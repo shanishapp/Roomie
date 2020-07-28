@@ -1,0 +1,8 @@
+<resources>
+    <string name="app_name">Roomie</string>
+    <string name="signInText">התחבר/י</string>
+    <string name="insertMailText">הכנס/י כתובת אימייל</string>
+    <string name="insertPasswordText">הכנס/י סיסמא</string>
+    <string name="sign_in_nav_text">התחברות</string>
+    <string name="sign_up_nav_text">הרשמה</string>
+</resources>
