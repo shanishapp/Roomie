@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!--  General  -->
+    <string name="app_name">Roomie</string>
+
+    <!--  Sign in activity  -->
+    <string name="sign_in_welcome_msg">שלום, שותף!</string>
+    <string name="sign_in_sign_in">התחבר</string>
+
+    <!--  Choose house activity  -->
+    <string name="choose_house_welcome_msg">היי, %s!</string>
+    <string name="choose_house_no_houses_msg">אין לך כרגע בית, מה שאומר שאתה חסר בית... בוא נתקן את זה!</string>
+    <string name="choose_house_create_new_house">צור בית חדש</string>
+    <string name="choose_house_join_existing_house">הצטרף לבית קיים</string>
+    <string name="choose_house_sign_out">התנתק</string>
+</resources>

@@ -1,13 +1,15 @@
 <resources>
+    <!--  General  -->
     <string name="app_name">Roomie</string>
-    <string name="signInText">התחבר/י</string>
-    <string name="insertMailText">הכנס/י כתובת אימייל</string>
-    <string name="insertPasswordText">הכנס/י סיסמא</string>
-    <string name="sign_in_nav_text">התחברות</string>
-    <string name="sign_up_nav_text">הרשמה</string>
-    <string name="hi_user_text">היי שני</string>
-    <string name="no_houses_text">אין בתים אליהם את/ה רשומ/ה</string>
-    <string name="create_new_house_text">צור בית חדש</string>
-    <string name="join_existing_house_text">הצטרף לבית קיים</string>
-    <string name="this_is_the_houses_text">אלו הבתים אליהם את/ה רשומ/ה</string>
+
+    <!--  Sign in activity  -->
+    <string name="sign_in_welcome_msg">Hey, roomie!</string>
+    <string name="sign_in_sign_in">Sign In</string>
+
+    <!--  Choose house activity  -->
+    <string name="choose_house_welcome_msg">Hey, %s!</string>
+    <string name="choose_house_no_houses_msg">You currently don\'t have a house, which means you are homeless... Let\'s fix it!</string>
+    <string name="choose_house_create_new_house">Create new house</string>
+    <string name="choose_house_join_existing_house">Join existing house</string>
+    <string name="choose_house_sign_out">Sign Out</string>
 </resources>
