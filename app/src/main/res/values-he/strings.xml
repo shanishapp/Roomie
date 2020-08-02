@@ -8,9 +8,14 @@
     <string name="sign_in_sign_in">התחבר</string>
 
     <!--  Choose house activity  -->
+    <!--  Choose house fragment  -->
+    <string name="choose_house_toolbar_title">בחירת בית</string>
     <string name="choose_house_welcome_msg">היי, %s!</string>
     <string name="choose_house_no_houses_msg">אין לך כרגע בית, מה שאומר שאתה חסר בית... בוא נתקן את זה!</string>
     <string name="choose_house_create_new_house">צור בית חדש</string>
     <string name="choose_house_join_existing_house">הצטרף לבית קיים</string>
     <string name="choose_house_sign_out">התנתק</string>
+
+    <!--  Create new house fragment  -->
+    <string name="create_new_house_toolbar_title">יצירת בית חדש</string>
 </resources>
