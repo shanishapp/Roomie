@@ -7,9 +7,14 @@
     <string name="sign_in_sign_in">Sign In</string>
 
     <!--  Choose house activity  -->
+    <!--  Choose house fragment  -->
+    <string name="choose_house_toolbar_title">Choose House</string>
     <string name="choose_house_welcome_msg">Hey, %s!</string>
     <string name="choose_house_no_houses_msg">You currently don\'t have a house, which means you are homeless... Let\'s fix it!</string>
     <string name="choose_house_create_new_house">Create new house</string>
     <string name="choose_house_join_existing_house">Join existing house</string>
     <string name="choose_house_sign_out">Sign Out</string>
+
+    <!--  Create new house fragment  -->
+    <string name="create_new_house_toolbar_title">Create New House</string>
 </resources>

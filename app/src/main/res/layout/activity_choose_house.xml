@@ -7,111 +7,34 @@
     app:layout_constraintWidth_percent="0.5"
     tools:context=".ChooseHouseActivity">
 
-    <ImageView
-        android:id="@+id/logo"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="50dp"
-        android:contentDescription="@string/app_name"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/app_logo" />
 
-    <TextView
-        android:id="@+id/welcome_msg"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
-        android:text="@string/choose_house_welcome_msg"
-        android:textSize="20sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/logo" />
-
-    <View
-        android:id="@+id/view"
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/choose_house_toolbar"
         android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:layout_marginStart="20dp"
-        android:layout_marginTop="10dp"
-        android:layout_marginEnd="20dp"
-        android:background="@android:color/darker_gray"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/welcome_msg" />
-
-    <TextView
-        android:id="@+id/this_is_the_homes_string"
-        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginHorizontal="32dp"
-        android:layout_marginTop="16dp"
-        android:text="@string/choose_house_no_houses_msg"
-        android:textAlignment="center"
-        android:textSize="18sp"
+        android:background="?attr/colorPrimary"
+        android:minHeight="?attr/actionBarSize"
+        android:theme="@style/ThemeOverlay.Roomie.ActionBar"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/view" />
+        app:layout_constraintTop_toTopOf="parent" />
 
-    <com.airbnb.lottie.LottieAnimationView
-        android:id="@+id/animationView"
-        android:layout_width="395dp"
-        android:layout_height="360dp"
-        app:layout_constraintBottom_toTopOf="@+id/create_house_button"
-        app:layout_constraintDimensionRatio="1:1"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/this_is_the_homes_string"
-        app:layout_constraintVertical_bias="0.1"
-        app:lottie_autoPlay="true"
-        app:lottie_fileName="8021-empty-and-lost.json"
-        app:lottie_loop="true" />
-
-
-    <Button
-        android:id="@+id/create_house_button"
+    <!--
+         FIXME note this issue:
+          Although android studio complains about changing to FragmentContainerView, if we do it
+          crashes. There are workarounds but they are cumbersome.
+          See here: https://stackoverflow.com/questions/50502269/illegalstateexception-link-does-not-have-a-navcontroller-set
+     -->
+    <fragment
+        android:id="@+id/choose_house_nav_host_fragment"
+        android:name="androidx.navigation.fragment.NavHostFragment"
         android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginHorizontal="16dp"
-        android:layout_marginBottom="8dp"
-        android:background="@drawable/button_bg"
-        android:padding="5dp"
-        android:text="@string/choose_house_create_new_house"
-        android:textColor="@color/white"
-        app:layout_constraintBottom_toTopOf="@id/join_house_button"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintWidth_percent="0.5" />
-
-    <Button
-        android:id="@+id/join_house_button"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginHorizontal="16dp"
-        android:layout_marginBottom="8dp"
-        android:background="@drawable/button_bg"
-        android:padding="5dp"
-        android:text="@string/choose_house_join_existing_house"
-        android:textColor="@color/white"
-        app:layout_constraintBottom_toTopOf="@id/sign_out_btn"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintWidth_percent="0.5" />
-
-    <Button
-        android:id="@+id/sign_out_btn"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginHorizontal="16dp"
-        android:layout_marginBottom="16dp"
-        android:background="@drawable/button_bg"
-        android:padding="5dp"
-        android:text="@string/choose_house_sign_out"
-        android:textColor="@color/white"
+        android:layout_height="0dp"
+        app:defaultNavHost="true"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintWidth_percent="0.5" />
 
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/choose_house_toolbar"
+        app:navGraph="@navigation/choose_house_nav_graph" />
 </androidx.constraintlayout.widget.ConstraintLayout>
