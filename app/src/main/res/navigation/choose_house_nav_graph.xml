@@ -8,7 +8,7 @@
 
     <fragment
         android:id="@+id/chooseHouse"
-        android:name="com.example.roomie.ChooseHouse"
+        android:name="com.example.roomie.choose_house.ChooseHouseFragment"
         android:label="@string/choose_house_toolbar_title"
         tools:layout="@layout/fragment_choose_house">
         <action
@@ -21,7 +21,7 @@
     </fragment>
     <fragment
         android:id="@+id/chooseHouseNewHouse"
-        android:name="com.example.roomie.ChooseHouseNewHouse"
+        android:name="com.example.roomie.choose_house.ChooseHouseNewHouseFragment"
         android:label="@string/create_new_house_toolbar_title"
         tools:layout="@layout/fragment_choose_house_new_house" />
 </navigation>

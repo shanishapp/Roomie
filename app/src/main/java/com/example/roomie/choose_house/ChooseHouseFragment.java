@@ -1,4 +1,4 @@
-package com.example.roomie;
+package com.example.roomie.choose_house;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -16,16 +16,18 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
 
+import com.example.roomie.LoginActivity;
+import com.example.roomie.R;
 import com.firebase.ui.auth.AuthUI;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
 /**
  * A simple {@link Fragment} subclass.
- * Use the {@link ChooseHouse#newInstance} factory method to
+ * Use the {@link ChooseHouseFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class ChooseHouse extends Fragment {
+public class ChooseHouseFragment extends Fragment {
 
     NavController navController;
 
@@ -37,7 +39,7 @@ public class ChooseHouse extends Fragment {
 
     private Button signOutBtn;
 
-    public ChooseHouse() {
+    public ChooseHouseFragment() {
         // Required empty public constructor
     }
 
@@ -47,8 +49,8 @@ public class ChooseHouse extends Fragment {
      *
      * @return A new instance of fragment ChooseHouse.
      */
-    public static ChooseHouse newInstance() {
-        return new ChooseHouse();
+    public static ChooseHouseFragment newInstance() {
+        return new ChooseHouseFragment();
     }
 
     @Override

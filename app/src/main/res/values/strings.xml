@@ -17,4 +17,16 @@
 
     <!--  Create new house fragment  -->
     <string name="create_new_house_toolbar_title">Create New House</string>
+    <string name="create_new_house_house_name">House name</string>
+    <string name="create_new_house_house_address">House address</string>
+    <string name="create_new_house_house_desc">House description</string>
+    <string name="create_new_house_create_new_house">Create new house</string>
+    <string name="create_new_house_err_invalid_house_name">Invalid house name</string>
+    <string name="create_new_house_err_invalid_house_address">Invalid house address</string>
+    <string name="create_new_house_err_invalid_house_desc">Invalid house description</string>
+    <string name="create_new_house_success">The house %s was created!</string>
+    <string name="create_new_house_err_create_house">There was an error during house creation, please try again.</string>
+
+    <!--  House Activity  -->
+    <string name="house_activity_title">Welcome to %s</string>
 </resources>
