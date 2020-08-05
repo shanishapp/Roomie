@@ -1,4 +1,4 @@
-package com.example.roomie;
+package com.example.roomie.choose_house;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -16,6 +16,10 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
+
+import com.example.roomie.util.FormValidator;
+import com.example.roomie.house.HouseActivity;
+import com.example.roomie.R;
 
 /**
  * A simple {@link Fragment} subclass.

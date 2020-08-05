@@ -1,4 +1,4 @@
-package com.example.roomie;
+package com.example.roomie.util;
 
 /**
  * A utility class to validate form input entered by the users.

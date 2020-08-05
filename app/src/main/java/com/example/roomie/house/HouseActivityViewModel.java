@@ -1,6 +1,8 @@
-package com.example.roomie;
+package com.example.roomie.house;
 
 import androidx.lifecycle.ViewModel;
+
+import com.example.roomie.House;
 
 public class HouseActivityViewModel extends ViewModel {
 

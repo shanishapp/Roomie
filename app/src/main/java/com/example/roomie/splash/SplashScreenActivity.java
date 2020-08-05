@@ -1,4 +1,4 @@
-package com.example.roomie;
+package com.example.roomie.splash;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.LiveData;
@@ -10,6 +10,9 @@ import android.os.Handler;
 import android.os.Looper;
 import android.widget.Toast;
 
+import com.example.roomie.LoginActivity;
+import com.example.roomie.choose_house.ChooseHouseActivity;
+import com.example.roomie.house.HouseActivity;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 

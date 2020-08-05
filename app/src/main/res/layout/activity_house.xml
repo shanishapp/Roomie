@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".HouseActivity">
+    tools:context=".house.HouseActivity">
 
     <TextView
         android:id="@+id/house_activity_title"

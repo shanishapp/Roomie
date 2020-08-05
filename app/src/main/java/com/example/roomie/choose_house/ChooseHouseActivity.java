@@ -1,4 +1,4 @@
-package com.example.roomie;
+package com.example.roomie.choose_house;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
@@ -10,6 +10,8 @@ import androidx.navigation.ui.NavigationUI;
 import android.content.Intent;
 import android.os.Bundle;
 
+import com.example.roomie.LoginActivity;
+import com.example.roomie.R;
 import com.google.firebase.auth.FirebaseAuth;
 
 public class ChooseHouseActivity extends AppCompatActivity {

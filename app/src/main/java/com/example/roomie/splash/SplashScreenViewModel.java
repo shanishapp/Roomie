@@ -1,4 +1,4 @@
-package com.example.roomie;
+package com.example.roomie.splash;
 
 import android.util.Log;
 
@@ -6,14 +6,12 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
+import com.example.roomie.FirestoreJob;
+import com.example.roomie.House;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.QueryDocumentSnapshot;
 
-import java.util.List;
-
-import static com.example.roomie.FirestoreUtil.HOUSES_COLLECTION_NAME;
+import static com.example.roomie.util.FirestoreUtil.HOUSES_COLLECTION_NAME;
 
 public class SplashScreenViewModel extends ViewModel {
 

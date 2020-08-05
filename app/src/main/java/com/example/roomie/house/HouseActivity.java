@@ -1,4 +1,4 @@
-package com.example.roomie;
+package com.example.roomie.house;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProvider;
@@ -6,6 +6,9 @@ import androidx.lifecycle.ViewModelProvider;
 import android.os.Bundle;
 import android.text.BidiFormatter;
 import android.widget.TextView;
+
+import com.example.roomie.House;
+import com.example.roomie.R;
 
 public class HouseActivity extends AppCompatActivity {
 

@@ -1,4 +1,7 @@
-package com.example.roomie;
+package com.example.roomie.choose_house;
+
+import com.example.roomie.FirestoreJob;
+import com.example.roomie.House;
 
 public class CreateNewHouseJob extends FirestoreJob {
 

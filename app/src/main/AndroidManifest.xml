@@ -9,11 +9,11 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".HouseActivity"></activity>
-        <activity android:name=".ChooseHouseActivity" />
+        <activity android:name=".house.HouseActivity"></activity>
+        <activity android:name=".choose_house.ChooseHouseActivity" />
         <activity android:name=".LoginActivity" />
         <activity
-            android:name=".SplashScreenActivity"
+            android:name=".splash.SplashScreenActivity"
             android:theme="@style/SplashTheme">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
