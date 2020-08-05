@@ -18,4 +18,14 @@
 
     <!--  Create new house fragment  -->
     <string name="create_new_house_toolbar_title">יצירת בית חדש</string>
+    <string name="create_new_house_err_invalid_house_name">שם הבית לא תקין</string>
+    <string name="create_new_house_err_invalid_house_address">כתובת הבית לא תקינה</string>
+    <string name="create_new_house_err_invalid_house_desc">תיאור הבית לא תקין</string>
+    <string name="create_new_house_success">הבית %s נוצר בהצלחה!</string>
+    <string name="create_new_house_err_create_house">ארעה שגיאה במהלך יצירת הבית, אנא נסו שוב.</string>
+    <string name="create_new_house_house_name">שם הבית</string>
+    <string name="create_new_house_house_address">כתובת הבית</string>
+    <string name="create_new_house_house_desc">תיאור הבית</string>
+    <string name="create_new_house_create_new_house">צור בית חדש</string>
+    <string name="house_activity_title">ברוך הבא אל %s</string>
 </resources>
