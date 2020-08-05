@@ -17,13 +17,13 @@ import java.util.Map;
 
 import static com.example.roomie.util.FirestoreUtil.HOUSES_COLLECTION_NAME;
 
-public class NewHouseViewModel extends ViewModel {
+public class NewHouseFragmentViewModel extends ViewModel {
 
     private final static String TAG = "NEW_HOUSE_VIEW_MODEL";
 
     private FirebaseFirestore db;
 
-    public NewHouseViewModel() {
+    public NewHouseFragmentViewModel() {
         db = FirebaseFirestore.getInstance();
     }
 

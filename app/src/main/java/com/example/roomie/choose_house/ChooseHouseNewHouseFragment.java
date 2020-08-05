@@ -23,12 +23,12 @@ import com.example.roomie.R;
 
 /**
  * A simple {@link Fragment} subclass.
- * Use the {@link ChooseHouseNewHouse#newInstance} factory method to
+ * Use the {@link ChooseHouseNewHouseFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class ChooseHouseNewHouse extends Fragment {
+public class ChooseHouseNewHouseFragment extends Fragment {
 
-    private NewHouseViewModel newHouseViewModel;
+    private NewHouseFragmentViewModel newHouseFragmentViewModel;
 
     private EditText houseNameInput;
 
@@ -38,7 +38,7 @@ public class ChooseHouseNewHouse extends Fragment {
 
     private Button createNewHouseBtn;
 
-    public ChooseHouseNewHouse() {
+    public ChooseHouseNewHouseFragment() {
         // Required empty public constructor
     }
 
@@ -48,15 +48,15 @@ public class ChooseHouseNewHouse extends Fragment {
      *
      * @return A new instance of fragment ChooseHouseNewHouse.
      */
-    public static ChooseHouseNewHouse newInstance() {
-        return new ChooseHouseNewHouse();
+    public static ChooseHouseNewHouseFragment newInstance() {
+        return new ChooseHouseNewHouseFragment();
     }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        newHouseViewModel = new ViewModelProvider(this).get(NewHouseViewModel.class);
+        newHouseFragmentViewModel = new ViewModelProvider(this).get(NewHouseFragmentViewModel.class);
     }
 
     @Override
@@ -108,7 +108,7 @@ public class ChooseHouseNewHouse extends Fragment {
             return;
         }
 
-        LiveData<CreateNewHouseJob> job = newHouseViewModel.createNewHouse(houseName, houseAddress, houseDesc);
+        LiveData<CreateNewHouseJob> job = newHouseFragmentViewModel.createNewHouse(houseName, houseAddress, houseDesc);
         // TODO check if this is the right arg to put in observe (and not getViewLifecycleOwner())
         // TODO do we need to remove the observer after we get the result?
         job.observe(this, createNewHouseJob -> {
