@@ -11,7 +11,7 @@
         android:theme="@style/AppTheme">
         <activity android:name=".house.HouseActivity" />
         <activity android:name=".choose_house.ChooseHouseActivity" />
-        <activity android:name=".LoginActivity" />
+        <activity android:name=".SignInActivity" />
         <activity
             android:name=".splash.SplashScreenActivity"
             android:theme="@style/SplashTheme">

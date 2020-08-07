@@ -6,11 +6,9 @@ import androidx.lifecycle.ViewModelProvider;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Looper;
 import android.widget.Toast;
 
-import com.example.roomie.LoginActivity;
+import com.example.roomie.SignInActivity;
 import com.example.roomie.choose_house.ChooseHouseActivity;
 import com.example.roomie.house.HouseActivity;
 import com.google.firebase.auth.FirebaseAuth;
@@ -35,12 +33,12 @@ public class SplashScreenActivity extends AppCompatActivity {
         FirebaseUser user = auth.getCurrentUser();
         if (user == null) {
             // user is logged out
-            Intent intent = new Intent(SplashScreenActivity.this, LoginActivity.class);
+            Intent intent = new Intent(SplashScreenActivity.this, SignInActivity.class);
             startActivity(intent);
             finish();
         } else {
             // user is logged in
-            LiveData<GetUserHouseJob> job = splashScreenViewModel.getkUserHouse();
+            LiveData<GetUserHouseJob> job = splashScreenViewModel.getUserHouse();
             job.observe(this, getUserHouseJob -> {
                 switch (job.getValue().getJobStatus()) {
                     case IN_PROGRESS:

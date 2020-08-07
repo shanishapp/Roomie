@@ -16,7 +16,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
 
-import com.example.roomie.LoginActivity;
+import com.example.roomie.SignInActivity;
 import com.example.roomie.R;
 import com.firebase.ui.auth.AuthUI;
 import com.google.firebase.auth.FirebaseAuth;
@@ -108,7 +108,7 @@ public class ChooseHouseFragment extends Fragment {
         AuthUI.getInstance()
                 .signOut(getActivity())
                 .addOnCompleteListener(task -> {
-                    Intent intent = new Intent(getActivity(), LoginActivity.class);
+                    Intent intent = new Intent(getActivity(), SignInActivity.class);
                     startActivity(intent);
                     getActivity().finish();
                 });

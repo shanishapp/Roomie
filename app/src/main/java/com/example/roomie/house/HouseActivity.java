@@ -16,7 +16,7 @@ import android.view.MenuItem;
 import android.view.View;
 
 import com.example.roomie.House;
-import com.example.roomie.LoginActivity;
+import com.example.roomie.SignInActivity;
 import com.example.roomie.R;
 import com.firebase.ui.auth.AuthUI;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
@@ -112,7 +112,7 @@ public class HouseActivity extends AppCompatActivity {
         AuthUI.getInstance()
                 .signOut(this)
                 .addOnCompleteListener(task -> {
-                    Intent intent = new Intent(this, LoginActivity.class);
+                    Intent intent = new Intent(this, SignInActivity.class);
                     startActivity(intent);
                     finish();
                 });
