@@ -28,5 +28,33 @@
     <string name="create_new_house_err_create_house">There was an error during house creation, please try again.</string>
 
     <!--  House Activity  -->
+    <string name="house_drawer_menu_house">House</string>
+    <string name="house_drawer_menu_house_settings">House Settings</string>
+    <string name="house_drawer_menu_user_profile">User Profile</string>
+    <string name="house_drawer_menu_sign_out">Sign Out</string>
+    <string name="house_bottom_menu_feed">Feed</string>
+    <string name="house_bottom_menu_chores">Chores</string>
+    <string name="house_bottom_menu_groceries">Groceries</string>
+    <string name="house_bottom_menu_expenses">Expenses</string>
+
+    <!--  House Feed Fragment  -->
+    <string name="house_feed_fragment_title">House Feed</string>
+    <string name="house_feed_fragment_house_details_title">House Details</string>
+
+    <!--  House Chores Fragment  -->
+    <string name="house_chores_fragment_title">Chores</string>
+
+    <!--  House Groceries Fragment  -->
+    <string name="house_groceries_fragment_title">Groceries</string>
+
+    <!--  House Expenses Fragment  -->
+    <string name="house_expenses_fragment_title">Expenses</string>
+
+    <!--  House Settings Fragment  -->
+    <string name="house_settings_fragment_title">House Settings</string>
+
+    <!--  House User Profile Fragment  -->
+    <string name="house_user_profile_fragment_title">User Profile</string>
     <string name="house_activity_title">Welcome to %s</string>
+
 </resources>

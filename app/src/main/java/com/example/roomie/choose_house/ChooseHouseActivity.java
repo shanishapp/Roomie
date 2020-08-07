@@ -10,7 +10,7 @@ import androidx.navigation.ui.NavigationUI;
 import android.content.Intent;
 import android.os.Bundle;
 
-import com.example.roomie.LoginActivity;
+import com.example.roomie.SignInActivity;
 import com.example.roomie.R;
 import com.google.firebase.auth.FirebaseAuth;
 
@@ -33,7 +33,7 @@ public class ChooseHouseActivity extends AppCompatActivity {
 
         auth = FirebaseAuth.getInstance();
         if (auth.getCurrentUser() == null) {
-            Intent intent = new Intent(this, LoginActivity.class);
+            Intent intent = new Intent(this, SignInActivity.class);
             startActivity(intent);
             finish();
         }

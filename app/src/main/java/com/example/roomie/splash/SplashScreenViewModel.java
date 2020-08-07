@@ -23,7 +23,7 @@ public class SplashScreenViewModel extends ViewModel {
         db = FirebaseFirestore.getInstance();
     }
 
-    LiveData<GetUserHouseJob> getkUserHouse() {
+    public LiveData<GetUserHouseJob> getUserHouse() {
         GetUserHouseJob getUserHouseJob = new GetUserHouseJob(FirestoreJob.JobStatus.IN_PROGRESS);
         MutableLiveData<GetUserHouseJob> job = new MutableLiveData<>(getUserHouseJob);
 
@@ -55,7 +55,7 @@ public class SplashScreenViewModel extends ViewModel {
 
                         job.setValue(getUserHouseJob);
 
-                        Log.d(TAG, "Error while creating a new house: ", task.getException());
+                        Log.d(TAG, "Error while fetching the user house: ", task.getException());
                     }
                 });
 

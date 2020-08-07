@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/house_nav_graph"
+    app:startDestination="@id/house_feed_fragment_dest">
+
+    <fragment
+        android:id="@+id/house_feed_fragment_dest"
+        android:name="com.example.roomie.house.feed.HouseFeedFragment"
+        android:label="@string/house_feed_fragment_title"
+        tools:layout="@layout/fragment_house_feed" />
+    <fragment
+        android:id="@+id/house_user_profile_fragmnet_dest"
+        android:name="com.example.roomie.house.HouseUserProfileFragment"
+        android:label="@string/house_user_profile_fragment_title"
+        tools:layout="@layout/fragment_house_user_profile" />
+    <fragment
+        android:id="@+id/house_settings_fragment_dest"
+        android:name="com.example.roomie.house.HouseHouseSettingsFragment"
+        android:label="@string/house_settings_fragment_title"
+        tools:layout="@layout/fragment_house_house_settings" />
+    <fragment
+        android:id="@+id/house_chores_fragment_dest"
+        android:name="com.example.roomie.house.chores.HouseChoresFragment"
+        android:label="@string/house_chores_fragment_title"
+        tools:layout="@layout/fragment_house_chores" />
+    <fragment
+        android:id="@+id/house_groceries_fragment_dest"
+        android:name="com.example.roomie.house.groceries.houseGroceriesFragment"
+        android:label="@string/house_groceries_fragment_title"
+        tools:layout="@layout/fragment_house_groceries" />
+    <fragment
+        android:id="@+id/house_expenses_fragment_dest"
+        android:name="com.example.roomie.house.expenses.houseExpensesFragment"
+        android:label="@string/house_expenses_fragment_title"
+        tools:layout="@layout/fragment_house_expenses" />
+</navigation>
