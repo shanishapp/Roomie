@@ -27,19 +27,8 @@ public class SplashScreenActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
 
         auth = FirebaseAuth.getInstance();
-
         splashScreenViewModel = new ViewModelProvider(this).get(SplashScreenViewModel.class);
-
-        Runnable runnable = new Runnable() {
-            @Override
-            public void run() {
-                loadApp();
-            }
-        };
-
-        Handler handler = new Handler(Looper.getMainLooper());
-        long millisecondsInTheFuture = 1000;
-        handler.postDelayed(runnable, millisecondsInTheFuture);
+        loadApp();
     }
 
     private void loadApp() {
@@ -52,7 +41,6 @@ public class SplashScreenActivity extends AppCompatActivity {
         } else {
             // user is logged in
             LiveData<GetUserHouseJob> job = splashScreenViewModel.getkUserHouse();
-            // TODO do we need to remove the observer after we get the result?
             job.observe(this, getUserHouseJob -> {
                 switch (job.getValue().getJobStatus()) {
                     case IN_PROGRESS:
