@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/house_feed_fragment_dest"
+        android:icon="@drawable/ic_baseline_home_24"
+        android:title="@string/house_bottom_menu_feed" />
+    <item
+        android:id="@+id/house_chores_fragment_dest"
+        android:icon="@drawable/ic_baseline_local_laundry_service_24"
+        android:title="@string/house_bottom_menu_chores" />
+    <item
+        android:id="@+id/house_groceries_fragment_dest"
+        android:icon="@drawable/ic_baseline_shopping_cart_24"
+        android:title="@string/house_bottom_menu_groceries" />
+    <item
+        android:id="@+id/house_expenses_fragment_dest"
+        android:icon="@drawable/ic_baseline_attach_money_24"
+        android:title="@string/house_bottom_menu_expenses" />
+</menu>
