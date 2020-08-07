@@ -42,4 +42,5 @@
     <string name="house_chores_fragment_title">מטלות</string>
     <string name="house_groceries_fragment_title">קניות</string>
     <string name="house_expenses_fragment_title">הוצאות</string>
+    <string name="house_feed_fragment_house_details_title">פרטי הבית</string>
 </resources>

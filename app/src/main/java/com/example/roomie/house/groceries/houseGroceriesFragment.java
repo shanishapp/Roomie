@@ -1,4 +1,4 @@
-package com.example.roomie.house;
+package com.example.roomie.house.groceries;
 
 import android.os.Bundle;
 

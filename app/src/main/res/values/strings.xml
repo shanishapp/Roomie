@@ -39,6 +39,7 @@
 
     <!--  House Feed Fragment  -->
     <string name="house_feed_fragment_title">House Feed</string>
+    <string name="house_feed_fragment_house_details_title">House Details</string>
 
     <!--  House Chores Fragment  -->
     <string name="house_chores_fragment_title">Chores</string>
