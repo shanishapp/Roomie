@@ -5,6 +5,7 @@
         <item name="colorPrimary">@color/buttonColor</item>
         <item name="colorPrimaryDark">@color/buttonColorDark</item>
         <item name="colorAccent">@color/colorAccent</item>
+        <item name="android:statusBarColor">@android:color/transparent</item>
     </style>
 
     <style name="SplashTheme" parent="Theme.AppCompat.Light.NoActionBar">
