@@ -1,14 +1,22 @@
-package com.example.roomie;
+package com.example.roomie.house.chores;
 
+import android.app.DatePickerDialog;
 import android.os.Bundle;
 
+import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.Fragment;
 
-import android.util.Pair;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.DatePicker;
+
+import com.example.roomie.R;
+import com.github.jjobes.slidedatetimepicker.SlideDateTimeListener;
+import com.github.jjobes.slidedatetimepicker.SlideDateTimePicker;
+
+import java.util.Date;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -64,16 +72,29 @@ public class ChoreFragment extends Fragment {
         // Inflate the layout for this fragment
         View v = inflater.inflate(R.layout.fragment_chore, container, false);
 
+        //define behaviour for the date picker button
         datePickerBtn = v.findViewById(R.id.setDueDateBtn);
-        datePickerBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-
-            }
-        });
-
+        datePickerBtn.setOnClickListener(view -> new SlideDateTimePicker.Builder(getChildFragmentManager())
+                .setListener(listener)
+                .setInitialDate(new Date())
+                .build()
+                .show());
         return v;
     }
 
+    private SlideDateTimeListener listener = new SlideDateTimeListener() {
 
+        @Override
+        public void onDateTimeSet(Date date)
+        {
+            // TODO something with the date. This Date object contains
+            // the date and time that the user has selected.
+        }
+
+        @Override
+        public void onDateTimeCancel()
+        {
+            // Overriding onDateTimeCancel() is optional.
+        }
+    };
 }

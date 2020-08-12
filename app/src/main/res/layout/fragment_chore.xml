@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ChoreFragment">
+    tools:context=".house.chores.ChoreFragment">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_height="match_parent"
@@ -13,7 +13,8 @@
 
         <EditText
             android:id="@+id/choreTitleEditText"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
+            app:layout_constraintWidth_percent="0.5"
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
             android:background="@drawable/input_bg"
@@ -26,13 +27,14 @@
 
         <EditText
             android:id="@+id/descriptionEditText"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
+            app:layout_constraintWidth_percent="0.5"
             android:layout_marginTop="10dp"
             android:background="@drawable/input_bg"
+            android:padding="5dp"
             android:ems="10"
             android:inputType="textPersonName"
-            android:padding="5dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/descriptionTextView" />
@@ -70,14 +72,46 @@
 
         <Button
             android:id="@+id/setDueDateBtn"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:background="@color/lightButtonColor"
+            android:paddingStart="10dp"
+            android:paddingEnd="10dp"
+            android:text="set new date"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/dueDateTextView"
+            app:layout_constraintWidth_percent="0.5" />
+
+        <TextView
+            android:id="@+id/textView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
-            android:background="@drawable/button_bg"
-            android:text="set"
+            android:text="0/0/0000 ,   00:00"
+            app:layout_constraintStart_toStartOf="@+id/setDueDateBtn"
+            app:layout_constraintTop_toBottomOf="@+id/setDueDateBtn" />
+
+        <TextView
+            android:id="@+id/textView2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:text="TextView"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/dueDateTextView" />
+            app:layout_constraintTop_toBottomOf="@+id/textView" />
+
+        <Spinner
+            android:id="@+id/spinner"
+            android:layout_width="236dp"
+            android:layout_height="56dp"
+            android:spinnerMode="dropdown"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/textView2" />
+
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 </FrameLayout>
