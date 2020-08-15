@@ -80,9 +80,6 @@ public class SignInActivity extends AppCompatActivity {
                 job.observe(this, getUserHouseJob -> {
                     switch (job.getValue().getJobStatus()) {
                         case IN_PROGRESS:
-                            // TODO add loading indication to user (overlay, loader etc).
-                            //      The indication should be added upon clicking sign in button and
-                            //      updated here.
                             break;
                         case SUCCESS:
                             if (getUserHouseJob.isUserHasHouse()) {
@@ -98,6 +95,7 @@ public class SignInActivity extends AppCompatActivity {
                             break;
                         case ERROR:
                             // TODO retry the job? meanwhile just toast a tmp message
+                            toggleLoadingLayout(false);
                             Toast.makeText(this, "Error querying firestore.", Toast.LENGTH_LONG).show();
                             break;
                     }
@@ -106,6 +104,7 @@ public class SignInActivity extends AppCompatActivity {
                 // Sign in failed. If response is null the user canceled the
                 // sign-in flow using the back button. Otherwise check
                 // response.getError().getErrorCode() and handle the error.
+                toggleLoadingLayout(false);
                 if (response == null) {
                     Log.d(TAG, "User cancelled sign in using back button.");
                 } else {
@@ -116,6 +115,7 @@ public class SignInActivity extends AppCompatActivity {
     }
 
     private void doSignIn(View view) {
+        toggleLoadingLayout(true);
         // Choose authentication providers
         List<AuthUI.IdpConfig> providers = Arrays.asList(
                 new AuthUI.IdpConfig.EmailBuilder().build(),
@@ -130,5 +130,13 @@ public class SignInActivity extends AppCompatActivity {
                         .setTheme(R.style.SignInTheme)
                         .build(),
                 RC_SIGN_IN);
+    }
+
+    private void toggleLoadingLayout(boolean isLoading) {
+        if (isLoading) {
+            signInBtn.setEnabled(false);
+        } else {
+            signInBtn.setEnabled(true);
+        }
     }
 }
