@@ -20,7 +20,7 @@ public class House implements Serializable {
      */
     public enum Roles {
         OWNER("owner"),
-        ROOMY("roomy");
+        ROOMIE("roomie");
 
         public final String role;
 
