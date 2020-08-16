@@ -9,6 +9,10 @@
             android:icon="@drawable/ic_baseline_home_24"
             android:title="@string/house_drawer_menu_house" />
         <item
+            android:id="@+id/house_invite_roomie_fragment_dest"
+            android:icon="@drawable/ic_baseline_person_add_24"
+            android:title="@string/house_drawer_menu_invite_roomie" />
+        <item
             android:id="@+id/house_settings_fragment_dest"
             android:icon="@drawable/ic_baseline_settings_24"
             android:title="@string/house_drawer_menu_house_settings" />

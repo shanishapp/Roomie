@@ -5,12 +5,25 @@
         <item name="colorPrimary">@color/buttonColor</item>
         <item name="colorPrimaryDark">@color/buttonColorDark</item>
         <item name="colorAccent">@color/colorAccent</item>
+        <item name="android:statusBarColor">@android:color/transparent</item>
     </style>
 
     <style name="SplashTheme" parent="Theme.AppCompat.Light.NoActionBar">
         <item name="android:windowBackground">
             @drawable/splash_background
         </item>
+    </style>
+
+    <style name="JoinHouseTheme" parent="Theme.AppCompat.Light.NoActionBar">
+        <item name="colorPrimary">@color/buttonColor</item>
+        <item name="colorPrimaryDark">@color/buttonColorDark</item>
+        <item name="colorAccent">@color/colorAccent</item>
+    </style>
+
+    <style name="ChooseHouseTheme" parent="Theme.AppCompat.Light.NoActionBar">
+        <item name="colorPrimary">@color/buttonColor</item>
+        <item name="colorPrimaryDark">@color/buttonColorDark</item>
+        <item name="colorAccent">@color/colorAccent</item>
     </style>
 
     <style name="SignInTheme" parent="Theme.AppCompat.Light.NoActionBar">

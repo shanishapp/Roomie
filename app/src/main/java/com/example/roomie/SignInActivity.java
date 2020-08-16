@@ -13,7 +13,9 @@ import android.widget.Toast;
 
 import com.example.roomie.choose_house.ChooseHouseActivity;
 import com.example.roomie.house.HouseActivity;
+import com.example.roomie.join_house.JoinHouseActivity;
 import com.example.roomie.splash.GetUserHouseJob;
+import com.example.roomie.splash.SplashScreenActivity;
 import com.example.roomie.splash.SplashScreenViewModel;
 import com.firebase.ui.auth.AuthUI;
 import com.firebase.ui.auth.IdpResponse;
@@ -30,6 +32,8 @@ public class SignInActivity extends AppCompatActivity {
     private static final int RC_SIGN_IN = 1;
 
     private FirebaseAuth auth;
+
+    private String invitationId;
 
     // TODO currently we use splash screen view model function to get the user house to avoid
     //      code duplication. Maybe create a unified view model for both of them (initViewModel)?
@@ -50,9 +54,18 @@ public class SignInActivity extends AppCompatActivity {
         auth = FirebaseAuth.getInstance();
         FirebaseUser user = auth.getCurrentUser();
         if (user != null) {
+            // TODO check if the user has house or not
             Intent intent = new Intent(this, ChooseHouseActivity.class);
             startActivity(intent);
             finish();
+        }
+
+        invitationId = null;
+        Bundle extras = getIntent().getExtras();
+        if (extras != null) {
+            if (extras.containsKey(SplashScreenActivity.INVITATION_ID_EXTRA)) {
+                invitationId = extras.getString(SplashScreenActivity.INVITATION_ID_EXTRA);
+            }
         }
 
         setUIElements();
@@ -75,14 +88,21 @@ public class SignInActivity extends AppCompatActivity {
 
             if (resultCode == RESULT_OK) {
                 // Successfully signed in
+
+                if (invitationId != null) {
+                    // we have an invitation id - redirect to join house
+                    Intent intent = new Intent(SignInActivity.this, JoinHouseActivity.class);
+                    intent.putExtra(SplashScreenActivity.INVITATION_ID_EXTRA, invitationId);
+                    startActivity(intent);
+                    finish();
+                    return;
+                }
+
                 // check if user has house or not
                 LiveData<GetUserHouseJob> job = splashScreenViewModel.getUserHouse();
                 job.observe(this, getUserHouseJob -> {
                     switch (job.getValue().getJobStatus()) {
                         case IN_PROGRESS:
-                            // TODO add loading indication to user (overlay, loader etc).
-                            //      The indication should be added upon clicking sign in button and
-                            //      updated here.
                             break;
                         case SUCCESS:
                             if (getUserHouseJob.isUserHasHouse()) {
@@ -98,6 +118,7 @@ public class SignInActivity extends AppCompatActivity {
                             break;
                         case ERROR:
                             // TODO retry the job? meanwhile just toast a tmp message
+                            toggleLoadingLayout(false);
                             Toast.makeText(this, "Error querying firestore.", Toast.LENGTH_LONG).show();
                             break;
                     }
@@ -106,6 +127,7 @@ public class SignInActivity extends AppCompatActivity {
                 // Sign in failed. If response is null the user canceled the
                 // sign-in flow using the back button. Otherwise check
                 // response.getError().getErrorCode() and handle the error.
+                toggleLoadingLayout(false);
                 if (response == null) {
                     Log.d(TAG, "User cancelled sign in using back button.");
                 } else {
@@ -116,6 +138,7 @@ public class SignInActivity extends AppCompatActivity {
     }
 
     private void doSignIn(View view) {
+        toggleLoadingLayout(true);
         // Choose authentication providers
         List<AuthUI.IdpConfig> providers = Arrays.asList(
                 new AuthUI.IdpConfig.EmailBuilder().build(),
@@ -130,5 +153,13 @@ public class SignInActivity extends AppCompatActivity {
                         .setTheme(R.style.SignInTheme)
                         .build(),
                 RC_SIGN_IN);
+    }
+
+    private void toggleLoadingLayout(boolean isLoading) {
+        if (isLoading) {
+            signInBtn.setEnabled(false);
+        } else {
+            signInBtn.setEnabled(true);
+        }
     }
 }

@@ -18,6 +18,9 @@ public class FirestoreJob {
 
     public enum JobErrorCode {
         GENERAL,
+        USER_NOT_SIGNED_IN,
+        DOCUMENT_NOT_FOUND,
+        INVITATION_EXPIRED,
     }
 
     private JobStatus jobStatus;

@@ -9,8 +9,13 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
+        <activity
+            android:name=".join_house.JoinHouseActivity"
+            android:theme="@style/JoinHouseTheme" />
         <activity android:name=".house.HouseActivity" />
-        <activity android:name=".choose_house.ChooseHouseActivity" />
+        <activity
+            android:name=".choose_house.ChooseHouseActivity"
+            android:theme="@style/ChooseHouseTheme" />
         <activity android:name=".SignInActivity" />
         <activity
             android:name=".splash.SplashScreenActivity"
@@ -19,6 +24,14 @@
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+                <data android:scheme="http"
+                    android:host="roomie.me"
+                    android:pathPrefix="/join" />
             </intent-filter>
         </activity>
     </application>

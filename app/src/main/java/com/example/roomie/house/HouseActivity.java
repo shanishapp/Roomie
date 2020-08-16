@@ -73,7 +73,7 @@ public class HouseActivity extends AppCompatActivity {
         appBarConfiguration = new AppBarConfiguration.Builder(
                 R.id.house_feed_fragment_dest, R.id.house_feed_fragment_dest, R.id.house_user_profile_fragmnet_dest,
                 R.id.house_settings_fragment_dest, R.id.house_chores_fragment_dest, R.id.house_groceries_fragment_dest,
-                R.id.house_expenses_fragment_dest)
+                R.id.house_expenses_fragment_dest, R.id.house_invite_roomie_fragment_dest)
                 .setOpenableLayout(drawerLayout)
                 .build();
         NavigationUI.setupActionBarWithNavController(this, navController, appBarConfiguration);
@@ -83,6 +83,7 @@ public class HouseActivity extends AppCompatActivity {
         // show and hide bottom nav according to the destination
         navController.addOnDestinationChangedListener((controller, destination, arguments) -> {
             switch (destination.getId()) {
+                case R.id.house_invite_roomie_fragment_dest:
                 case R.id.house_settings_fragment_dest:
                 case R.id.house_user_profile_fragmnet_dest:
                     bottomNavigationView.setVisibility(View.GONE);

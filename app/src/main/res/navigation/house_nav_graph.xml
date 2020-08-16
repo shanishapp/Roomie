@@ -35,4 +35,9 @@
         android:name="com.example.roomie.house.expenses.houseExpensesFragment"
         android:label="@string/house_expenses_fragment_title"
         tools:layout="@layout/fragment_house_expenses" />
+    <fragment
+        android:id="@+id/house_invite_roomie_fragment_dest"
+        android:name="com.example.roomie.house.invite.HouseInviteRoomieFragment"
+        android:label="@string/house_invite_roomie_fragment_title"
+        tools:layout="@layout/fragment_house_invite_roomie" />
 </navigation>
