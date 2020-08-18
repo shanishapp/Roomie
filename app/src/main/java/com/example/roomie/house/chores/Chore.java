@@ -10,7 +10,6 @@ public class Chore {
     private Date _creationDate;
     private Date _lastUpdatedDate;
     private Date _snoozeDate;//TODO need to be changed dynamically through the running
-
     private String _title;
     private String _description;
     private Pair<String,Integer> _kind;
