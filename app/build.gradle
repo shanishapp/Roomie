@@ -65,4 +65,8 @@ dependencies {
     // LiveData
     implementation "androidx.lifecycle:lifecycle-livedata:$lifecycle_version"
 
+    //floating and movable button
+    implementation 'com.getbase:floatingactionbutton:1.9.1'
+
+
 }

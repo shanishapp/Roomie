@@ -15,6 +15,7 @@ import android.widget.DatePicker;
 import com.example.roomie.R;
 import com.github.jjobes.slidedatetimepicker.SlideDateTimeListener;
 import com.github.jjobes.slidedatetimepicker.SlideDateTimePicker;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.util.Date;
 
@@ -71,6 +72,8 @@ public class ChoreFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View v = inflater.inflate(R.layout.fragment_chore, container, false);
+
+        FloatingActionButton fab = (FloatingActionButton) v.findViewById(R.id.fab);
 
         //define behaviour for the date picker button
         datePickerBtn = v.findViewById(R.id.setDueDateBtn);

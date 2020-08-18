@@ -9,6 +9,8 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+
 
 import com.example.roomie.R;
 
@@ -26,6 +28,7 @@ public class HouseChoresFragment extends Fragment {
     private RecyclerView.Adapter adapter;
     private DBManager db;
     private ArrayList<Chore> choreList;
+    private Button button;
 
     public HouseChoresFragment() {
         // Required empty public constructor
@@ -54,11 +57,24 @@ public class HouseChoresFragment extends Fragment {
         //init variables
         db = DBManager.getInstance();
         adapter = db.adapter;
+        button = v.findViewById(R.id.fab);
         // set up for recyclerview
         RecyclerView recyclerView = (RecyclerView) v.findViewById(R.id.recyclerView);
         recyclerView.setAdapter(adapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
 
+        //set up add button
+        button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                showNewChoreDialog();
+            }
+        });
+
         return v;
+    }
+
+    public void showNewChoreDialog() {
+
     }
 }
