@@ -6,6 +6,16 @@ import java.util.Date;
 
 public class Expense
 {
+    public boolean is_hasReceipt()
+    {
+        return _hasReceipt;
+    }
+
+    public void set_hasReceipt(boolean _hasReceipt)
+    {
+        this._hasReceipt = _hasReceipt;
+    }
+
     public enum ExpenseType
     {
         PROFESSIONAL,
@@ -22,6 +32,9 @@ public class Expense
     private Date _creationDate;
     private Date _purchaseDate;
     private Roommate _payer;
+    private boolean _hasReceipt;
+    //TODO: receipt photo
+
 
     Expense(String name, String desctiption, float cost, Date purchaseDate, ExpenseType type, Roommate payer)
     {
@@ -35,9 +48,6 @@ public class Expense
     }
 
 
-    /*
-    getters
-     */
     public Date getCreationDate()
     {
         return _creationDate;
@@ -72,10 +82,6 @@ public class Expense
     {
         return _name;
     }
-
-    /*
-    setters
-     */
 
     public void set_cost(float _cost)
     {

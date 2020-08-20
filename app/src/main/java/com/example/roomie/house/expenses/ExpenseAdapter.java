@@ -1,9 +1,11 @@
 package com.example.roomie.house.expenses;
 
 import android.content.Context;
+import android.os.storage.StorageManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -31,13 +33,50 @@ public class ExpenseAdapter extends RecyclerView.Adapter<ExpenseAdapter.ViewHold
     {
         Context context = parent.getContext();
         LayoutInflater inflater = LayoutInflater.from(context);
-        View expenseView = inflater.inflate(R.layout.one_expense_item,parent,false);
-        return new ViewHolder(expenseView,_myExpenseListener);
+        View expenseView = inflater.inflate(R.layout.one_expense_item, parent, false);
+        return new ViewHolder(expenseView, _myExpenseListener);
+    }
+
+    public void setExpenseIcon(ImageView image, Expense.ExpenseType expenseType)
+    {
+        int iconCode = 0;
+        switch (expenseType)
+        {
+            case PROFESSIONAL:
+                iconCode = R.drawable.ic_professional;
+                break;
+            case BILL:
+                iconCode = R.drawable.ic_baseline_bill_24;
+                break;
+            case GROCERIES:
+                iconCode = R.drawable.ic_baseline_shopping_cart_24;
+                break;
+            default:
+                iconCode = R.drawable.ic_baseline_attach_money_24;
+                break;
+        }
+        image.setImageResource(iconCode);
     }
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position)
     {
+        Expense expense = _expenses.get(position);
+        TextView titleView = holder.title;
+        TextView costView = holder.cost;
+        TextView payerView = holder.payer;
+
+        String costString = String.valueOf(expense.get_cost());
+        String payerName = expense.get_payer().get_name();
+
+        titleView.setText(expense.get_name());
+        if (expense.is_hasReceipt())
+        {
+            holder.viewReceiptIcon.setVisibility(View.VISIBLE);
+        }
+        setExpenseIcon(holder.expenseTypeIcon, expense.get_type());
+        costView.setText(costString);
+        payerView.setText(payerName);
 
     }
 
@@ -50,21 +89,21 @@ public class ExpenseAdapter extends RecyclerView.Adapter<ExpenseAdapter.ViewHold
     public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener
     {
 
-        public ImageView locked;
-        public ImageView unlocked;
+        public ImageView viewReceiptIcon;
+        public ImageView expenseTypeIcon;
         public TextView title;
-        public TextView dueDate;
-        public TextView assignee;
+        public TextView cost;
+        public TextView payer;
         ExpenseAdapter.OnExpenseListener onExpenseListener;
 
         public ViewHolder(View view, ExpenseAdapter.OnExpenseListener onExpenseListener)
         {
             super(view);
-            locked = view.findViewById(R.id.lockedView);
-            unlocked = view.findViewById(R.id.unlockedView);
+            viewReceiptIcon = view.findViewById(R.id.viewReceiptIcon);
+            expenseTypeIcon = view.findViewById(R.id.expenseTypeIcon);
             title = view.findViewById(R.id.choreTitleHolderView);
-            dueDate = view.findViewById(R.id.choreDueDateHolderView);
-            assignee = view.findViewById(R.id.choreAssigneeHolderView);
+            cost = view.findViewById(R.id.expenseCostHolderView);
+            payer = view.findViewById(R.id.expensePayerHolderView);
             this.onExpenseListener = onExpenseListener;
             view.setOnClickListener(this);
         }

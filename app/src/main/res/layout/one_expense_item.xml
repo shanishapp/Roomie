@@ -13,14 +13,13 @@
         android:layout_height="40dp"
         android:layout_marginEnd="15dp"
         android:layout_marginBottom="30dp"
+        android:src="@drawable/ic_baseline_receipt_24"
         android:visibility="invisible"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        android:src="@drawable/ic_baseline_receipt_24"
-        />
+        app:layout_constraintEnd_toEndOf="parent" />
 
     <ImageView
-        android:id="@+id/viewReceitIcon"
+        android:id="@+id/viewReceiptIcon"
         android:layout_width="40dp"
         android:layout_height="40dp"
         android:layout_marginEnd="15dp"
@@ -34,27 +33,27 @@
         android:layout_height="20dp"
         android:layout_marginStart="10dp"
         android:layout_marginTop="10dp"
-        android:text="Chore Title"
+        android:text="Expense Title"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
-        android:id="@+id/choreDueDateHolderView"
+        android:id="@+id/expenseCostHolderView"
         android:layout_width="0dp"
         android:layout_height="20dp"
         android:layout_marginStart="10dp"
         android:layout_marginTop="10dp"
-        android:text="Due date"
+        android:text="Cost"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/choreTitleHolderView" />
+        app:layout_constraintTop_toBottomOf="@+id/expenseTitleHolderView" />
 
     <TextView
-        android:id="@+id/choreAssigneeHolderView"
+        android:id="@+id/expensePayerHolderView"
         android:layout_width="0dp"
         android:layout_height="20dp"
         android:layout_marginStart="10dp"
         android:layout_marginTop="10dp"
-        android:text="currently no assignee"
+        android:text="No Payer Set"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/choreDueDateHolderView" />
+        app:layout_constraintTop_toBottomOf="@+id/expenseCostHolderView" />
 </androidx.constraintlayout.widget.ConstraintLayout>
