@@ -9,15 +9,20 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.example.roomie.R;
+import com.google.firebase.auth.FirebaseAuth;
 
 /**
  * A simple {@link Fragment} subclass.
  * Use the {@link houseExpensesFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class houseExpensesFragment extends Fragment {
+public class houseExpensesFragment extends Fragment
+{
 
-    public houseExpensesFragment() {
+    private FirebaseAuth auth;
+
+    public houseExpensesFragment()
+    {
         // Required empty public constructor
     }
 
@@ -27,18 +32,23 @@ public class houseExpensesFragment extends Fragment {
      *
      * @return A new instance of fragment houseExpensesFragment.
      */
-    public static houseExpensesFragment newInstance() {
+    public static houseExpensesFragment newInstance()
+    {
         return new houseExpensesFragment();
     }
 
     @Override
-    public void onCreate(Bundle savedInstanceState) {
+    public void onCreate(Bundle savedInstanceState)
+    {
+
         super.onCreate(savedInstanceState);
+        auth = FirebaseAuth.getInstance();
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
+                             Bundle savedInstanceState)
+    {
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_house_expenses, container, false);
     }

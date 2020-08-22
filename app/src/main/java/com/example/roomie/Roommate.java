@@ -9,19 +9,14 @@ import java.util.List;
 
 public class Roommate
 {
+    //TODO: profile pic
     private String _name;
-    private File _profilePic;
     private int _housePoints;
     private List<Chore> _chores;
 
     public String get_name()
     {
         return _name;
-    }
-
-    public File get_profilePic()
-    {
-        return _profilePic;
     }
 
     public int get_housePoints()
