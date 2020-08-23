@@ -19,8 +19,6 @@ import com.google.firebase.auth.FirebaseAuth;
 public class houseExpensesFragment extends Fragment
 {
 
-    private FirebaseAuth auth;
-
     public houseExpensesFragment()
     {
         // Required empty public constructor
@@ -40,9 +38,7 @@ public class houseExpensesFragment extends Fragment
     @Override
     public void onCreate(Bundle savedInstanceState)
     {
-
         super.onCreate(savedInstanceState);
-        auth = FirebaseAuth.getInstance();
     }
 
     @Override
