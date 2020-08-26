@@ -2,13 +2,21 @@ package com.example.roomie.house.chores;
 
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
+import androidx.navigation.NavController;
+import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+
 
 import com.example.roomie.R;
 
@@ -26,6 +34,8 @@ public class HouseChoresFragment extends Fragment {
     private RecyclerView.Adapter adapter;
     private DBManager db;
     private ArrayList<Chore> choreList;
+    private MovableFloatingActionButton button;
+    private NavController navController;
 
     public HouseChoresFragment() {
         // Required empty public constructor
@@ -59,6 +69,24 @@ public class HouseChoresFragment extends Fragment {
         recyclerView.setAdapter(adapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
 
+
+
         return v;
     }
+
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        navController = Navigation.findNavController(view);
+        button = view.findViewById(R.id.fab);
+        //set up add button
+        button.setOnClickListener(view1 -> {
+            if(view1 != null){
+                navController.navigate(R.id.action_house_chores_fragment_dest_to_choreFragment);
+            }
+        });
+    }
+
+
+
 }
