@@ -68,5 +68,8 @@ dependencies {
     //floating and movable button
     implementation 'com.getbase:floatingactionbutton:1.9.1'
 
+    //date and time picker
+    implementation 'com.github.florent37:singledateandtimepicker:2.2.6'
+
 
 }

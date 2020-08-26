@@ -2,7 +2,13 @@ package com.example.roomie.house.chores;
 
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
+import androidx.navigation.NavController;
+import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -28,7 +34,8 @@ public class HouseChoresFragment extends Fragment {
     private RecyclerView.Adapter adapter;
     private DBManager db;
     private ArrayList<Chore> choreList;
-    private Button button;
+    private MovableFloatingActionButton button;
+    private NavController navController;
 
     public HouseChoresFragment() {
         // Required empty public constructor
@@ -57,24 +64,29 @@ public class HouseChoresFragment extends Fragment {
         //init variables
         db = DBManager.getInstance();
         adapter = db.adapter;
-        button = v.findViewById(R.id.fab);
         // set up for recyclerview
         RecyclerView recyclerView = (RecyclerView) v.findViewById(R.id.recyclerView);
         recyclerView.setAdapter(adapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
 
-        //set up add button
-        button.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                showNewChoreDialog();
-            }
-        });
+
 
         return v;
     }
 
-    public void showNewChoreDialog() {
-
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        navController = Navigation.findNavController(view);
+        button = view.findViewById(R.id.fab);
+        //set up add button
+        button.setOnClickListener(view1 -> {
+            if(view1 != null){
+                navController.navigate(R.id.action_house_chores_fragment_dest_to_choreFragment);
+            }
+        });
     }
+
+
+
 }

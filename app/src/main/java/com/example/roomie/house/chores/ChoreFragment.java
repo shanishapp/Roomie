@@ -3,8 +3,12 @@ package com.example.roomie.house.chores;
 import android.app.DatePickerDialog;
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.Fragment;
+import androidx.navigation.NavController;
+import androidx.navigation.Navigation;
 
 import android.view.LayoutInflater;
 import android.view.View;
@@ -73,16 +77,24 @@ public class ChoreFragment extends Fragment {
         // Inflate the layout for this fragment
         View v = inflater.inflate(R.layout.fragment_chore, container, false);
 
-        FloatingActionButton fab = (FloatingActionButton) v.findViewById(R.id.fab);
+
 
         //define behaviour for the date picker button
-        datePickerBtn = v.findViewById(R.id.setDueDateBtn);
-        datePickerBtn.setOnClickListener(view -> new SlideDateTimePicker.Builder(getChildFragmentManager())
-                .setListener(listener)
-                .setInitialDate(new Date())
-                .build()
-                .show());
         return v;
+
+    }
+
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        NavController navController = Navigation.findNavController(view);
+        Button button = view.findViewById(R.id.createChoreBtn);
+        //set up add button
+        button.setOnClickListener(view1 -> {
+            if (view1 != null) {
+                navController.navigate(R.id.action_choreFragment_to_house_chores_fragment_dest);
+            }
+        });
     }
 
     private SlideDateTimeListener listener = new SlideDateTimeListener() {
