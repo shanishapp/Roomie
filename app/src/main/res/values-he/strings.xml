@@ -57,4 +57,23 @@
     <string name="join_house_activity_welcome_msg">ברוך הבא, הצטרפת לבית החדש שלך!</string>
     <string name="join_house_activity_join_error">ארעה שגיאה במהלך ההצטרפות לבית, אנא נסה שוב.</string>
     <string name="join_house_activity_invitation_expired">פג תוקף ההזמנה.</string>
+
+
+    <!-- create chore Fragment-->
+    <string name="enter_your_title_here">הכנס את שם הבית כאן</string>
+    <string name="title">שם הבית</string>
+    <string name="content">הערות</string>
+    <string name="assignee">ממונה</string>
+    <string name="create">צור</string>
+    <string name="create_new_chore_err_msg">ארעה שגיאה בעת יצירת המטלה, אנא נסה שוב.</string>
+
+    <string-array name="default_titles">
+        <item>שטיפת כלים</item>
+        <item>רצפה</item>
+        <item>נקיון כללי</item>
+        <item>כביסה</item>
+        <item>זבל</item>
+        <item>אחר</item>
+    </string-array>
+
 </resources>

@@ -4,14 +4,14 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".house.chores.ChoreFragment"
+    tools:context=".house.chores.chore.newChoreFragment"
     android:screenOrientation="portrait">
     <FrameLayout
         android:id="@+id/chore_fragment"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
-
     </FrameLayout>
+
     <TextView
         android:id="@+id/titleTextView"
         android:layout_width="wrap_content"
@@ -19,25 +19,24 @@
         android:layout_marginTop="10dp"
         android:text="@string/title"
         android:textSize="20sp"
-        app:layout_constraintEnd_toEndOf="@+id/planets_spinner"
-        app:layout_constraintStart_toStartOf="@+id/planets_spinner"
+        app:layout_constraintEnd_toEndOf="@+id/titleSpinner"
+        app:layout_constraintStart_toStartOf="@+id/titleSpinner"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <Spinner
-        android:id="@+id/planets_spinner"
-        android:layout_width="match_parent"
-        android:layout_height="40dp"
+    <com.dev.materialspinner.MaterialSpinner
+        android:id="@+id/titleSpinner"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
         android:layout_marginStart="20dp"
-        android:layout_marginTop="10dp"
         android:layout_marginEnd="20dp"
-        android:background="@drawable/input_bg"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/titleTextView" />
+        app:layout_constraintTop_toBottomOf="@+id/titleTextView"
+        />
 
 
     <EditText
-        android:id="@+id/editTextTextPersonName"
+        android:id="@+id/differentTitleEditText"
         android:layout_width="match_parent"
         android:layout_height="50dp"
         android:layout_marginStart="20dp"
@@ -49,7 +48,9 @@
         android:hint="@string/enter_your_title_here"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/planets_spinner" />
+        app:layout_constraintTop_toBottomOf="@+id/titleSpinner"
+        app:errorEnabled = "true"
+        />
 
     <TextView
         android:id="@+id/contentTextView"
@@ -60,10 +61,10 @@
         android:textSize="20sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/editTextTextPersonName" />
+        app:layout_constraintTop_toBottomOf="@+id/differentTitleEditText" />
 
     <EditText
-        android:id="@+id/editTextTextPersonName2"
+        android:id="@+id/contentEditText"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_marginStart="20dp"
@@ -72,25 +73,13 @@
         android:layout_marginBottom="40dp"
         android:background="@drawable/input_bg"
         android:gravity="center"
-        app:layout_constraintBottom_toTopOf="@+id/textView4"
+        app:layout_constraintBottom_toTopOf="@+id/assigneeTextView"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/contentTextView" />
 
-    <Spinner
-        android:id="@+id/assigneeSpinner"
-        android:layout_width="match_parent"
-        android:layout_height="50dp"
-        android:layout_marginStart="20dp"
-        android:layout_marginEnd="20dp"
-        android:layout_marginBottom="50dp"
-        android:background="@drawable/input_bg"
-        app:layout_constraintBottom_toTopOf="@+id/animationView"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
-
     <TextView
-        android:id="@+id/textView4"
+        android:id="@+id/assigneeTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/assignee"
@@ -99,10 +88,21 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
 
+    <com.dev.materialspinner.MaterialSpinner
+        android:id="@+id/assigneeSpinner"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="20dp"
+        android:layout_marginEnd="20dp"
+        android:layout_marginBottom="50dp"
+        app:layout_constraintBottom_toTopOf="@+id/snoozeAnimationView"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
     <com.airbnb.lottie.LottieAnimationView
-        android:id="@+id/animationView"
-        android:layout_width="193dp"
-        android:layout_height="158dp"
+        android:id="@+id/snoozeAnimationView"
+        android:layout_width="177dp"
+        android:layout_height="119dp"
         android:layout_marginEnd="40dp"
         android:layout_marginBottom="40dp"
         app:layout_constraintBottom_toTopOf="@+id/createChoreBtn"
@@ -113,7 +113,7 @@
         app:lottie_loop="true" />
 
     <TextView
-        android:id="@+id/textView"
+        android:id="@+id/remindMeAtTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="40dp"
@@ -124,14 +124,14 @@
         app:layout_constraintTop_toBottomOf="@+id/assigneeSpinner" />
 
     <TextView
-        android:id="@+id/textView2"
+        android:id="@+id/presentDateTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="20dp"
         android:visibility="invisible"
-        app:layout_constraintEnd_toEndOf="@+id/textView"
-        app:layout_constraintStart_toStartOf="@+id/textView"
-        app:layout_constraintTop_toBottomOf="@+id/textView" />
+        app:layout_constraintEnd_toEndOf="@+id/remindMeAtTextView"
+        app:layout_constraintStart_toStartOf="@+id/remindMeAtTextView"
+        app:layout_constraintTop_toBottomOf="@+id/remindMeAtTextView" />
 
     <Button
         android:id="@+id/createChoreBtn"
@@ -143,5 +143,8 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
+
+
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>

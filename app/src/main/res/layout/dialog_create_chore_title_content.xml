@@ -8,7 +8,7 @@
 
 
     <Spinner
-        android:id="@+id/planets_spinner"
+        android:id="@+id/titleSpinner"
         android:layout_width="match_parent"
         android:layout_height="50dp"
         android:layout_marginStart="20dp"
@@ -21,7 +21,7 @@
         app:layout_constraintVertical_bias="0.2"/>
 
     <EditText
-        android:id="@+id/editTextTextPersonName"
+        android:id="@+id/differentTitleEditText"
         android:layout_width="match_parent"
         android:layout_height="50dp"
         android:layout_marginStart="20dp"
@@ -33,18 +33,18 @@
         android:hint="@string/enter_your_title_here"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/planets_spinner" />
+        app:layout_constraintTop_toBottomOf="@+id/titleSpinner" />
 
     <TextView
-        android:id="@+id/textView4"
+        android:id="@+id/assigneeTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="5dp"
         android:text="@string/title"
         android:textSize="20sp"
-        app:layout_constraintBottom_toTopOf="@+id/planets_spinner"
-        app:layout_constraintEnd_toEndOf="@+id/planets_spinner"
-        app:layout_constraintStart_toStartOf="@+id/planets_spinner" />
+        app:layout_constraintBottom_toTopOf="@+id/titleSpinner"
+        app:layout_constraintEnd_toEndOf="@+id/titleSpinner"
+        app:layout_constraintStart_toStartOf="@+id/titleSpinner" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -15,7 +15,7 @@
         android:background="@color/lightButtonColor"
     />
 
-    <com.example.roomie.house.chores.MovableFloatingActionButton
+    <com.example.roomie.MovableFloatingActionButton
         android:id="@+id/fab"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

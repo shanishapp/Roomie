@@ -12,6 +12,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 
 import com.example.roomie.R;
+import com.example.roomie.house.chores.chore.Chore;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;

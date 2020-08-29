@@ -5,8 +5,8 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.FragmentTransaction;
+import androidx.lifecycle.LiveData;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -15,24 +15,28 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 
 
+import com.example.roomie.FirestoreJob;
+import com.example.roomie.MovableFloatingActionButton;
 import com.example.roomie.R;
+import com.example.roomie.house.HouseActivityViewModel;
+import com.example.roomie.house.chores.chore.Chore;
 
 import java.util.ArrayList;
-import java.util.Date;
+import java.util.List;
 
 /**
  * A simple {@link Fragment} subclass.
  * Use the {@link HouseChoresFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class HouseChoresFragment extends Fragment {
+public class HouseChoresFragment extends Fragment implements ChoreAdapter.OnChoreListener {
 
     private RecyclerView recyclerView;
-    private RecyclerView.Adapter adapter;
-    private DBManager db;
+    private RecyclerView.Adapter adapter = null;
+    private HouseActivityViewModel houseActivityViewModel;
+    private HouseChoresFragmentViewModel vm;
     private ArrayList<Chore> choreList;
     private MovableFloatingActionButton button;
     private NavController navController;
@@ -62,15 +66,18 @@ public class HouseChoresFragment extends Fragment {
         // Inflate the layout for this fragment
         View v =  inflater.inflate(R.layout.fragment_house_chores, container, false);
         //init variables
-        db = DBManager.getInstance();
-        adapter = db.adapter;
-        // set up for recyclerview
-        RecyclerView recyclerView = (RecyclerView) v.findViewById(R.id.recyclerView);
-        recyclerView.setAdapter(adapter);
-        recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-
-
-
+        houseActivityViewModel = new ViewModelProvider(requireActivity()).get(HouseActivityViewModel.class);
+        vm = new ViewModelProvider(this).get(HouseChoresFragmentViewModel.class);
+        LiveData<allChoresJob> job  = vm.getAllChores(houseActivityViewModel.getHouse().getId());
+        job.observe(getViewLifecycleOwner(), allChoresJob -> {
+            if(allChoresJob.getJobStatus() == FirestoreJob.JobStatus.SUCCESS) {
+                choreList = (ArrayList<Chore>) allChoresJob.getChoreList();
+                adapter = new ChoreAdapter(choreList,HouseChoresFragment.this);
+                RecyclerView recyclerView = v.findViewById(R.id.recyclerView);
+                recyclerView.setAdapter(adapter);
+                recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+            }
+        });
         return v;
     }
 
@@ -88,5 +95,8 @@ public class HouseChoresFragment extends Fragment {
     }
 
 
+    @Override
+    public void onChoreClick(int pos) {
 
+    }
 }

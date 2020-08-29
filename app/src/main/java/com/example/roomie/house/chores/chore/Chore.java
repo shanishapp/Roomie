@@ -1,10 +1,10 @@
-package com.example.roomie.house.chores;
+package com.example.roomie.house.chores.chore;
 
 import android.util.Pair;
 
 import java.util.Date;
 
-public class Chore {
+public class  Chore {
     private String _id;
     private Date _dueDate;
     private Date _creationDate;
@@ -15,10 +15,11 @@ public class Chore {
     private Pair<String,Integer> _kind;
     private String _assignee; //TODO change to residence class
 
-    Chore(String title, String description, Pair<String, Integer> kind, String assignee, Date dueDate) {
+    Chore(){}
+
+    Chore(String title, String description, String assignee, Date dueDate) {
         _title = title;
         _description = description;
-        _kind = kind;
         _assignee = assignee;
         _dueDate = dueDate;
         _creationDate = new Date();
@@ -30,6 +31,10 @@ public class Chore {
 
     public Date get_dueDate() {
         return _dueDate;
+    }
+
+    public Date get_creationDate() {
+        return _creationDate;
     }
 
     public Date get_lastUpdatedDate() {
