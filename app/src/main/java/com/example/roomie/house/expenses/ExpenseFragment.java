@@ -11,9 +11,6 @@ import androidx.annotation.Nullable;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 
-import com.example.roomie.R;
-import com.example.roomie.house.chores.ChoreFragment;
-
 public class ExpenseFragment extends houseExpensesFragment
 {
     // TODO: Rename parameter arguments, choose names that match

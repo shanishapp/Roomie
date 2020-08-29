@@ -71,7 +71,7 @@ public class HouseActivity extends AppCompatActivity {
 
         // Add ids of menu items which we want to be top-level
         appBarConfiguration = new AppBarConfiguration.Builder(
-                R.id.house_feed_fragment_dest, R.id.house_feed_fragment_dest, R.id.house_user_profile_fragmnet_dest,
+                R.id.house_feed_fragment_dest, R.id.house_feed_fragment_dest, R.id.house_user_profile_fragment_dest,
                 R.id.house_settings_fragment_dest, R.id.house_chores_fragment_dest, R.id.house_groceries_fragment_dest,
                 R.id.house_expenses_fragment_dest, R.id.house_invite_roomie_fragment_dest)
                 .setOpenableLayout(drawerLayout)

@@ -49,4 +49,22 @@
         <item name="android:textColorPrimary">@color/white</item>
     </style>
 
+    <style name="UserProfileStatItemWrapper">
+        <item name="android:background">@drawable/user_profile_stat_item_wrapper_bg</item>
+        <item name="android:paddingVertical">22dp</item>
+        <item name="android:layout_marginHorizontal">8dp</item>
+    </style>
+
+    <style name="UserProfileStatValue">
+        <item name="android:textSize">22sp</item>
+        <item name="android:textColor">@color/buttonColorDark</item>
+        <item name="android:textAlignment">center</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+
+    <style name="UserProfileStatTitle">
+        <item name="android:textColor">@color/buttonColorDark</item>
+        <item name="android:textAlignment">center</item>
+    </style>
+
 </resources>
