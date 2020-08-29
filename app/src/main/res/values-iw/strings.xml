@@ -27,7 +27,6 @@
     <string name="create_new_house_house_address">כתובת הבית</string>
     <string name="create_new_house_house_desc">תיאור הבית</string>
     <string name="create_new_house_create_new_house">צור בית חדש</string>
-    <string name="house_activity_title">ברוך הבא אל %s</string>
     <string name="house_drawer_menu_house">בית</string>
     <string name="house_drawer_menu_house_settings">הגדרות הבית</string>
     <string name="house_drawer_menu_user_profile">פרופיל משתמש</string>
@@ -75,4 +74,17 @@
         <item>other</item>
     </string-array>
 
+    <string name="request_permission_title">בקשה להרשאה</string>
+    <string name="request_permission_approve">בסדר</string>
+    <string name="request_read_external_storage_msg">על מנת לשנות את תמונת הפרופיל שלך אנחנו צריכים הרשאות לגשת לתמונות שלך.</string>
+    <string name="house_user_profile_fragment_profile_pic_desc">תמונת פרופיל</string>
+    <string name="house_user_profile_fragment_roomie_in">שותף בבית %s</string>
+    <string name="house_user_profile_fragmnet_chores">מטלות</string>
+    <string name="house_user_profile_fragmnet_brooms">מטאטאים</string>
+    <string name="house_user_profile_fragmnet_expenses">הוצאות</string>
+    <string name="house_user_profile_fragment_edit_profile_button">ערוך פרופיל</string>
+    <string name="house_edit_user_profile_fragment_title">עריכת פרופיל</string>
+    <string name="house_edit_user_profile_fragment_change_picture_desc">בחירת תמונת פרופיל</string>
+    <string name="house_edit_user_profile_fragment_username_text">שם משתמש</string>
+    <string name="house_edit_user_profile_fragment_save_changes">שמור שינויים</string>
 </resources>

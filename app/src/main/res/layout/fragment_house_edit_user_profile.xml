@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".house.user_profile.HouseEditUserProfileFragment">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <RelativeLayout
+            android:id="@+id/relativeLayout"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginEnd="16dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <RelativeLayout
+                android:id="@+id/edit_user_profile_profile_picture_card_wrapper"
+                android:layout_width="134dp"
+                android:layout_height="134dp"
+                android:layout_centerHorizontal="true"
+                android:background="@drawable/user_profile_picture_circle_border">
+
+                <androidx.cardview.widget.CardView
+                    android:id="@+id/edit_user_profile_profile_picture_card"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerInParent="true"
+                    android:layout_centerVertical="true"
+                    app:cardCornerRadius="64dp"
+                    app:cardPreventCornerOverlap="false">
+
+                    <ImageView
+                        android:id="@+id/edit_user_profile_profile_picture"
+                        android:layout_width="128dp"
+                        android:layout_height="128dp"
+                        android:contentDescription="@string/house_user_profile_fragment_profile_pic_desc"
+                        app:srcCompat="@drawable/avatar_1" />
+                </androidx.cardview.widget.CardView>
+            </RelativeLayout>
+
+            <ImageButton
+                android:id="@+id/edit_user_profile_select_profile_picture_button"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:layout_below="@id/edit_user_profile_profile_picture_card_wrapper"
+                android:layout_marginStart="-48dp"
+                android:layout_marginTop="-48dp"
+                android:layout_toEndOf="@id/edit_user_profile_profile_picture_card_wrapper"
+                android:background="@drawable/edit_user_profile_profile_picture_button_bg"
+                android:contentDescription="@string/house_edit_user_profile_fragment_change_picture_desc"
+                android:src="@drawable/ic_baseline_photo_camera_24"
+                android:translationZ="2dp" />
+        </RelativeLayout>
+
+        <TextView
+            android:id="@+id/edit_user_profile_username_text"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginEnd="16dp"
+            android:labelFor="@id/edit_user_profile_username_value"
+            android:text="@string/house_edit_user_profile_fragment_username_text"
+            android:textColor="@android:color/black"
+            android:textSize="18sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/relativeLayout" />
+
+        <EditText
+            android:id="@+id/edit_user_profile_username_value"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="16dp"
+            android:importantForAutofill="no"
+            android:inputType="textPersonName"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/edit_user_profile_username_text" />
+
+        <Button
+            android:id="@+id/edit_user_profile_save_changes_btn"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginEnd="16dp"
+            android:background="@color/buttonColorDark"
+            android:text="@string/house_edit_user_profile_fragment_save_changes"
+            android:textAllCaps="false"
+            android:textColor="@color/white"
+            android:textSize="18sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/edit_user_profile_username_value" />
+
+        <FrameLayout
+            android:id="@+id/edit_user_profile_loading_overlay"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:alpha="0.6"
+            android:background="@color/white"
+            android:translationZ="10dp"
+            android:visibility="gone"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <ProgressBar
+                android:id="@+id/edit_user_profile_progress_bar"
+                style="?android:attr/progressBarStyle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center" />
+        </FrameLayout>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</ScrollView>

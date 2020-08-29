@@ -1,6 +1,11 @@
 <resources>
     <!--  General  -->
     <string name="app_name">Roomie</string>
+    <string name="request_permission_title">Permission Request</string>
+    <string name="request_permission_approve">OK</string>
+    <string name="request_read_external_storage_msg">
+        In order to set your profile picture we need your permission to access your photos.
+    </string>
 
     <!--  Sign in activity  -->
     <string name="sign_in_welcome_msg">Hey, roomie!</string>
@@ -80,7 +85,18 @@
 
     <!--  House User Profile Fragment  -->
     <string name="house_user_profile_fragment_title">User Profile</string>
-    <string name="house_activity_title">Welcome to %s</string>
+    <string name="house_user_profile_fragment_profile_pic_desc">Profile Picture</string>
+    <string name="house_user_profile_fragment_roomie_in">Roomie in %s</string>
+    <string name="house_user_profile_fragmnet_brooms">Brooms</string>
+    <string name="house_user_profile_fragmnet_chores">Chores</string>
+    <string name="house_user_profile_fragmnet_expenses">Expenses</string>
+    <string name="house_user_profile_fragment_edit_profile_button">Edit Profile</string>
+
+    <!--  House Edit User Profile Fragment  -->
+    <string name="house_edit_user_profile_fragment_title">Edit Profile</string>
+    <string name="house_edit_user_profile_fragment_change_picture_desc">Change Profile Picture</string>
+    <string name="house_edit_user_profile_fragment_username_text">Username</string>
+    <string name="house_edit_user_profile_fragment_save_changes">Save Changes</string>
 
     <!-- Join House Activity  -->
     <string name="join_house_activity_title">Join House</string>

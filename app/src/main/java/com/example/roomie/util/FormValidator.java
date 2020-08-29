@@ -30,8 +30,21 @@ public class FormValidator {
 
         return true;
     }
+
     public static boolean isValidHouseDesc(String houseDesc) {
         // TODO add regex check for invalid chars?
+
+        return true;
+    }
+
+    public static boolean isValidUsername(String username) {
+        if (username.isEmpty()) {
+            return false;
+        }
+
+        if (username.length() < 3 || username.length() > 30) {
+            return false;
+        }
 
         return true;
     }
