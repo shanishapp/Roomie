@@ -9,4 +9,6 @@ public class FirestoreUtil {
 
     public final static String INVITES_COLLECTION_NAME = "invites";
 
+    public final static String CHORESS_COLLECTION_NAME = "chores";
+
 }

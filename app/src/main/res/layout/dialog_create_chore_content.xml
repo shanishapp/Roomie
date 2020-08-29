@@ -19,7 +19,7 @@
         app:layout_constraintVertical_bias="0.2"/>
 
     <EditText
-        android:id="@+id/editTextTextPersonName2"
+        android:id="@+id/contentEditText"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_marginEnd="10dp"

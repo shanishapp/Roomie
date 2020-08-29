@@ -50,7 +50,7 @@
         tools:layout="@layout/fragment_house_invite_roomie" />
     <fragment
         android:id="@+id/choreFragment"
-        android:name="com.example.roomie.house.chores.ChoreFragment"
+        android:name="com.example.roomie.house.chores.chore.newChoreFragment"
         android:label="fragment_chore"
         tools:layout="@layout/fragment_chore" >
         <action

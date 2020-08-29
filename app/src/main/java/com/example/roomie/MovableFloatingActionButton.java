@@ -1,4 +1,4 @@
-package com.example.roomie.house.chores;
+package com.example.roomie;
 
 import android.content.Context;
 import android.util.AttributeSet;

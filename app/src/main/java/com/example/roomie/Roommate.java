@@ -1,10 +1,7 @@
 package com.example.roomie;
 
-import com.example.roomie.house.chores.Chore;
-import com.example.roomie.house.expenses.Expense;
+import com.example.roomie.house.chores.chore.Chore;
 
-import java.io.File;
-import java.util.ArrayList;
 import java.util.List;
 
 public class Roommate
