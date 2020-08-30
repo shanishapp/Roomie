@@ -6,25 +6,7 @@ import java.util.Date;
 
 public class Expense
 {
-    public boolean is_hasReceipt()
-    {
-        return _hasReceipt;
-    }
-
-    public void set_hasReceipt(boolean _hasReceipt)
-    {
-        this._hasReceipt = _hasReceipt;
-    }
-
-    public enum ExpenseType
-    {
-        PROFESSIONAL,
-        GROCERIES,
-        BILL,
-        GENERAL
-    }
-
-
+    private String _id;
     private String _name;
     private String _description;
     private ExpenseType _type;
@@ -35,11 +17,42 @@ public class Expense
     private boolean _hasReceipt;
     //TODO: receipt photo
 
+    public boolean is_hasReceipt()
+    {
+        return _hasReceipt;
+    }
 
-    Expense(String name, String desctiption, float cost, Date purchaseDate, ExpenseType type, Roommate payer)
+    public void set_hasReceipt(boolean _hasReceipt)
+    {
+        this._hasReceipt = _hasReceipt;
+    }
+
+    public void set_id(String id)
+    {
+        _id = id;
+    }
+
+    public String get_id()
+    {
+        return _id;
+    }
+
+    static public enum ExpenseType
+    {
+        PROFESSIONAL,
+        GROCERIES,
+        BILL,
+        GENERAL
+    }
+
+
+
+
+
+    Expense(String name, String description, float cost, Date purchaseDate, ExpenseType type, Roommate payer)
     {
         _name = name;
-        _description = desctiption;
+        _description = description;
         _type = type;
         _cost = cost;
         _purchaseDate = purchaseDate;
