@@ -6,8 +6,6 @@ import androidx.lifecycle.MutableLiveData;
 import com.example.roomie.FirestoreJob;
 import com.example.roomie.House;
 import com.example.roomie.Roommate;
-import com.example.roomie.house.chores.chore.Chore;
-import com.example.roomie.house.chores.chore.newChoreJob;
 import com.google.firebase.firestore.FieldPath;
 import com.google.firebase.firestore.FirebaseFirestore;
 
