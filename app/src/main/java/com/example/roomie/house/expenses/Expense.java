@@ -37,7 +37,7 @@ public class Expense
         return _id;
     }
 
-    static public enum ExpenseType
+    public enum ExpenseType
     {
         PROFESSIONAL,
         GROCERIES,
@@ -120,7 +120,7 @@ public class Expense
     {
         this._type = _type;
     }
-    //Todo: picture
+    //Todo: take picture
 //    static final int REQUEST_IMAGE_CAPTURE = 1;
 //    private void dispatchTakePictureIntent () {
 //        Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);

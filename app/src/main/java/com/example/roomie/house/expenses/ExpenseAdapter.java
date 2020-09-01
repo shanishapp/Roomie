@@ -1,11 +1,9 @@
 package com.example.roomie.house.expenses;
 
 import android.content.Context;
-import android.os.storage.StorageManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -33,7 +31,7 @@ public class ExpenseAdapter extends RecyclerView.Adapter<ExpenseAdapter.ViewHold
     {
         Context context = parent.getContext();
         LayoutInflater inflater = LayoutInflater.from(context);
-        View expenseView = inflater.inflate(R.layout.one_expense_item, parent, false);
+        View expenseView = inflater.inflate(R.layout.single_expense, parent, false);
         return new ViewHolder(expenseView, _myExpenseListener);
     }
 

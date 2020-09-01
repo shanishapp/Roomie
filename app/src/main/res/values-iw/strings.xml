@@ -87,4 +87,8 @@
     <string name="house_edit_user_profile_fragment_change_picture_desc">בחירת תמונת פרופיל</string>
     <string name="house_edit_user_profile_fragment_username_text">שם משתמש</string>
     <string name="house_edit_user_profile_fragment_save_changes">שמור שינויים</string>
+    <string name="expenseType">סוג ההוצאה</string>
+    <string name="enter_custom_expense">הכנס את שם ההוצאה כאן</string>
+    <string name="cost">מחיר</string>
+    <string name="enter_expense_price">הכנס את עלות ההוצאה כאן</string>
 </resources>

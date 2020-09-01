@@ -48,4 +48,6 @@ public class houseExpensesFragment extends Fragment
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_house_expenses, container, false);
     }
+
+    //TODO: need a view for total
 }

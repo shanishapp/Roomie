@@ -116,6 +116,10 @@
     <string name="assignee">Assignee</string>
     <string name="create">create</string>
     <string name="create_new_chore_err_msg"> there was an error creating the chore, please try again</string>
+    <string name="expenseType">Expense Type</string>
+    <string name="enter_custom_expense">Enter the title of your expense here</string>
+    <string name="cost">Cost</string>
+    <string name="enter_expense_price">Enter Expense Price</string>
 
     <string-array name="default_titles">
         <item>washing dishes</item>
