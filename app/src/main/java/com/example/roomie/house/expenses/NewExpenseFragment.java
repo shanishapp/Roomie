@@ -28,6 +28,7 @@ import com.skydoves.powerspinner.PowerSpinnerView;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
+import java.util.List;
 import java.util.Objects;
 
 import me.abhinay.input.CurrencyEditText;
@@ -130,19 +131,23 @@ public class NewExpenseFragment extends Fragment
         //TODO: get price from editText
         //TODO: get type by enum and not string
         //TODO: clean up confusion with type and title
-        Roommate payer = new Roommate("some dude");
+        String[] myList = new String[]{"a", "b", "c"};
+        List<String> roommatesList = Arrays.asList("shani", "avihai", "uri");
+        Roommate payer;
         float cost = (float) 12.9;
         String title, content;
         Date dateCreated = new Date();
         title = getCostType();
         if (title == null) return;
         content = contentEditText.getText().toString();
+        int idx = payerSpinner.getSelectedIndex();
+        payer = new Roommate(roommatesList.get(idx));
 //        payer = payerSpinner.get
 //        payer = payerSpinner.getSpinner().getSelectedItem().toString();
         dateCreated = new Date();
 
         LiveData<CreateNewExpenseJob> job = newExpenseViewModel.createNewExpense(house, title, content, cost, payer,
-                Expense.ExpenseType.GENERAL,dateCreated);
+                Expense.ExpenseType.GENERAL, dateCreated);
 
         job.observe(getViewLifecycleOwner(), createNewChoreJob -> {
             switch (createNewChoreJob.getJobStatus())
