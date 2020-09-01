@@ -120,6 +120,9 @@
     <string name="enter_custom_expense">Enter the title of your expense here</string>
     <string name="cost">Cost</string>
     <string name="enter_expense_price">Enter Expense Price</string>
+    <string name="currently_no_assignee">currently no assignee</string>
+    <string name="due_date">Due date</string>
+    <string name="chore_title">Chore Title</string>
 
     <string-array name="default_titles">
         <item>washing dishes</item>

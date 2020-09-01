@@ -65,6 +65,9 @@
     <string name="assignee">ממונה</string>
     <string name="create">צור</string>
     <string name="create_new_chore_err_msg">ארעה שגיאה בעת יצירת המטלה, אנא נסה שוב.</string>
+    <string name="currently_no_assignee">אין כרגע ממונה על המטלה</string>
+    <string name="due_date">תאריך יעד</string>
+    <string name="chore_title">שם המטלה</string>
 
     <string-array name="default_titles">
         <item>שטיפת כלים</item>

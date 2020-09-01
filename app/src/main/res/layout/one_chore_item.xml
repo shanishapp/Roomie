@@ -11,8 +11,8 @@
 
     <ImageView
         android:id="@+id/lockedView"
-        android:layout_width="70dp"
-        android:layout_height="70dp"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
         android:layout_marginEnd="10dp"
         android:visibility="invisible"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -23,8 +23,8 @@
 
     <ImageView
         android:id="@+id/unlockedView"
-        android:layout_width="70dp"
-        android:layout_height="70dp"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
         android:layout_marginEnd="10dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintDimensionRatio="1.0"
@@ -34,35 +34,44 @@
 
     <TextView
         android:id="@+id/choreTitleHolderView"
-        android:gravity="center"
         android:layout_width="0dp"
         android:layout_height="20dp"
         android:layout_marginTop="10dp"
-        android:text="Chore Title"
+        android:gravity="center"
+        android:text="@string/chore_title"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/unlockedView"
+        app:layout_constraintStart_toStartOf="@+id/choreDueDateHolderView"
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
         android:id="@+id/choreDueDateHolderView"
-        android:gravity="center"
         android:layout_width="0dp"
         android:layout_height="20dp"
-        android:layout_marginStart="10dp"
         android:layout_marginTop="10dp"
-        android:text="Due date"
-        app:layout_constraintEnd_toEndOf="@+id/lockedView"
-        app:layout_constraintStart_toStartOf="parent"
+        android:gravity="center"
+        android:text="@string/due_date"
+        app:layout_constraintEnd_toStartOf="@+id/lockedView"
+        app:layout_constraintStart_toEndOf="@+id/assigneeImageView"
         app:layout_constraintTop_toBottomOf="@+id/choreTitleHolderView" />
 
     <TextView
         android:id="@+id/choreAssigneeHolderView"
-        android:gravity="center"
         android:layout_width="0dp"
         android:layout_height="20dp"
         android:layout_marginTop="10dp"
-        android:text="currently no assignee"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
+        android:gravity="center"
+        android:text="@string/currently_no_assignee"
+        app:layout_constraintEnd_toStartOf="@+id/lockedView"
+        app:layout_constraintStart_toStartOf="@+id/choreDueDateHolderView"
         app:layout_constraintTop_toBottomOf="@+id/choreDueDateHolderView" />
+
+    <ImageView
+        android:id="@+id/assigneeImageView"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_marginStart="10dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -21,13 +21,16 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.airbnb.lottie.LottieAnimationView;
-import com.dev.materialspinner.MaterialSpinner;
 import com.example.roomie.House;
 import com.example.roomie.R;
 import com.example.roomie.house.HouseActivityViewModel;
 import com.github.jjobes.slidedatetimepicker.SlideDateTimeListener;
+import com.skydoves.powerspinner.OnSpinnerItemSelectedListener;
+import com.skydoves.powerspinner.PowerSpinnerView;
 
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 
 /**
@@ -38,16 +41,17 @@ import java.util.Date;
 public class newChoreFragment extends Fragment {
 
     private NewChoreFragmentViewModel newChoreFragmentViewModel;
-    private MaterialSpinner titleSpinner;
+    private PowerSpinnerView titleSpinner;
     private EditText differentTitleEditTText;
     private EditText contentEditText;
-    private MaterialSpinner assigneeSpinner;
+    private PowerSpinnerView assigneeSpinner;
     private LottieAnimationView snoozeAnimationView;
     private TextView presentDateTextView;
     private HouseActivityViewModel houseActivityViewModel;
     private House house;
     private Button createChoreButton;
     private NavController navController ;
+    private ArrayList<String> roommatesList;
 
 
     public newChoreFragment() {
@@ -94,7 +98,6 @@ public class newChoreFragment extends Fragment {
         //set up add button
         createChoreButton.setOnClickListener(view1 -> {
             if (view1 != null) {
-
                 doCreateNewChore(view);
             }
         });
@@ -119,37 +122,38 @@ public class newChoreFragment extends Fragment {
     }
 
     private void setAssigneeSpinner() {
-        String[] stringArray = {"shani","avihi","uri"};
-        ArrayAdapter<String> arr = new ArrayAdapter<String>(getContext(),android.R.layout.simple_spinner_item, stringArray);
-        assigneeSpinner.setAdapter(arr);
+        String[] arr = {"shani","avihi","uri"};
+        roommatesList = new ArrayList<String>(Arrays.asList(arr));
+        //ArrayAdapter<String> arr = new ArrayAdapter<String>(getContext(),android.R.layout.simple_spinner_item, stringArray);
+        assigneeSpinner.setItems(roommatesList);
     }
 
     private void setTitleSpinner() {
-        ArrayAdapter<String> arr = new ArrayAdapter<String>(getContext(),android.R.layout.simple_spinner_item, getResources().getStringArray(R.array.default_titles));
-        titleSpinner.setAdapter(arr);
-        titleSpinner.setItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+//        ArrayAdapter<String> arr = new ArrayAdapter<String>(getContext(),android.R.layout.simple_spinner_item, getResources().getStringArray(R.array.default_titles));
+//        titleSpinner.setAdapter(arr);
+        titleSpinner.setOnSpinnerItemSelectedListener(new OnSpinnerItemSelectedListener<String>() {
             @Override
-            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-                String choice = adapterView.getItemAtPosition(i).toString();
-                if(choice.equals("other") || choice.equals("אחר")) {
+            public void onItemSelected(int i, String s) {
+
+
+                if (s.equals("other") || s.equals("אחר")) {
                     differentTitleEditTText.setVisibility(View.VISIBLE);
+                } else {
+                    differentTitleEditTText.setText(s);
                 }
-
-            }
-            @Override
-            public void onNothingSelected(AdapterView<?> adapterView) {
-
             }
         });
+
     }
 
     private void doCreateNewChore(View view) {
         String title, content, assignee;
         Date dueDate;
-        title = getTitle();
+        title = differentTitleEditTText.getText().toString();
         if (title == null) return;
         content = contentEditText.getText().toString();
-        assignee = assigneeSpinner.getSpinner().getSelectedItem().toString();
+        int idx =  assigneeSpinner.getSelectedIndex();
+        assignee = roommatesList.get(idx);
         dueDate = new Date();
 
         LiveData<newChoreJob> job = newChoreFragmentViewModel.createNewChore(house,title,content,dueDate,assignee);
@@ -172,19 +176,19 @@ public class newChoreFragment extends Fragment {
         });
     }
 
-    private String getTitle() {
-        String title;
-        if (titleSpinner.getSpinner().getSelectedItem().toString().equals("other")) { // TODO, switch to string resource
-            title = differentTitleEditTText.getText().toString();
-            if(title.equals("")) {// TODO nul ??
-                differentTitleEditTText.setError("you need to enter title"); // TODO string resource
-                return null;
-            }
-        } else {
-            title = titleSpinner.getSpinner().getSelectedItem().toString();
-        }
-        return title;
-    }
+//    private String getTitle() {
+//        String title;
+//        if (titleSpinner.getSelectedItem().toString().equals("other")) { // TODO, switch to string resource
+//            title = differentTitleEditTText.getText().toString();
+//            if(title.equals("")) {// TODO nul ??
+//                differentTitleEditTText.setError("you need to enter title"); // TODO string resource
+//                return null;
+//            }
+//        } else {
+//            title = titleSpinner.getSpinner().getSelectedItem().toString();
+//        }
+//        return title;
+//    }
 
     private SlideDateTimeListener listener = new SlideDateTimeListener() {
 
