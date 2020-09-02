@@ -68,6 +68,11 @@
     <string name="currently_no_assignee">אין כרגע ממונה על המטלה</string>
     <string name="due_date">תאריך יעד</string>
     <string name="chore_title">שם המטלה</string>
+    <string name="other">אחר</string>
+    <string name="enter_title">בבקשה הכנס\י שם</string>
+    <string name="no_title_error_msg">אנא בחר\י שם או בחר\י אחר ותיצר\י אחד משלך</string>
+    <string name="change_due_date">change date</string>
+
 
     <string-array name="default_titles">
         <item>שטיפת כלים</item>

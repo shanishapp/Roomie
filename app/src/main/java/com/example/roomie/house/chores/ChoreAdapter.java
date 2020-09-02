@@ -51,7 +51,7 @@ public class ChoreAdapter extends RecyclerView.Adapter<ChoreAdapter.ViewHolder> 
         TextView assigneeView = holder.assignee;
 
         titleView.setText(choreItem.get_title());
-        String pattern = "dd/MM/yyyy HH:mm:ss";
+        String pattern = "dd/MM/yyyy HH:mm";
         DateFormat df = new SimpleDateFormat(pattern);
         dueDateView.setText(df.format(choreItem.get_dueDate()));
         assigneeView.setText(choreItem.get_assignee());
@@ -63,7 +63,6 @@ public class ChoreAdapter extends RecyclerView.Adapter<ChoreAdapter.ViewHolder> 
             holder.locked.setVisibility(View.VISIBLE);
             holder.unlocked.setVisibility(View.INVISIBLE);
         }
-
     }
 
     @Override

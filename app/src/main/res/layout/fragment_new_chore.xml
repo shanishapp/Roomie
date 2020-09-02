@@ -6,11 +6,6 @@
     android:layout_height="match_parent"
     tools:context=".house.chores.chore.newChoreFragment"
     android:screenOrientation="portrait">
-    <FrameLayout
-        android:id="@+id/chore_fragment"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
-    </FrameLayout>
 
     <TextView
         android:id="@+id/titleTextView"
@@ -34,11 +29,16 @@
         android:textColor="#000000"
         android:textColorHint="@color/colorAccent"
         android:textSize="14.5sp"
-        app:spinner_arrow_gravity="end"
+
+        app:spinner_arrow_gravity="start"
         app:spinner_arrow_padding="8dp"
-        app:spinner_divider_color="@color/white"
+        app:spinner_arrow_tint="@color/black"
+        app:spinner_arrow_animate="true"
+
+        app:spinner_divider_color="@color/gray_holo_light"
         app:spinner_divider_show="true"
         app:spinner_divider_size="0.4dp"
+
         app:spinner_popup_animation="dropdown"
         app:spinner_popup_background="@color/white"
         app:spinner_popup_elevation="14dp"
@@ -59,83 +59,80 @@
         android:layout_marginEnd="20dp"
         android:layout_marginTop="10dp"
         android:gravity="center"
-        android:visibility="invisible"
+        android:visibility="gone"
         android:background="@drawable/input_bg"
         android:hint="@string/enter_your_title_here"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/titleSpinner"
         app:errorEnabled = "true"
+
         />
-
-    <TextView
-        android:id="@+id/contentTextView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
-        android:text="@string/content"
-        android:textSize="20sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/differentTitleEditText" />
-
-    <EditText
-        android:id="@+id/contentEditText"
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_marginStart="20dp"
-        android:layout_marginTop="10dp"
-        android:layout_marginEnd="20dp"
-        android:layout_marginBottom="40dp"
-        android:background="@drawable/input_bg"
-        android:gravity="center"
-        app:layout_constraintBottom_toTopOf="@+id/assigneeTextView"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/contentTextView" />
 
     <TextView
         android:id="@+id/assigneeTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
         android:text="@string/assignee"
         android:textSize="20sp"
-        app:layout_constraintBottom_toTopOf="@+id/assigneeSpinner"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/differentTitleEditText" />
 
     <com.skydoves.powerspinner.PowerSpinnerView
         android:id="@+id/assigneeSpinner"
-        android:layout_width="match_parent"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="20dp"
+        android:layout_marginTop="10dp"
+
+
         android:layout_marginEnd="20dp"
-        android:layout_marginBottom="50dp"
-        app:layout_constraintBottom_toTopOf="@+id/snoozeAnimationView"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+        android:background="@drawable/input_bg"
+        android:padding="10dp"
+        android:textColor="#000000"
 
-    <com.airbnb.lottie.LottieAnimationView
-        android:id="@+id/snoozeAnimationView"
-        android:layout_width="177dp"
-        android:layout_height="119dp"
-        android:layout_marginEnd="40dp"
-        android:layout_marginBottom="40dp"
-        app:layout_constraintBottom_toTopOf="@+id/createChoreBtn"
-        app:layout_constraintDimensionRatio="1.0"
+        android:textColorHint="@color/colorAccent"
+        android:textSize="14.5sp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:lottie_autoPlay="true"
-        app:lottie_fileName="4021-no-notification-state.json"
-        app:lottie_loop="true" />
+        app:layout_constraintStart_toStartOf="parent"
 
-    <TextView
-        android:id="@+id/remindMeAtTextView"
+        app:layout_constraintTop_toBottomOf="@+id/assigneeTextView"
+        app:spinner_arrow_animate="true"
+        app:spinner_arrow_gravity="start"
+
+        app:spinner_arrow_padding="8dp"
+        app:spinner_arrow_tint="@color/black"
+        app:spinner_divider_color="@color/gray_holo_light"
+        app:spinner_divider_show="true"
+
+        app:spinner_divider_size="0.4dp"
+        app:spinner_popup_animation="dropdown"
+        app:spinner_popup_background="@color/white"
+        app:spinner_popup_elevation="14dp" />
+
+    <Button
+        android:id="@+id/setDueDateButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="40dp"
-        android:text="remind me at:"
+        android:layout_marginTop="10dp"
+        android:padding="6dp"
+        android:background="@drawable/light_button_bg"
+        android:text="@string/change_due_date"
+        app:layout_constraintDimensionRatio="1.0"
+        app:layout_constraintEnd_toEndOf="@+id/dueDate"
+        app:layout_constraintStart_toStartOf="@+id/dueDate"
+        app:layout_constraintTop_toBottomOf="@+id/dueDate" />
+
+    <TextView
+        android:id="@+id/dueDate"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:text="@string/due_date"
         android:textSize="20sp"
-        app:layout_constraintBottom_toTopOf="@+id/createChoreBtn"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/assigneeSpinner" />
 
@@ -143,11 +140,10 @@
         android:id="@+id/presentDateTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
-        android:visibility="invisible"
-        app:layout_constraintEnd_toEndOf="@+id/remindMeAtTextView"
-        app:layout_constraintStart_toStartOf="@+id/remindMeAtTextView"
-        app:layout_constraintTop_toBottomOf="@+id/remindMeAtTextView" />
+        android:layout_marginTop="10dp"
+        app:layout_constraintEnd_toEndOf="@+id/dueDate"
+        app:layout_constraintStart_toStartOf="@+id/dueDate"
+        app:layout_constraintTop_toBottomOf="@+id/setDueDateButton" />
 
     <Button
         android:id="@+id/createChoreBtn"
@@ -159,8 +155,6 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
-
-
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
