@@ -10,7 +10,8 @@ public class Expense
     private String _name;
     private String _description;
     private ExpenseType _type;
-    private float _cost;
+    private double _cost;
+    //TODO: maybe only one date needed?
     private Date _creationDate;
     private Date _purchaseDate;
     private Roommate _payer;
@@ -37,6 +38,7 @@ public class Expense
         return _id;
     }
 
+
     public enum ExpenseType
     {
         PROFESSIONAL,
@@ -46,10 +48,7 @@ public class Expense
     }
 
 
-
-
-
-    Expense(String name, String description, float cost, Date purchaseDate, ExpenseType type, Roommate payer)
+    Expense(String name, String description, double cost, Date purchaseDate, ExpenseType type, Roommate payer)
     {
         _name = name;
         _description = description;
@@ -76,7 +75,7 @@ public class Expense
         return _type;
     }
 
-    public float get_cost()
+    public double get_cost()
     {
         return _cost;
     }

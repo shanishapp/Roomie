@@ -21,7 +21,6 @@ import com.example.roomie.R;
 import com.example.roomie.Roommate;
 import com.example.roomie.house.HouseActivityViewModel;
 import com.example.roomie.house.chores.chore.newChoreFragment;
-import com.example.roomie.house.chores.chore.newChoreJob;
 import com.skydoves.powerspinner.OnSpinnerItemSelectedListener;
 import com.skydoves.powerspinner.PowerSpinnerView;
 
@@ -35,6 +34,8 @@ import me.abhinay.input.CurrencyEditText;
 
 public class NewExpenseFragment extends Fragment
 {
+    //TODO: remove roomateList, replace with "Roomie" class solution
+    private static List<String> roommatesList = Arrays.asList("shani", "avihai", "uri");
     private NewExpenseViewModel newExpenseViewModel;
     private PowerSpinnerView expenseTypeSpinner;
     private PowerSpinnerView payerSpinner;
@@ -97,14 +98,13 @@ public class NewExpenseFragment extends Fragment
 
         costEditText = view.findViewById(R.id.expenseCostEditText);
 
-        //TODO: set action for price editText
 
     }
 
     private void initPayerSpinner()
     {
         //TODO: change according to roommates
-        String[] arr = {"shani", "avihi", "uri"};
+        String[] arr = {"shani", "avihai", "uri"};
         ArrayList<String> roommatesList = new ArrayList<>(Arrays.asList(arr));
         payerSpinner.setItems(roommatesList);
     }
@@ -127,23 +127,17 @@ public class NewExpenseFragment extends Fragment
 
     private void createExpense(View view)
     {
-        //TODO: get user from picker
-        //TODO: get price from editText
         //TODO: get type by enum and not string
         //TODO: clean up confusion with type and title
-        String[] myList = new String[]{"a", "b", "c"};
-        List<String> roommatesList = Arrays.asList("shani", "avihai", "uri");
         Roommate payer;
-        float cost = (float) 12.9;
         String title, content;
         Date dateCreated = new Date();
-        title = getCostType();
+        title = getExpenseType();
         if (title == null) return;
+        double cost = costEditText.getCleanDoubleValue();
         content = contentEditText.getText().toString();
         int idx = payerSpinner.getSelectedIndex();
         payer = new Roommate(roommatesList.get(idx));
-//        payer = payerSpinner.get
-//        payer = payerSpinner.getSpinner().getSelectedItem().toString();
         dateCreated = new Date();
 
         LiveData<CreateNewExpenseJob> job = newExpenseViewModel.createNewExpense(house, title, content, cost, payer,
@@ -168,27 +162,25 @@ public class NewExpenseFragment extends Fragment
         });
     }
 
-    private String getCostType()
+    private String getExpenseType()
     {
-//        String title;
-//        if (expenseTypeSpinner.getSpinner().getSelectedItem().toString().equals("other"))
-//        { // TODO, switch to string resource
-//            title = customTitleEditText.getText().toString();
-//            if (title.equals(""))
-//            {// TODO nul ??
-//                customTitleEditText.setError("you need to enter title"); // TODO string resource
-//                return null;
-//            }
-//        } else
-//        {
-//            title = expenseTypeSpinner.getSpinner().getSelectedItem().toString();
-//        }
-//        return title;
-        return "abed";
+        String title;
+        int idx = expenseTypeSpinner.getSelectedIndex();
+        String selectedType = roommatesList.get(idx);
+        if (selectedType.equals("GENERAL"))
+        {
+            title = customTitleEditText.getText().toString();
+        } else
+        {
+            title = selectedType;
+
+        }
+        return title;
     }
 
     private String[] getAllExpenseTypes()
     {
+        //TODO: find way to translate, add check for hebrew on getCostType
         return Arrays.stream(Objects.requireNonNull(Expense.ExpenseType.class.getEnumConstants())).map(Enum::name).toArray(String[]::new);
     }
 }

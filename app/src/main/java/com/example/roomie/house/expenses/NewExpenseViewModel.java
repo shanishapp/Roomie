@@ -24,7 +24,7 @@ public class NewExpenseViewModel
         db = FirebaseFirestore.getInstance();
     }
 
-    public LiveData<CreateNewExpenseJob> createNewExpense(House house, String title, String description, float cost,
+    public LiveData<CreateNewExpenseJob> createNewExpense(House house, String title, String description, double cost,
                                                           Roommate roommate, Expense.ExpenseType type,
                                                           Date purchaseDate)
     {
