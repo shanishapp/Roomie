@@ -99,7 +99,7 @@ public class ExpenseAdapter extends RecyclerView.Adapter<ExpenseAdapter.ViewHold
             super(view);
             viewReceiptIcon = view.findViewById(R.id.viewReceiptIcon);
             expenseTypeIcon = view.findViewById(R.id.expenseTypeIcon);
-            title = view.findViewById(R.id.choreTitleHolderView);
+            title = view.findViewById(R.id.expenseTitleHolderView);
             cost = view.findViewById(R.id.expenseCostHolderView);
             payer = view.findViewById(R.id.expensePayerHolderView);
             this.onExpenseListener = onExpenseListener;
@@ -109,7 +109,7 @@ public class ExpenseAdapter extends RecyclerView.Adapter<ExpenseAdapter.ViewHold
         @Override
         public void onClick(View view)
         {
-
+            onExpenseListener.onExpenseClick(getAdapterPosition());
         }
     }
 
