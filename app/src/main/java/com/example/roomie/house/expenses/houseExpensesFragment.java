@@ -91,7 +91,7 @@ public class houseExpensesFragment extends Fragment implements ExpenseAdapter.On
         //set up add button
         button.setOnClickListener(view1 -> {
             if(view1 != null){
-                navController.navigate(R.id.action_house_chores_fragment_dest_to_expenseFragment);
+                navController.navigate(R.id.action_house_expenses_fragment_dest_to_expenseFragment);
             }
         });
     }

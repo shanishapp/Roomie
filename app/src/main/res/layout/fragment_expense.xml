@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:screenOrientation="portrait"
-    tools:context=".house.chores.chore.newChoreFragment">
+    tools:context=".house.expenses.NewExpenseFragment">
 
     <FrameLayout
         android:id="@+id/expense_fragment"
