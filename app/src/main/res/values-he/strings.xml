@@ -59,8 +59,8 @@
 
 
     <!-- create chore Fragment-->
-    <string name="enter_your_title_here">הכנס את שם הבית כאן</string>
-    <string name="title">שם הבית</string>
+    <string name="enter_your_title_here">הכנס את שם המטלה כאן</string>
+    <string name="title">שם המטלה</string>
     <string name="content">הערות</string>
     <string name="assignee">ממונה</string>
     <string name="create">צור</string>

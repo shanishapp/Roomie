@@ -22,6 +22,7 @@ import com.example.roomie.House;
 import com.example.roomie.R;
 import com.example.roomie.house.HouseActivityViewModel;
 import com.github.florent37.singledateandtimepicker.dialog.SingleDateAndTimePickerDialog;
+import com.google.firebase.auth.FirebaseAuth;
 import com.skydoves.powerspinner.OnSpinnerItemSelectedListener;
 import com.skydoves.powerspinner.PowerSpinnerView;
 
@@ -31,6 +32,8 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
+import java.util.Map;
+import java.util.Set;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -139,10 +142,18 @@ public class newChoreFragment extends Fragment {
     private void setAssigneeSpinner() {
         String[] arr = {"shani","avihi","uri"};
         roommatesList = new ArrayList<String>(Arrays.asList(arr));
+        roommatesList = getRoommies();
         assigneeSpinner.setItems(roommatesList);
         assigneeSpinner.setOnSpinnerItemSelectedListener((OnSpinnerItemSelectedListener<String>) (i, s) -> {
             assignee = s;
         });
+    }
+
+    private ArrayList<String> getRoommies() {
+        FirebaseAuth auth = FirebaseAuth.getInstance();
+        Object[] arr = house.getRoomies().keySet().toArray();
+        String[] stringArray = Arrays.asList(arr).toArray(new String[arr.length]);
+        return new ArrayList<String>(Arrays.asList(stringArray));
     }
 
     private void setTitleSpinner() {
@@ -153,7 +164,7 @@ public class newChoreFragment extends Fragment {
             if (s.equals(getString(R.string.other))) {
                 differentTitleEditText.setVisibility(View.VISIBLE);
             } else {
-                differentTitleEditText.setVisibility(View.INVISIBLE);
+                differentTitleEditText.setVisibility(View.GONE);
             }
         });
     }

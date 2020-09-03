@@ -58,9 +58,8 @@
     <string name="join_house_activity_invitation_expired">פג תוקף ההזמנה.</string>
 
     <!-- create chore Fragment-->
-<<<<<<< HEAD
-    <string name="enter_your_title_here">הכנס את שם הבית כאן</string>
-    <string name="title">שם הבית</string>
+    <string name="enter_your_title_here">הכנס את שם המטלה כאן</string>
+    <string name="title">שם המטלה</string>
     <string name="content">הערות</string>
     <string name="assignee">ממונה</string>
     <string name="create">צור</string>
