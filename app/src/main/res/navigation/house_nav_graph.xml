@@ -60,7 +60,7 @@
         android:id="@+id/choreFragment"
         android:name="com.example.roomie.house.chores.chore.newChoreFragment"
         android:label="fragment_chore"
-        tools:layout="@layout/fragment_chore" >
+        tools:layout="@layout/fragment_new_chore" >
         <action
             android:id="@+id/action_choreFragment_to_house_chores_fragment_dest"
             app:destination="@id/house_chores_fragment_dest"

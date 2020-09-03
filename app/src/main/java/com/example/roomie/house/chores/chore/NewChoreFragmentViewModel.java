@@ -24,14 +24,13 @@ public class NewChoreFragmentViewModel extends ViewModel {
 
     public LiveData<newChoreJob> createNewChore(House house,
                                                 String title,
-                                                String description,
                                                 Date dueDate,
                                                 String assignee) {
         newChoreJob newChoreJob = new newChoreJob(FirestoreJob.JobStatus.IN_PROGRESS);
         MutableLiveData<com.example.roomie.house.chores.chore.newChoreJob> job = new MutableLiveData<>(newChoreJob);
 
         //create new chore
-        Chore chore = new Chore(title, description, assignee, dueDate);
+        Chore chore = new Chore(title, assignee, dueDate);
 
         //add new chore to firestore
         db.collection(HOUSES_COLLECTION_NAME).
