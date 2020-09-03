@@ -11,6 +11,7 @@ import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
@@ -24,8 +25,11 @@ import com.example.roomie.house.HouseActivityViewModel;
 import com.github.florent37.singledateandtimepicker.dialog.SingleDateAndTimePickerDialog;
 import com.google.firebase.auth.FirebaseAuth;
 import com.skydoves.powerspinner.OnSpinnerItemSelectedListener;
+import com.skydoves.powerspinner.OnSpinnerOutsideTouchListener;
 import com.skydoves.powerspinner.PowerSpinnerView;
 
+
+import org.jetbrains.annotations.NotNull;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -147,13 +151,15 @@ public class newChoreFragment extends Fragment {
         assigneeSpinner.setOnSpinnerItemSelectedListener((OnSpinnerItemSelectedListener<String>) (i, s) -> {
             assignee = s;
         });
+        assigneeSpinner.setSpinnerOutsideTouchListener((view, motionEvent) -> assigneeSpinner.dismiss());
+        assigneeSpinner.setLifecycleOwner(getViewLifecycleOwner());
     }
 
     private ArrayList<String> getRoommies() {
         FirebaseAuth auth = FirebaseAuth.getInstance();
         Object[] arr = house.getRoomies().keySet().toArray();
         String[] stringArray = Arrays.asList(arr).toArray(new String[arr.length]);
-        return new ArrayList<String>(Arrays.asList(stringArray));
+        return new ArrayList<>(Arrays.asList(stringArray));
     }
 
     private void setTitleSpinner() {
@@ -167,6 +173,10 @@ public class newChoreFragment extends Fragment {
                 differentTitleEditText.setVisibility(View.GONE);
             }
         });
+
+        titleSpinner.setSpinnerOutsideTouchListener((view, motionEvent) -> titleSpinner.dismiss());
+        titleSpinner.setLifecycleOwner(getViewLifecycleOwner());
+
     }
 
     private void doCreateNewChore(View view) {
@@ -181,10 +191,6 @@ public class newChoreFragment extends Fragment {
                  title = diffT;
              }
         }
-//        if(assignee == null) {
-//            assigneeSpinner.setError("please select an assignee");
-//            return;
-//        }
 
         LiveData<newChoreJob> job = newChoreFragmentViewModel.createNewChore(house,title,date,assignee);
 
