@@ -13,6 +13,8 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.roomie.R;
 import com.example.roomie.house.chores.chore.Chore;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -49,12 +51,12 @@ public class ChoreAdapter extends RecyclerView.Adapter<ChoreAdapter.ViewHolder> 
         TextView assigneeView = holder.assignee;
 
         titleView.setText(choreItem.get_title());
-        String pattern = "dd/MM/yyyy HH:mm:ss";
+        String pattern = "dd/MM/yyyy HH:mm";
         DateFormat df = new SimpleDateFormat(pattern);
         dueDateView.setText(df.format(choreItem.get_dueDate()));
         assigneeView.setText(choreItem.get_assignee());
 
-        if (choreItem.get_assignee().equals("")) {
+        if (choreItem.get_assignee() == null) {
             holder.locked.setVisibility(View.INVISIBLE);
             holder.unlocked.setVisibility(View.VISIBLE);
         } else {

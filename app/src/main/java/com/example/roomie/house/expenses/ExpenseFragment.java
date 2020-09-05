@@ -10,6 +10,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
+import com.example.roomie.R;
 
 public class ExpenseFragment extends houseExpensesFragment
 {

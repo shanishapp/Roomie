@@ -49,37 +49,37 @@ dependencies {
 
     // firebase ui auth
     implementation 'com.firebaseui:firebase-ui-auth:6.2.0'
-
     // firebase firestore
     implementation 'com.google.firebase:firebase-firestore:21.5.0'
 
     def nav_version = "2.3.0"
-
     // navigation component
     implementation "androidx.navigation:navigation-fragment:$nav_version"
     implementation "androidx.navigation:navigation-ui:$nav_version"
 
     def lifecycle_version = "2.2.0"
-
     //recyclerView
     implementation "androidx.recyclerview:recyclerview:1.1.0"
-
     // ViewModel
     implementation "androidx.lifecycle:lifecycle-viewmodel:$lifecycle_version"
     // LiveData
     implementation "androidx.lifecycle:lifecycle-livedata:$lifecycle_version"
-
     //floating and movable button
     implementation 'com.getbase:floatingactionbutton:1.9.1'
-
     //date and time picker
     implementation 'com.github.florent37:singledateandtimepicker:2.2.6'
 
-    //spinner library
-    implementation'com.github.devdhar04:MaterialSpinner:v0.1.2'
-
     // picasso
     implementation "com.squareup.picasso:picasso:2.71828"
+
+    //spinner library
+    def kotlin_version = "1.1.2-2"
+    implementation "com.github.skydoves:powerspinner:1.1.0"
+    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
+    //uploading images from uri
+    implementation 'com.squareup.picasso:picasso:2.71828'
+    // error massage
+    implementation 'com.google.android.material:material:1.0.0'
 
 
 }

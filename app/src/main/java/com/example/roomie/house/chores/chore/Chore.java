@@ -11,23 +11,19 @@ public class  Chore {
     private Date _lastUpdatedDate;
     private Date _snoozeDate;//TODO need to be changed dynamically through the running
     private String _title;
-    private String _description;
     private Pair<String,Integer> _kind;
     private String _assignee; //TODO change to residence class
 
     Chore(){}
 
-    Chore(String title, String description, String assignee, Date dueDate) {
+    Chore(String title, String assignee, Date dueDate) {
         _title = title;
-        _description = description;
         _assignee = assignee;
         _dueDate = dueDate;
         _creationDate = new Date();
         _lastUpdatedDate = _creationDate;
         _snoozeDate = null;
     }
-
-
 
     public Date get_dueDate() {
         return _dueDate;
@@ -47,10 +43,6 @@ public class  Chore {
 
     public String get_title() {
         return _title;
-    }
-
-    public String get_description() {
-        return _description;
     }
 
     public Pair<String, Integer> get_kind() {

@@ -7,4 +7,5 @@
     <color name="buttonColor">#01AAD5</color>
     <color name="lightButtonColor">#4F0286A8</color>
     <color name="buttonColorDark">#007695</color>
+    <color name="black">#000000</color>
 </resources>
