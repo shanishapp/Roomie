@@ -98,4 +98,8 @@
     <string name="enter_custom_expense">הכנס את שם ההוצאה כאן</string>
     <string name="cost">מחיר</string>
     <string name="enter_expense_price">הכנס את עלות ההוצאה כאן</string>
+    <string name="house_settings_fragment_house_info_title">פרטי הבית</string>
+    <string name="house_settings_fragment_edit_house_info_button">ערוך את פרטי הבית</string>
+    <string name="house_settings_fragment_roomies_title">שותפים</string>
+    <string name="house_settings_fragment_roomies_profile_picture_desc">תמונת פרופיל</string>
 </resources>

@@ -14,4 +14,6 @@ public class FirestoreUtil
 
     public final static String CHORESS_COLLECTION_NAME = "chores";
 
+    public final static String USERS_COLLECTION_NAME = "users";
+
 }
