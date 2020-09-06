@@ -125,8 +125,7 @@ public class NewExpenseFragment extends Fragment
 
         priceEditText = view.findViewById(R.id.expenseCostEditText);
         priceEditText.setDecimals(false);
-//        Currency ILS = Currency.getInstance("376");
-//        priceEditText.setCurrency(String.valueOf(ILS));
+        priceEditText.setCurrency("₪");
         //TODO: maybe change/pick currency?
     }
 
@@ -143,7 +142,7 @@ public class NewExpenseFragment extends Fragment
 
         String[] arr = {"Shani", "Avihai", "Uri"};
         roommatesList = new ArrayList<>(Arrays.asList(arr));
-        roommatesList = getRoommies();
+//        roommatesList = getRoommies();
         payerSpinner.setItems(roommatesList);
         payerSpinner.setOnSpinnerItemSelectedListener((OnSpinnerItemSelectedListener<String>) (i, s) -> {
             payerName = s;
@@ -167,7 +166,7 @@ public class NewExpenseFragment extends Fragment
         titleSpinner.setOnSpinnerItemSelectedListener((OnSpinnerItemSelectedListener<String>) (i, s) -> {
             titleSpinner.setError(null);
             title = s;
-            if (s.equals(getString(R.string.other)))
+            if (s.equals(getString(R.string.general)))
             {
                 customTitleEditText.setVisibility(View.VISIBLE);
             } else
@@ -189,7 +188,7 @@ public class NewExpenseFragment extends Fragment
             errorText.setError("");
             errorText.setText(R.string.no_title_error_msg);//changes the selected item text to this
             return; //TODO error massage
-        } else if (title.equals(getString(R.string.other)))
+        } else if (title.equals(getString(R.string.general)))
         {
             String diffT = customTitleEditText.getText().toString();
             if (!diffT.equals(""))

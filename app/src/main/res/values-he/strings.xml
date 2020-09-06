@@ -71,7 +71,7 @@
     <string name="other">אחר</string>
     <string name="enter_title">בבקשה הכנס\י שם</string>
     <string name="no_title_error_msg">אנא בחר\י שם או בחר\י אחר ותיצר\י אחד משלך</string>
-    <string name="change_due_date">change date</string>
+    <string name="change_due_date">שנה תאריך</string>
 
 
     <string-array name="default_titles">
@@ -101,4 +101,7 @@
     <string name="cost">מחיר</string>
     <string name="enter_expense_price">הכנס את עלות ההוצאה כאן</string>
     <string name="create_expense_error_msg">אירעה שגיאה בעת יצירת ההוצאה. נסו שוב מאוחר יותר.</string>
+    <string name="payed_for_by">שולם ע\"י</string>
+    <string name="description">תיאור</string>
+    <string name="general">כללי</string>
 </resources>

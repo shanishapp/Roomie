@@ -99,4 +99,7 @@
     <string name="cost">מחיר</string>
     <string name="enter_expense_price">הכנס את עלות ההוצאה כאן</string>
     <string name="create_expense_error_msg">אירעה שגיאה בעת יצירת ההוצאה. נסו שוב מאוחר יותר.</string>
+    <string name="payed_for_by">שולם ע\"י</string>
+    <string name="description">תיאור</string>
+    <string name="general">כללי</string>
 </resources>

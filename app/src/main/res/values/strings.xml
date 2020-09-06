@@ -131,6 +131,7 @@
     <string name="change_due_date">change date</string>
     <string name="payed_for_by">Payed For By</string>
     <string name="description">Description</string>
+    <string name="general">General</string>
 
     <string-array name="default_titles">
         <item>washing dishes</item>
