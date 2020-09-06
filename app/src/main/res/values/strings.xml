@@ -115,6 +115,8 @@
     <string name="content">Content</string>
     <string name="assignee">Assignee</string>
     <string name="create">create</string>
+    <string name="create_expense_error_msg">There was an error creating the expense. Try again
+    later</string>
     <string name="create_new_chore_err_msg"> there was an error creating the chore, please try again</string>
     <string name="expenseType">Expense Type</string>
     <string name="enter_custom_expense">Enter the title of your expense here</string>
@@ -127,6 +129,8 @@
     <string name="enter_title">please enter title</string>
     <string name="no_title_error_msg">please choose a title or choose \'other\' and enter your own</string>
     <string name="change_due_date">change date</string>
+    <string name="payed_for_by">Payed For By</string>
+    <string name="description">Description</string>
 
     <string-array name="default_titles">
         <item>washing dishes</item>

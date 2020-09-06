@@ -1,11 +1,13 @@
 package com.example.roomie.house.expenses;
 
+
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -20,58 +22,86 @@ import com.example.roomie.House;
 import com.example.roomie.R;
 import com.example.roomie.Roommate;
 import com.example.roomie.house.HouseActivityViewModel;
-import com.example.roomie.house.chores.chore.newChoreFragment;
+import com.google.firebase.auth.FirebaseAuth;
 import com.skydoves.powerspinner.OnSpinnerItemSelectedListener;
 import com.skydoves.powerspinner.PowerSpinnerView;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Currency;
 import java.util.Date;
 import java.util.List;
-import java.util.Objects;
 
 import me.abhinay.input.CurrencyEditText;
 
+/**
+ * A simple {@link Fragment} subclass.
+ * Use the {@link com.example.roomie.house.expenses.NewExpenseFragment#newInstance} factory method to
+ * create an instance of this fragment.
+ */
 public class NewExpenseFragment extends Fragment
 {
-    //TODO: remove roomateList, replace with "Roomie" class solution
-    private static List<String> roommatesList = Arrays.asList("shani", "avihai", "uri");
+
     private NewExpenseViewModel newExpenseViewModel;
-    private PowerSpinnerView expenseTypeSpinner;
-    private PowerSpinnerView payerSpinner;
+    private PowerSpinnerView titleSpinner;
     private EditText customTitleEditText;
-    private EditText contentEditText;
-    private CurrencyEditText costEditText;
+    private EditText expenseDescription;
+    private PowerSpinnerView payerSpinner;
+    private CurrencyEditText priceEditText;
     private HouseActivityViewModel houseActivityViewModel;
     private House house;
-    private Button createExpenseButton;
+    private Button addExpenseButton;
     private NavController navController;
+    private ArrayList<String> roommatesList;
+    private ArrayList<Roommate> roomieList;
+    private Date date = new Date();
+    private String title = null;
+    private String description = null;
+    private String payerName = null;
+    private Expense.ExpenseType type;
+    private double cost = 0.0;
 
     public NewExpenseFragment()
     {
+        // Required empty public constructor
     }
 
-
-    //TODO: parameters
-    public static newChoreFragment newInstance(String param1, String param2)
+    /**
+     * Use this factory method to create a new instance of
+     * this fragment using the provided parameters.
+     *
+     * @param param1 Parameter 1.
+     * @param param2 Parameter 2.
+     * @return A new instance of fragment NewExpenseFragment.
+     */
+    // TODO: Rename and change types and number of parameters
+    public static NewExpenseFragment newInstance(String param1, String param2)
     {
-        return new newChoreFragment();
+        return new NewExpenseFragment();
+    }
+
+    @Override
+    public void onCreate(Bundle savedInstanceState)
+    {
+        super.onCreate(savedInstanceState);
+        newExpenseViewModel = new ViewModelProvider(this).get(NewExpenseViewModel.class);
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState)
     {
-        return inflater.inflate(R.layout.fragment_new_chore, container, false);
+        return inflater.inflate(R.layout.fragment_create_expense, container, false);
+
     }
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState)
     {
         super.onViewCreated(view, savedInstanceState);
-        initUI(view);
+        initViews(view);
         //set up add button
-        view.setOnClickListener(view1 -> {
+        addExpenseButton.setOnClickListener(view1 -> {
             if (view1 != null)
             {
                 createExpense(view);
@@ -79,108 +109,121 @@ public class NewExpenseFragment extends Fragment
         });
     }
 
-
-    private void initUI(View view)
+    private void initViews(View view)
     {
         houseActivityViewModel = new ViewModelProvider(requireActivity()).get(HouseActivityViewModel.class);
         house = houseActivityViewModel.getHouse();
-        createExpenseButton = view.findViewById(R.id.createExpenseBtn);
+        addExpenseButton = view.findViewById(R.id.createExpenseBtn);
         navController = Navigation.findNavController(view);
-
         customTitleEditText = view.findViewById(R.id.customExpenseTypeEditText);
-        expenseTypeSpinner = view.findViewById(R.id.expenseTypeSpinner);
-        initTypeSpinner();
+        expenseDescription = view.findViewById(R.id.expenseDescriptionEditText);
+        titleSpinner = view.findViewById(R.id.expenseTypeSpinner);
+        setupTypeSpinner();
 
         payerSpinner = view.findViewById(R.id.expensePayerSpinner);
-        initPayerSpinner();
+        setupPayerSpinner();
 
-        contentEditText = view.findViewById(R.id.expenseContentEditText);
-
-        costEditText = view.findViewById(R.id.expenseCostEditText);
-
-
+        priceEditText = view.findViewById(R.id.expenseCostEditText);
+        priceEditText.setDecimals(false);
+//        Currency ILS = Currency.getInstance("376");
+//        priceEditText.setCurrency(String.valueOf(ILS));
+        //TODO: maybe change/pick currency?
     }
 
-    private void initPayerSpinner()
+    private void setupPayerSpinner()
     {
-        //TODO: change according to roommates
-        String[] arr = {"shani", "avihai", "uri"};
-        ArrayList<String> roommatesList = new ArrayList<>(Arrays.asList(arr));
+        //TODO: change this to pick from actual roommates.
+//        Roommate Uri, Shani, Avihai;
+//        Uri = new Roommate("Uri");
+//        Shani = new Roommate("Shani");
+//        Avihai = new Roommate("Avihai");
+//
+//        Roommate[] roomiArray = {Uri, Shani, Avihai};
+//        roomieList = new ArrayList<>(Arrays.asList(roomiArray));
+
+        String[] arr = {"Shani", "Avihai", "Uri"};
+        roommatesList = new ArrayList<>(Arrays.asList(arr));
+        roommatesList = getRoommies();
         payerSpinner.setItems(roommatesList);
+        payerSpinner.setOnSpinnerItemSelectedListener((OnSpinnerItemSelectedListener<String>) (i, s) -> {
+            payerName = s;
+        });
+        payerSpinner.setSpinnerOutsideTouchListener((view, motionEvent) -> payerSpinner.dismiss());
+        payerSpinner.setLifecycleOwner(getViewLifecycleOwner());
     }
 
-    private void initTypeSpinner()
+    private ArrayList<String> getRoommies()
     {
-        String[] arr = getAllExpenseTypes();
-        ArrayList<String> expenseTypesList = new ArrayList<>(Arrays.asList(arr));
-        expenseTypeSpinner.setItems(expenseTypesList);
-        expenseTypeSpinner.setOnSpinnerItemSelectedListener((OnSpinnerItemSelectedListener<String>) (i, s) -> {
-            if (s.equals("other") || s.equals("אחר"))
+        FirebaseAuth auth = FirebaseAuth.getInstance();
+        Object[] arr = house.getRoomies().keySet().toArray();
+        String[] stringArray = Arrays.asList(arr).toArray(new String[arr.length]);
+        return new ArrayList<>(Arrays.asList(stringArray));
+    }
+
+    private void setupTypeSpinner()
+    {
+        List<String> expenseTypes = Expense.getExpenseTypes();
+        titleSpinner.setItems(expenseTypes);
+        titleSpinner.setOnSpinnerItemSelectedListener((OnSpinnerItemSelectedListener<String>) (i, s) -> {
+            titleSpinner.setError(null);
+            title = s;
+            if (s.equals(getString(R.string.other)))
             {
                 customTitleEditText.setVisibility(View.VISIBLE);
             } else
             {
-                customTitleEditText.setText(s);
+                customTitleEditText.setVisibility(View.GONE);
             }
         });
+
+        titleSpinner.setSpinnerOutsideTouchListener((view, motionEvent) -> titleSpinner.dismiss());
+        titleSpinner.setLifecycleOwner(getViewLifecycleOwner());
+
     }
 
     private void createExpense(View view)
     {
-        //TODO: get type by enum and not string
-        //TODO: clean up confusion with type and title
-        Roommate payer;
-        String title, content;
-        Date dateCreated = new Date();
-        title = getExpenseType();
-        if (title == null) return;
-        double cost = costEditText.getCleanDoubleValue();
-        content = contentEditText.getText().toString();
-        int idx = payerSpinner.getSelectedIndex();
-        payer = new Roommate(roommatesList.get(idx));
-        dateCreated = new Date();
+        if (title == null)
+        {
+            TextView errorText = (TextView) titleSpinner;
+            errorText.setError("");
+            errorText.setText(R.string.no_title_error_msg);//changes the selected item text to this
+            return; //TODO error massage
+        } else if (title.equals(getString(R.string.other)))
+        {
+            String diffT = customTitleEditText.getText().toString();
+            if (!diffT.equals(""))
+            {
+                title = diffT;
+            }
+            type = Expense.ExpenseType.GENERAL;
+        } else
+        {
+            type = Expense.typeFromString(title);
+        }
+        description = expenseDescription.getText().toString();
+        cost = priceEditText.getCleanDoubleValue();
 
-        LiveData<CreateNewExpenseJob> job = newExpenseViewModel.createNewExpense(house, title, content, cost, payer,
-                Expense.ExpenseType.GENERAL, dateCreated);
 
-        job.observe(getViewLifecycleOwner(), createNewChoreJob -> {
-            switch (createNewChoreJob.getJobStatus())
+        LiveData<CreateNewExpenseJob> job = newExpenseViewModel.createNewExpense(house, title, description, cost,
+                new Roommate(payerName), type, date);
+
+        job.observe(getViewLifecycleOwner(), CreateNewExpenseJob -> {
+            switch (CreateNewExpenseJob.getJobStatus())
             {
                 case IN_PROGRESS:
-                    createExpenseButton.setEnabled(false);
+                    addExpenseButton.setEnabled(false);
                     break;
                 case SUCCESS:
-                    navController.navigate(R.id.action_choreFragment_to_house_chores_fragment_dest);
+                    navController.navigate(R.id.action_newExpenseFragment_to_house_expenses_fragment_dest);
                     break;
                 case ERROR:
-                    createExpenseButton.setEnabled(true);
-                    Toast.makeText(getContext(), getString(R.string.create_new_chore_err_msg),
+                    addExpenseButton.setEnabled(true);
+                    Toast.makeText(getContext(), getString(R.string.create_expense_error_msg),
                             Toast.LENGTH_LONG).show();
                     break;
                 default:
             }
         });
-    }
-
-    private String getExpenseType()
-    {
-        String title;
-        int idx = expenseTypeSpinner.getSelectedIndex();
-        String selectedType = roommatesList.get(idx);
-        if (selectedType.equals("GENERAL"))
-        {
-            title = customTitleEditText.getText().toString();
-        } else
-        {
-            title = selectedType;
-
-        }
-        return title;
-    }
-
-    private String[] getAllExpenseTypes()
-    {
-        //TODO: find way to translate, add check for hebrew on getCostType
-        return Arrays.stream(Objects.requireNonNull(Expense.ExpenseType.class.getEnumConstants())).map(Enum::name).toArray(String[]::new);
     }
 }

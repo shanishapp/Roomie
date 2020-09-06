@@ -30,7 +30,7 @@
         android:layout_marginTop="30dp"
         android:hint="@string/enter_expense_price"
         android:inputType="number"
-        android:textSize="24sp"
+        android:textSize="20sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/costTextView" />
@@ -76,18 +76,18 @@
         app:layout_constraintTop_toBottomOf="@+id/expenseTypeSpinner" />
 
     <TextView
-        android:id="@+id/expenseContentTextView"
+        android:id="@+id/expenseDescriptionTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="10dp"
-        android:text="@string/content"
+        android:text="@string/description"
         android:textSize="20sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/customExpenseTypeEditText" />
 
     <EditText
-        android:id="@+id/expenseContentEditText"
+        android:id="@+id/expenseDescriptionEditText"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_marginStart="20dp"
@@ -99,13 +99,13 @@
         app:layout_constraintBottom_toTopOf="@+id/expensePayerTextView"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/expenseContentTextView" />
+        app:layout_constraintTop_toBottomOf="@+id/expenseDescriptionTextView" />
 
     <TextView
         android:id="@+id/expensePayerTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/assignee"
+        android:text="@string/payed_for_by"
         android:textSize="20sp"
         app:layout_constraintBottom_toTopOf="@+id/expensePayerSpinner"
         app:layout_constraintEnd_toEndOf="parent"

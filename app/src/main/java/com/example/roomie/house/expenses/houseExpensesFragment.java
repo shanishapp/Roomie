@@ -34,7 +34,7 @@ public class houseExpensesFragment extends Fragment implements ExpenseAdapter.On
     private HouseActivityViewModel houseActivityViewModel;
     private houseExpensesViewModel viewModel;
     private ArrayList<Expense> expenses;
-    private MovableFloatingActionButton button;
+    private MovableFloatingActionButton addExpenseButton;
     private NavController navController;
 
     public houseExpensesFragment()
@@ -84,14 +84,16 @@ public class houseExpensesFragment extends Fragment implements ExpenseAdapter.On
     }
 
     @Override
-    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState)
+    {
         super.onViewCreated(view, savedInstanceState);
         navController = Navigation.findNavController(view);
-        button = view.findViewById(R.id.fab);
+        addExpenseButton = view.findViewById(R.id.fab);
         //set up add button
-        button.setOnClickListener(view1 -> {
-            if(view1 != null){
-                navController.navigate(R.id.action_house_expenses_fragment_dest_to_expenseFragment);
+        addExpenseButton.setOnClickListener(view1 -> {
+            if (view1 != null)
+            {
+                navController.navigate(R.id.action_house_expenses_fragment_dest_to_newExpenseFragment);
             }
         });
     }

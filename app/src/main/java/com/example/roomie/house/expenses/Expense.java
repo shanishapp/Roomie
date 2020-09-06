@@ -2,10 +2,18 @@ package com.example.roomie.house.expenses;
 
 import com.example.roomie.Roommate;
 
+import java.util.Arrays;
 import java.util.Date;
+import java.util.List;
 
 public class Expense
 {
+    //TODO: translate to hebrew?
+    private static final String typeProfessionalString = "Professional";
+    private static final String typeGroceryShoppingString = "Grocery Shopping";
+    private static final String typeBillString = "Bill";
+    private static final String typeGeneralString = "General";
+
     private String _id;
     private String _name;
     private String _description;
@@ -16,6 +24,32 @@ public class Expense
     private Date _purchaseDate;
     private Roommate _payer;
     private boolean _hasReceipt;
+
+    public static ExpenseType typeFromString(String title)
+    {
+        ExpenseType resultType = null;
+        switch (title)
+        {
+            case typeProfessionalString:
+                resultType = ExpenseType.PROFESSIONAL;
+                break;
+            case typeGroceryShoppingString:
+                resultType = ExpenseType.GROCERIES;
+                break;
+            case typeBillString:
+                resultType = ExpenseType.BILL;
+                break;
+            default:
+                resultType = ExpenseType.GENERAL;
+        }
+        return resultType;
+    }
+
+    public static List<String> getExpenseTypes()
+    {
+        String[] arr = {typeBillString, typeGroceryShoppingString, typeProfessionalString, typeGeneralString};
+        return Arrays.asList(arr);
+    }
     //TODO: receipt photo
 
     public boolean is_hasReceipt()

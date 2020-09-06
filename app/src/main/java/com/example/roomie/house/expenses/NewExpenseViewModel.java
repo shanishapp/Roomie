@@ -2,6 +2,7 @@ package com.example.roomie.house.expenses;
 
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
+import androidx.lifecycle.ViewModel;
 
 import com.example.roomie.FirestoreJob;
 import com.example.roomie.House;
@@ -15,7 +16,7 @@ import static com.example.roomie.util.FirestoreUtil.HOUSES_COLLECTION_NAME;
 
 import java.util.Date;
 
-public class NewExpenseViewModel
+public class NewExpenseViewModel extends ViewModel
 {
     private FirebaseFirestore db;
 

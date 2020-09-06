@@ -100,4 +100,5 @@
     <string name="enter_custom_expense">הכנס את שם ההוצאה כאן</string>
     <string name="cost">מחיר</string>
     <string name="enter_expense_price">הכנס את עלות ההוצאה כאן</string>
+    <string name="create_expense_error_msg">אירעה שגיאה בעת יצירת ההוצאה. נסו שוב מאוחר יותר.</string>
 </resources>
