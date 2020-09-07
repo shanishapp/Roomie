@@ -8,14 +8,14 @@
 
     <!--    TODO fix fragment being overridden by bottom bar-->
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/recyclerView"
+        android:id="@+id/expensesRecyclerView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@color/lightButtonColor"
         android:padding="4dp" />
 
     <com.example.roomie.MovableFloatingActionButton
-        android:id="@+id/fab"
+        android:id="@+id/expensesFab"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentEnd="true"

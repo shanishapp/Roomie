@@ -53,7 +53,6 @@ public class NewExpenseFragment extends Fragment
     private Button addExpenseButton;
     private NavController navController;
     private ArrayList<String> roommatesList;
-    private ArrayList<Roommate> roomieList;
     private Date date = new Date();
     private String title = null;
     private String description = null;
@@ -125,8 +124,10 @@ public class NewExpenseFragment extends Fragment
 
         priceEditText = view.findViewById(R.id.expenseCostEditText);
         priceEditText.setDecimals(false);
+
+        //TODO: string resource for currency symbols
         priceEditText.setCurrency("₪");
-        //TODO: maybe change/pick currency?
+        //TODO: change/pick currency, maybe in house settings
     }
 
     private void setupPayerSpinner()

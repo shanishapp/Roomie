@@ -82,7 +82,7 @@ public class Expense
     }
 
 
-    Expense(String name, String description, double cost, Date purchaseDate, ExpenseType type, Roommate payer)
+    public Expense(String name, String description, double cost, Date purchaseDate, ExpenseType type, Roommate payer)
     {
         _name = name;
         _description = description;
@@ -91,6 +91,10 @@ public class Expense
         _purchaseDate = purchaseDate;
         _creationDate = new Date();
         _payer = payer;
+    }
+
+    public Expense()
+    {
     }
 
 

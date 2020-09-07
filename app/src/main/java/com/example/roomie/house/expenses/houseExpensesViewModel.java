@@ -6,15 +6,12 @@ import androidx.lifecycle.ViewModel;
 
 import com.example.roomie.FirestoreJob;
 import com.example.roomie.Roommate;
-import com.example.roomie.house.chores.allChoresJob;
-import com.example.roomie.house.chores.chore.Chore;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.example.roomie.util.FirestoreUtil.CHORESS_COLLECTION_NAME;
 import static com.example.roomie.util.FirestoreUtil.EXPENSES_COLLECTION_NAME;
 import static com.example.roomie.util.FirestoreUtil.HOUSES_COLLECTION_NAME;
 
