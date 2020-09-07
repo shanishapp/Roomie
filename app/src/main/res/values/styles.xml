@@ -75,9 +75,15 @@
         <item name="android:textStyle">bold</item>
     </style>
 
-    <style name="HouseSettingsSectionItem">
+    <style name="HouseSettingsSectionItemWrapper">
         <item name="android:padding">16dp</item>
         <item name="android:background">@drawable/bottom_border</item>
+    </style>
+
+    <style name="HouseSettingsSectionItem">
+        <item name="android:textColor">@color/black</item>
+        <item name="android:layout_marginTop">8dp</item>
+        <item name="android:textSize">16sp</item>
     </style>
 
 </resources>

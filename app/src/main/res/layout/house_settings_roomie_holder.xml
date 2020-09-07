@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_height="wrap_content"
     android:background="@drawable/bottom_border"
     android:padding="16dp"
     android:paddingHorizontal="8dp"
@@ -39,18 +39,10 @@
         android:layout_marginStart="8dp"
         android:textColor="@color/black"
         android:textSize="18sp"
+        app:layout_constraintBottom_toBottomOf="@+id/house_settings_roomie_holder_profile_picture_wrapper"
         app:layout_constraintEnd_toStartOf="@+id/house_settings_roomie_holder_role"
         app:layout_constraintStart_toEndOf="@+id/house_settings_roomie_holder_profile_picture_wrapper"
         app:layout_constraintTop_toTopOf="@id/house_settings_roomie_holder_profile_picture_wrapper" />
-
-    <TextView
-        android:id="@+id/house_settings_roomie_holder_email"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        app:layout_constraintEnd_toEndOf="@+id/house_settings_roomie_holder_name"
-        app:layout_constraintStart_toEndOf="@+id/house_settings_roomie_holder_profile_picture_wrapper"
-        app:layout_constraintTop_toBottomOf="@id/house_settings_roomie_holder_name" />
 
     <TextView
         android:id="@+id/house_settings_roomie_holder_role"
@@ -62,5 +54,5 @@
         android:textColor="@color/buttonColorDark"
         app:layout_constraintBottom_toBottomOf="@+id/house_settings_roomie_holder_profile_picture_wrapper"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/house_settings_roomie_holder_name" />
+        app:layout_constraintTop_toTopOf="@id/house_settings_roomie_holder_profile_picture_wrapper" />
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -6,6 +6,8 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.navigation.NavController;
+import androidx.navigation.fragment.NavHostFragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -13,6 +15,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.FrameLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -27,6 +30,8 @@ import com.example.roomie.house.HouseActivityViewModel;
  */
 public class HouseHouseSettingsFragment extends Fragment {
 
+    private NavController navController;
+
     private HouseActivityViewModel houseActivityViewModel;
 
     private HouseSettingsViewModel houseSettingsViewModel;
@@ -38,6 +43,8 @@ public class HouseHouseSettingsFragment extends Fragment {
     private TextView houseDesc;
 
     private Button editHouseInfoButton;
+
+    private FrameLayout loadingOverlay;
 
     private RecyclerView roomiesRecylcerView;
 
@@ -76,6 +83,8 @@ public class HouseHouseSettingsFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
+        navController = NavHostFragment.findNavController(this);
+
         houseActivityViewModel = new ViewModelProvider(requireActivity()).get(HouseActivityViewModel.class);
         houseSettingsViewModel = new ViewModelProvider(requireActivity()).get(HouseSettingsViewModel.class);
         setUIElements(view);
@@ -88,6 +97,7 @@ public class HouseHouseSettingsFragment extends Fragment {
         houseAddress = view.findViewById(R.id.house_settings_house_address);
         houseDesc = view.findViewById(R.id.house_settings_house_desc);
         editHouseInfoButton = view.findViewById(R.id.house_settings_edit_house_info_button);
+        loadingOverlay = view.findViewById(R.id.house_settings_loading_overlay);
 
         // init recycler view
         roomiesRecylcerView = view.findViewById(R.id.house_settings_roomies_recycler_view);
@@ -102,6 +112,7 @@ public class HouseHouseSettingsFragment extends Fragment {
     }
 
     private void setContent() {
+        toggleLoadingOverlay(true);
         houseName.setText(houseActivityViewModel.getHouse().getName());
         houseAddress.setText(houseActivityViewModel.getHouse().getAddress());
         houseDesc.setText(houseActivityViewModel.getHouse().getDesc());
@@ -112,9 +123,11 @@ public class HouseHouseSettingsFragment extends Fragment {
     private void roomiesListObserver(GetHouseRoomiesJob job) {
         switch (job.getJobStatus()) {
             case SUCCESS:
+                toggleLoadingOverlay(false);
                 roomieAdapter.setRoomiesList(job.getRoomiesList());
                 break;
             case ERROR:
+                toggleLoadingOverlay(false);
                 Toast.makeText(getContext(), "There was an error while fetching the roomies.", Toast.LENGTH_LONG).show();
                 break;
             default:
@@ -123,6 +136,16 @@ public class HouseHouseSettingsFragment extends Fragment {
     }
 
     private void gotoEditHouseInfo(View view) {
+        navController.navigate(R.id.action_house_settings_fragment_dest_to_house_edit_house_settings_fragment_dest);
+    }
 
+    private void toggleLoadingOverlay(boolean isVisible) {
+        if (isVisible) {
+            loadingOverlay.setVisibility(View.VISIBLE);
+            editHouseInfoButton.setEnabled(false);
+        } else {
+            loadingOverlay.setVisibility(View.GONE);
+            editHouseInfoButton.setEnabled(true);
+        }
     }
 }

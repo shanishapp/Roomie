@@ -104,4 +104,16 @@
     <string name="house_settings_fragment_edit_house_info_button">ערוך את פרטי הבית</string>
     <string name="house_settings_fragment_roomies_title">שותפים</string>
     <string name="house_settings_fragment_roomies_profile_picture_desc">תמונת פרופיל</string>
+    <string name="house_settings_fragment_house_info_name">שם</string>
+    <string name="house_settings_fragment_house_info_desc">תיאור</string>
+    <string name="house_settings_fragment_house_info_address">כתובת</string>
+    <string name="edit_house_settings_fragment_title">עריכת פרטי בית</string>
+    <string name="edit_house_settings_fragment_house_name">שם הבית</string>
+    <string name="edit_house_settings_fragment_house_address">כתובת הבית</string>
+    <string name="edit_house_settings_fragment_house_desc">תיאור הבית</string>
+    <string name="edit_house_settings_fragment_save_changes">שמור שינויים</string>
+    <string name="edit_house_settings_fragment_saved_successfully">השינויים נשמרו בהצלחה!</string>
+    <string name="edit_house_settings_fragment_invalid_house_name">שם הבית לא תקין</string>
+    <string name="edit_house_settings_fragment_invalid_house_address">כתובת הבית לא תקינה</string>
+    <string name="edit_house_settings_fragment_invalid_house_desc">תיאור הבית לא תקין</string>
 </resources>

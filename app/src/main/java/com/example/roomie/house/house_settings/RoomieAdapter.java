@@ -42,7 +42,6 @@ public class RoomieAdapter extends RecyclerView.Adapter<RoomieHolder> {
         User roomie = roomiesList.get(position);
         holder.setProfilePicture(roomie.getProfilePicture());
         holder.setRoomieName(roomie.getUsername());
-        holder.setRoomieEmail(roomie.getEmail());
         holder.setRoomieRole(roomie.getRole());
     }
 

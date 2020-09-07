@@ -88,4 +88,25 @@ public class HouseRepository {
 
         return job;
     }
+
+    public LiveData<FirestoreJob> updateHouseInfo(String houseId, String name, String address, String desc) {
+        FirestoreJob firestoreJob = new FirestoreJob(FirestoreJob.JobStatus.IN_PROGRESS);
+        MutableLiveData<FirestoreJob> job = new MutableLiveData<>(firestoreJob);
+
+        db.collection(FirestoreUtil.HOUSES_COLLECTION_NAME)
+                .document(houseId)
+                .update("name", name, "address", address, "desc", desc)
+                .addOnSuccessListener(task -> {
+                    firestoreJob.setJobStatus(FirestoreJob.JobStatus.SUCCESS);
+                    job.setValue(firestoreJob);
+                })
+                .addOnFailureListener(task -> {
+                    firestoreJob.setJobStatus(FirestoreJob.JobStatus.ERROR);
+                    firestoreJob.setJobErrorCode(FirestoreJob.JobErrorCode.GENERAL);
+                    job.setValue(firestoreJob);
+                    Log.d(TAG, "Error during house info update.", task.getCause());
+                });
+
+        return job;
+    }
 }
