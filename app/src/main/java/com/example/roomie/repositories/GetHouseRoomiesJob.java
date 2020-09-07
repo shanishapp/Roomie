@@ -1,4 +1,7 @@
-package com.example.roomie;
+package com.example.roomie.repositories;
+
+import com.example.roomie.FirestoreJob;
+import com.example.roomie.User;
 
 import java.util.List;
 

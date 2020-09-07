@@ -1,10 +1,13 @@
-package com.example.roomie;
+package com.example.roomie.repositories;
 
 import android.util.Log;
 
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
+import com.example.roomie.FirestoreJob;
+import com.example.roomie.House;
+import com.example.roomie.User;
 import com.example.roomie.util.FirestoreUtil;
 import com.google.firebase.firestore.FieldPath;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -85,5 +88,4 @@ public class HouseRepository {
 
         return job;
     }
-
 }

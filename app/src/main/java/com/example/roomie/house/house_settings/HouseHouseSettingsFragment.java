@@ -16,10 +16,9 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.roomie.GetHouseRoomiesJob;
+import com.example.roomie.repositories.GetHouseRoomiesJob;
 import com.example.roomie.R;
 import com.example.roomie.house.HouseActivityViewModel;
-import com.example.roomie.splash.GetUserHouseJob;
 
 /**
  * A simple {@link Fragment} subclass.

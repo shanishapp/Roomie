@@ -16,6 +16,13 @@ public class User {
 
     }
 
+    public User(String uid, String username, String email, String profilePicture) {
+        this.uid = uid;
+        this.username = username;
+        this.email = email;
+        this.profilePicture = profilePicture;
+    }
+
     public User(String uid, String username, String email, String profilePicture, String role) {
         this.uid = uid;
         this.username = username;

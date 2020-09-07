@@ -17,6 +17,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.example.roomie.FirestoreJob;
 import com.example.roomie.util.FormValidator;
 import com.example.roomie.house.HouseActivity;
 import com.example.roomie.R;
@@ -117,16 +118,27 @@ public class ChooseHouseNewHouseFragment extends Fragment {
                     createNewHouseBtn.setEnabled(false);
                     break;
                 case SUCCESS:
-                    BidiFormatter myBidiFormatter = BidiFormatter.getInstance();
-                    String successMsg = String.format(getString(R.string.create_new_house_success),
-                            myBidiFormatter.unicodeWrap(houseName));
-                    Toast.makeText(getContext(), successMsg, Toast.LENGTH_LONG).show();
+                    LiveData<FirestoreJob> updateUserRole = newHouseFragmentViewModel.updateUserRole();
+                    updateUserRole.observe(getViewLifecycleOwner(), firestoreJob -> {
+                        switch (firestoreJob.getJobStatus()) {
+                            case SUCCESS:
+                                BidiFormatter myBidiFormatter = BidiFormatter.getInstance();
+                                String successMsg = String.format(getString(R.string.create_new_house_success),
+                                        myBidiFormatter.unicodeWrap(houseName));
+                                Toast.makeText(getContext(), successMsg, Toast.LENGTH_LONG).show();
 
-                    // TODO notify activity and let the activity switch
-                    Intent intent = new Intent(getActivity(), HouseActivity.class);
-                    intent.putExtra("house", createNewHouseJob.getHouse());
-                    getActivity().startActivity(intent);
-                    getActivity().finish();
+                                Intent intent = new Intent(getActivity(), HouseActivity.class);
+                                intent.putExtra("house", createNewHouseJob.getHouse());
+                                getActivity().startActivity(intent);
+                                getActivity().finish();
+                                break;
+                            case ERROR:
+                                Toast.makeText(getContext(), "There was an error during update.", Toast.LENGTH_LONG).show();
+                                break;
+                            default:
+                                break;
+                        }
+                    });
                     break;
                 case ERROR:
                     createNewHouseBtn.setEnabled(true);

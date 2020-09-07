@@ -14,6 +14,8 @@ import android.widget.Toast;
 import com.example.roomie.choose_house.ChooseHouseActivity;
 import com.example.roomie.house.HouseActivity;
 import com.example.roomie.join_house.JoinHouseActivity;
+import com.example.roomie.repositories.HouseRepository;
+import com.example.roomie.repositories.UserRepository;
 import com.example.roomie.splash.GetUserHouseJob;
 import com.example.roomie.splash.SplashScreenActivity;
 import com.example.roomie.splash.SplashScreenViewModel;
@@ -88,38 +90,18 @@ public class SignInActivity extends AppCompatActivity {
 
             if (resultCode == RESULT_OK) {
                 // Successfully signed in
-
-                if (invitationId != null) {
-                    // we have an invitation id - redirect to join house
-                    Intent intent = new Intent(SignInActivity.this, JoinHouseActivity.class);
-                    intent.putExtra(SplashScreenActivity.INVITATION_ID_EXTRA, invitationId);
-                    startActivity(intent);
-                    finish();
-                    return;
-                }
-
-                // check if user has house or not
-                LiveData<GetUserHouseJob> job = splashScreenViewModel.getUserHouse();
-                job.observe(this, getUserHouseJob -> {
-                    switch (job.getValue().getJobStatus()) {
-                        case IN_PROGRESS:
-                            break;
+                LiveData<FirestoreJob> addUserJob = UserRepository.getInstance().addUser(auth.getCurrentUser());
+                addUserJob.observe(this, firestoreJob -> {
+                    switch (firestoreJob.getJobStatus()) {
                         case SUCCESS:
-                            if (getUserHouseJob.isUserHasHouse()) {
-                                Intent intent = new Intent(SignInActivity.this, HouseActivity.class);
-                                intent.putExtra("house", getUserHouseJob.getHouse());
-                                startActivity(intent);
-                                finish();
-                            } else {
-                                Intent intent = new Intent(SignInActivity.this, ChooseHouseActivity.class);
-                                startActivity(intent);
-                                finish();
-                            }
+                            proceedSignIn();
                             break;
                         case ERROR:
-                            // TODO retry the job? meanwhile just toast a tmp message
-                            toggleLoadingLayout(false);
-                            Toast.makeText(this, "Error querying firestore.", Toast.LENGTH_LONG).show();
+                            // TODO retry on error?
+                            Log.d(TAG, "Error while adding user.");
+                            Toast.makeText(this, "Error adding user, please try again.", Toast.LENGTH_LONG).show();
+                            break;
+                        default:
                             break;
                     }
                 });
@@ -135,6 +117,43 @@ public class SignInActivity extends AppCompatActivity {
                 }
             }
         }
+    }
+
+    private void proceedSignIn() {
+        if (invitationId != null) {
+            // we have an invitation id - redirect to join house
+            Intent intent = new Intent(SignInActivity.this, JoinHouseActivity.class);
+            intent.putExtra(SplashScreenActivity.INVITATION_ID_EXTRA, invitationId);
+            startActivity(intent);
+            finish();
+            return;
+        }
+
+        // check if user has house or not
+        LiveData<GetUserHouseJob> job = splashScreenViewModel.getUserHouse();
+        job.observe(this, getUserHouseJob -> {
+            switch (job.getValue().getJobStatus()) {
+                case IN_PROGRESS:
+                    break;
+                case SUCCESS:
+                    if (getUserHouseJob.isUserHasHouse()) {
+                        Intent intent = new Intent(SignInActivity.this, HouseActivity.class);
+                        intent.putExtra("house", getUserHouseJob.getHouse());
+                        startActivity(intent);
+                        finish();
+                    } else {
+                        Intent intent = new Intent(SignInActivity.this, ChooseHouseActivity.class);
+                        startActivity(intent);
+                        finish();
+                    }
+                    break;
+                case ERROR:
+                    // TODO retry the job? meanwhile just toast a tmp message
+                    toggleLoadingLayout(false);
+                    Toast.makeText(this, "Error querying firestore.", Toast.LENGTH_LONG).show();
+                    break;
+            }
+        });
     }
 
     private void doSignIn(View view) {

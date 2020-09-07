@@ -3,8 +3,8 @@ package com.example.roomie.house.house_settings;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.ViewModel;
 
-import com.example.roomie.GetHouseRoomiesJob;
-import com.example.roomie.HouseRepository;
+import com.example.roomie.repositories.GetHouseRoomiesJob;
+import com.example.roomie.repositories.HouseRepository;
 
 public class HouseSettingsViewModel extends ViewModel {
 
