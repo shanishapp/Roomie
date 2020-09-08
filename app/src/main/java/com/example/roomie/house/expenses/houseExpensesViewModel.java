@@ -11,6 +11,7 @@ import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 import static com.example.roomie.util.FirestoreUtil.EXPENSES_COLLECTION_NAME;
 import static com.example.roomie.util.FirestoreUtil.HOUSES_COLLECTION_NAME;
@@ -19,7 +20,7 @@ public class houseExpensesViewModel extends ViewModel implements ExpenseAdapter.
 {
     private FirebaseFirestore db;
     private MutableLiveData<List<Expense>> expenses;
-    public ExpenseAdapter expenseAdapter = null;
+//    public ExpenseAdapter expenseAdapter = null;
 
     public houseExpensesViewModel()
     {
@@ -73,7 +74,7 @@ public class houseExpensesViewModel extends ViewModel implements ExpenseAdapter.
         CreateNewExpenseJob expenseJob = new CreateNewExpenseJob(FirestoreJob.JobStatus.IN_PROGRESS);
         MutableLiveData<CreateNewExpenseJob> job = new MutableLiveData<>(expenseJob);
 
-        expenses.getValue().remove(expense); // TODO does it work ?
+        expenses.getValue().remove(expense);
         db.collection(HOUSES_COLLECTION_NAME)
                 .document(houseId).collection(EXPENSES_COLLECTION_NAME)
                 .document(expense.get_id()).delete()
@@ -102,7 +103,7 @@ public class houseExpensesViewModel extends ViewModel implements ExpenseAdapter.
             if (task.isSuccessful())
             {
                 List<Expense> fetchedList = new ArrayList<>();
-                for (DocumentSnapshot documentSnapshot : task.getResult())
+                for (DocumentSnapshot documentSnapshot : Objects.requireNonNull(task.getResult()))
                 {
                     Expense expense = documentSnapshot.toObject(Expense.class);
                     fetchedList.add(expense);
@@ -110,12 +111,13 @@ public class houseExpensesViewModel extends ViewModel implements ExpenseAdapter.
                 expenses.setValue(fetchedList);
                 expensesJob.setExpenses(fetchedList);
                 expensesJob.setJobStatus(FirestoreJob.JobStatus.SUCCESS);
+                job.setValue(expensesJob);
             } else
             {
                 expensesJob.setJobStatus(FirestoreJob.JobStatus.ERROR);
                 expensesJob.setJobErrorCode(FirestoreJob.JobErrorCode.GENERAL);
+                job.setValue(expensesJob);
             }
-            job.setValue(expensesJob);
         });
         return job;
     }
@@ -123,6 +125,6 @@ public class houseExpensesViewModel extends ViewModel implements ExpenseAdapter.
     @Override
     public void onExpenseClick(int pos)
     {
-        //TODO: implement this
+        //TODO: implementation missing - expand to other fragment?
     }
 }

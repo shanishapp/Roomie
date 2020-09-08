@@ -30,7 +30,7 @@ import java.util.ArrayList;
 public class houseExpensesFragment extends Fragment implements ExpenseAdapter.OnExpenseListener
 {
     private RecyclerView recyclerView;
-    private RecyclerView.Adapter adapter = null;
+    private RecyclerView.Adapter<ExpenseAdapter.ViewHolder> adapter = null;
     private HouseActivityViewModel houseActivityViewModel;
     private houseExpensesViewModel viewModel;
     private ArrayList<Expense> expenses;
@@ -39,7 +39,6 @@ public class houseExpensesFragment extends Fragment implements ExpenseAdapter.On
 
     public houseExpensesFragment()
     {
-        // Required empty public constructor
 
     }
 
@@ -64,9 +63,7 @@ public class houseExpensesFragment extends Fragment implements ExpenseAdapter.On
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState)
     {
-        // Inflate the layout for this fragment
         View v = inflater.inflate(R.layout.fragment_house_expenses, container, false);
-        //init variables
         houseActivityViewModel = new ViewModelProvider(requireActivity()).get(HouseActivityViewModel.class);
         viewModel = new ViewModelProvider(this).get(houseExpensesViewModel.class);
         LiveData<allExpensesJob> job = viewModel.getExpenses(houseActivityViewModel.getHouse().getId());
@@ -89,7 +86,6 @@ public class houseExpensesFragment extends Fragment implements ExpenseAdapter.On
         super.onViewCreated(view, savedInstanceState);
         navController = Navigation.findNavController(view);
         addExpenseButton = view.findViewById(R.id.expensesFab);
-        //set up add button
         addExpenseButton.setOnClickListener(view1 -> {
             if (view1 != null)
             {
@@ -103,5 +99,5 @@ public class houseExpensesFragment extends Fragment implements ExpenseAdapter.On
     {
     }
 
-    //TODO: need a view for total
+    //TODO: add a view for total debts
 }
