@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/bottom_border"
+    android:padding="16dp"
+    android:paddingHorizontal="8dp"
+    android:paddingVertical="16dp">
+
+    <RelativeLayout
+        android:id="@+id/house_settings_roomie_holder_profile_picture_wrapper"
+        android:layout_width="70dp"
+        android:layout_height="70dp"
+        android:background="@drawable/user_profile_picture_circle_border"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <androidx.cardview.widget.CardView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            app:cardCornerRadius="32dp">
+
+            <ImageView
+                android:id="@+id/house_settings_roomie_holder_profile_picture"
+                android:layout_width="64dp"
+                android:layout_height="64dp"
+                android:contentDescription="@string/house_settings_fragment_roomies_profile_picture_desc"
+                app:srcCompat="@drawable/avatar_1" />
+        </androidx.cardview.widget.CardView>
+    </RelativeLayout>
+
+    <TextView
+        android:id="@+id/house_settings_roomie_holder_name"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:textColor="@color/black"
+        android:textSize="18sp"
+        app:layout_constraintBottom_toBottomOf="@+id/house_settings_roomie_holder_profile_picture_wrapper"
+        app:layout_constraintEnd_toStartOf="@+id/house_settings_roomie_holder_role"
+        app:layout_constraintStart_toEndOf="@+id/house_settings_roomie_holder_profile_picture_wrapper"
+        app:layout_constraintTop_toTopOf="@id/house_settings_roomie_holder_profile_picture_wrapper" />
+
+    <TextView
+        android:id="@+id/house_settings_roomie_holder_role"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@drawable/badge_background"
+        android:paddingHorizontal="8dp"
+        android:paddingVertical="4dp"
+        android:textColor="@color/buttonColorDark"
+        app:layout_constraintBottom_toBottomOf="@+id/house_settings_roomie_holder_profile_picture_wrapper"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@id/house_settings_roomie_holder_profile_picture_wrapper" />
+</androidx.constraintlayout.widget.ConstraintLayout>
