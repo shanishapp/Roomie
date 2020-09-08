@@ -8,6 +8,8 @@ import androidx.lifecycle.ViewModel;
 
 import com.example.roomie.FirestoreJob;
 import com.example.roomie.House;
+import com.example.roomie.repositories.HouseRepository;
+import com.example.roomie.repositories.UserRepository;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.FieldPath;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -86,6 +88,11 @@ public class NewHouseFragmentViewModel extends ViewModel {
         });
 
         return job;
+    }
+
+    public LiveData<FirestoreJob> updateUserRole() {
+        return UserRepository.getInstance().updateUserRole(
+                FirebaseAuth.getInstance().getCurrentUser().getUid(), House.Roles.OWNER);
     }
 
 }

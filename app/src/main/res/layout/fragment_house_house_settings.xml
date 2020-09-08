@@ -1,14 +1,140 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".house.HouseHouseSettingsFragment">
+    android:fillViewport="true"
+    tools:context=".house.house_settings.HouseHouseSettingsFragment">
 
-    <!-- TODO: Update blank fragment layout -->
-    <TextView
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="@string/house_settings_fragment_title" />
+        android:layout_height="wrap_content">
 
-</FrameLayout>
+        <TextView
+            android:id="@+id/house_settings_house_info_title"
+            style="@style/HouseSettingsSectionTitle"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="@string/house_settings_fragment_house_info_title"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <LinearLayout
+            android:id="@+id/house_settings_house_info_item_list"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:orientation="vertical"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/house_settings_house_info_title">
+
+            <LinearLayout
+                style="@style/HouseSettingsSectionItemWrapper"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/house_settings_house_name_title"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/house_settings_fragment_house_info_name" />
+
+                <TextView
+                    android:id="@+id/house_settings_house_name"
+                    style="@style/HouseSettingsSectionItem"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" />
+            </LinearLayout>
+
+            <LinearLayout
+                style="@style/HouseSettingsSectionItemWrapper"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/house_settings_house_address_title"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/house_settings_fragment_house_info_address" />
+
+                <TextView
+                    android:id="@+id/house_settings_house_address"
+                    style="@style/HouseSettingsSectionItem"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" />
+            </LinearLayout>
+
+            <LinearLayout
+                style="@style/HouseSettingsSectionItemWrapper"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/house_settings_house_desc_title"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/house_settings_fragment_house_info_desc" />
+
+                <TextView
+                    android:id="@+id/house_settings_house_desc"
+                    style="@style/HouseSettingsSectionItem"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" />
+            </LinearLayout>
+
+            <Button
+                android:id="@+id/house_settings_edit_house_info_button"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="#EFEFEF"
+                android:text="@string/house_settings_fragment_edit_house_info_button"
+                android:textAllCaps="false"
+                android:textColor="@color/buttonColorDark"
+                android:textStyle="bold" />
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/house_settings_roomies_title"
+            style="@style/HouseSettingsSectionTitle"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="@string/house_settings_fragment_roomies_title"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/house_settings_house_info_item_list" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/house_settings_roomies_recycler_view"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/house_settings_roomies_title" />
+
+        <FrameLayout
+            android:id="@+id/house_settings_loading_overlay"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:alpha="0.6"
+            android:background="@color/white"
+            android:translationZ="10dp"
+            android:visibility="gone"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <ProgressBar
+                android:id="@+id/house_settings_progress_bar"
+                style="?android:attr/progressBarStyle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center" />
+        </FrameLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</ScrollView>

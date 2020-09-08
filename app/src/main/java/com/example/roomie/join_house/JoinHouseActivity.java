@@ -14,9 +14,11 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.roomie.FirestoreJob;
+import com.example.roomie.House;
 import com.example.roomie.R;
 import com.example.roomie.SignInActivity;
 import com.example.roomie.house.HouseActivity;
+import com.example.roomie.repositories.UserRepository;
 import com.example.roomie.splash.GetUserHouseJob;
 import com.example.roomie.splash.SplashScreenActivity;
 import com.google.firebase.auth.FirebaseAuth;
@@ -152,11 +154,25 @@ public class JoinHouseActivity extends AppCompatActivity {
         job.observe(this, joinHouseJob -> {
             switch (joinHouseJob.getJobStatus()) {
                 case SUCCESS:
-                    Toast.makeText(this, getString(R.string.join_house_activity_welcome_msg), Toast.LENGTH_LONG).show();
-                    Intent intent = new Intent(JoinHouseActivity.this, HouseActivity.class);
-                    intent.putExtra("house", joinHouseJob.getHouse());
-                    startActivity(intent);
-                    finish();
+                    // update user role
+                    LiveData<FirestoreJob> updateUserRoleJob = UserRepository.getInstance().updateUserRole(
+                            auth.getCurrentUser().getUid(), House.Roles.ROOMIE);
+                    updateUserRoleJob.observe(this, firestoreJob -> {
+                        switch (firestoreJob.getJobStatus()) {
+                            case SUCCESS:
+                                Toast.makeText(this, getString(R.string.join_house_activity_welcome_msg), Toast.LENGTH_LONG).show();
+                                Intent intent = new Intent(JoinHouseActivity.this, HouseActivity.class);
+                                intent.putExtra("house", joinHouseJob.getHouse());
+                                startActivity(intent);
+                                finish();
+                                break;
+                            case ERROR:
+                                Toast.makeText(this, "Error while updating user.", Toast.LENGTH_LONG).show();
+                                break;
+                            default:
+                                break;
+                        }
+                    });
                     break;
                 case ERROR:
                     toggleJoinButton(true);

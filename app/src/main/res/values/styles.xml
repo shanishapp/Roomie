@@ -67,4 +67,23 @@
         <item name="android:textAlignment">center</item>
     </style>
 
+    <style name="HouseSettingsSectionTitle">
+        <item name="android:padding">16dp</item>
+        <item name="android:background">@color/buttonColorDark</item>
+        <item name="android:textColor">@color/white</item>
+        <item name="android:textSize">18sp</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+
+    <style name="HouseSettingsSectionItemWrapper">
+        <item name="android:padding">16dp</item>
+        <item name="android:background">@drawable/bottom_border</item>
+    </style>
+
+    <style name="HouseSettingsSectionItem">
+        <item name="android:textColor">@color/black</item>
+        <item name="android:layout_marginTop">8dp</item>
+        <item name="android:textSize">16sp</item>
+    </style>
+
 </resources>
