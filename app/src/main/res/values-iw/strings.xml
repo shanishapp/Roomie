@@ -114,4 +114,10 @@
     <string name="edit_house_settings_fragment_invalid_house_name">שם הבית לא תקין</string>
     <string name="edit_house_settings_fragment_invalid_house_address">כתובת הבית לא תקינה</string>
     <string name="edit_house_settings_fragment_invalid_house_desc">תיאור הבית לא תקין</string>
+    <string name="roomie_profile_fragment_title">פרופיל שותף</string>
+    <string name="roomie_profile_fragment_profile_pic_desc">תמונת פרופיל</string>
+    <string name="roomie_profile_fragment_roomie_in">שותף בבית %s</string>
+    <string name="roomie_profile_fragmnet_brooms">מטאטאים</string>
+    <string name="roomie_profile_fragmnet_chores">מטלות</string>
+    <string name="roomie_profile_fragmnet_expenses">הוצאות</string>
 </resources>

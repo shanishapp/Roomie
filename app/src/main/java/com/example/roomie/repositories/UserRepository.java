@@ -246,4 +246,35 @@ public class UserRepository {
         return job;
     }
 
+    public LiveData<GetUserJob> getUserById(String userId) {
+        GetUserJob getUserJob = new GetUserJob(FirestoreJob.JobStatus.IN_PROGRESS);
+        MutableLiveData<GetUserJob> job = new MutableLiveData<>(getUserJob);
+
+        db.collection(FirestoreUtil.USERS_COLLECTION_NAME)
+                .whereEqualTo("uid", userId)
+                .get()
+                .addOnSuccessListener(task -> {
+                    if (task.isEmpty() || task.size() > 1) {
+                        getUserJob.setJobStatus(FirestoreJob.JobStatus.ERROR);
+                        getUserJob.setJobErrorCode(FirestoreJob.JobErrorCode.GENERAL);
+                        job.setValue(getUserJob);
+                        Log.d(TAG, "Error too many or no records found (" + task.size() + ") in getUserById.");
+                        return;
+                    }
+
+                    User user = task.getDocuments().get(0).toObject(User.class);
+                    getUserJob.setUser(user);
+                    getUserJob.setJobStatus(FirestoreJob.JobStatus.SUCCESS);
+                    job.setValue(getUserJob);
+                })
+                .addOnFailureListener(task -> {
+                    getUserJob.setJobStatus(FirestoreJob.JobStatus.ERROR);
+                    getUserJob.setJobErrorCode(FirestoreJob.JobErrorCode.GENERAL);
+                    job.setValue(getUserJob);
+                    Log.d(TAG, "Error while fetching the user in getUserById", task.getCause());
+                });
+
+        return job;
+    }
+
 }

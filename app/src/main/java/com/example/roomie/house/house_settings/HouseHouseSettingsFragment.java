@@ -109,6 +109,7 @@ public class HouseHouseSettingsFragment extends Fragment {
 
     private void setListeners() {
         editHouseInfoButton.setOnClickListener(this::gotoEditHouseInfo);
+        roomieAdapter.setItemClickCallback(this::gotoRoomieProfile);
     }
 
     private void setContent() {
@@ -137,6 +138,16 @@ public class HouseHouseSettingsFragment extends Fragment {
 
     private void gotoEditHouseInfo(View view) {
         navController.navigate(R.id.action_house_settings_fragment_dest_to_house_edit_house_settings_fragment_dest);
+    }
+
+    /**
+     * This function is used as a callback for roomie list item click.
+     * @param userId The user id to pass to the roomie profile fragment.
+     */
+    public void gotoRoomieProfile(String userId) {
+        Bundle bundle = new Bundle();
+        bundle.putSerializable("userId", userId);
+        navController.navigate(R.id.action_house_settings_fragment_dest_to_roomie_profile_fragment_dest, bundle);
     }
 
     private void toggleLoadingOverlay(boolean isVisible) {
