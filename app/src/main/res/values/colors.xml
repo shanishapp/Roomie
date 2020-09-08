@@ -6,6 +6,8 @@
     <color name="white">#ffffff</color>
     <color name="buttonColor">#01AAD5</color>
     <color name="lightButtonColor">#4F0286A8</color>
+    <color name="lightButtonColorSolid">#A4D7E4</color>
     <color name="buttonColorDark">#007695</color>
     <color name="black">#000000</color>
+    <color name="dark_transpart">#51000000</color>
 </resources>

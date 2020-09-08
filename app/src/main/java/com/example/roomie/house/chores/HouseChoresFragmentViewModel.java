@@ -10,6 +10,9 @@ import com.example.roomie.house.chores.chore.newChoreJob;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -47,7 +50,7 @@ public class HouseChoresFragmentViewModel extends ViewModel implements ChoreAdap
                             chores.setValue(choreList);
                             db.collection(HOUSES_COLLECTION_NAME)
                                     .document(houseId).collection(CHORESS_COLLECTION_NAME)
-                                    .document(choreId).update("assignee",assignee);
+                                    .document(choreId).update("_assignee",assignee);
 
                             choresJob.setChore(task.getResult().toObject(Chore.class));
                             choresJob.setJobStatus(FirestoreJob.JobStatus.SUCCESS);
@@ -115,5 +118,81 @@ public class HouseChoresFragmentViewModel extends ViewModel implements ChoreAdap
     @Override
     public void onChoreClick(int pos) {
         //TODO implement
+    }
+
+    public LiveData<newChoreJob>  setTitle(String choreId, String title, String houseId) {
+        newChoreJob choresJob = new newChoreJob(FirestoreJob.JobStatus.IN_PROGRESS);
+        MutableLiveData<newChoreJob> job = new MutableLiveData<>(choresJob);
+
+        db.collection(HOUSES_COLLECTION_NAME)
+                .document(houseId).collection(CHORESS_COLLECTION_NAME)
+                .document(choreId)
+                .get()
+                .addOnCompleteListener(task ->  {
+                    if(task.isSuccessful()) {
+                        Chore chore = task.getResult().toObject(Chore.class);
+                        if(chore !=null) {
+                            List<Chore> choreList = chores.getValue();
+                            choreList.remove(chore);
+                            chore.set_title(title);
+                            choreList.add(chore);
+                            chores.setValue(choreList);
+                            db.collection(HOUSES_COLLECTION_NAME)
+                                    .document(houseId).collection(CHORESS_COLLECTION_NAME)
+                                    .document(choreId).update("_title",title);
+
+                            choresJob.setChore(task.getResult().toObject(Chore.class));
+                            choresJob.setJobStatus(FirestoreJob.JobStatus.SUCCESS);
+                            job.setValue(choresJob);
+                        }
+                    } else {
+                        choresJob.setJobStatus(FirestoreJob.JobStatus.ERROR);
+                        choresJob.setJobErrorCode(FirestoreJob.JobErrorCode.GENERAL);
+                        job.setValue(choresJob);
+                    }
+                });
+
+        return job;
+    }
+
+    public LiveData<newChoreJob> setDueDate(String choreId, String dueDate, String houseId) {
+        newChoreJob choresJob = new newChoreJob(FirestoreJob.JobStatus.IN_PROGRESS);
+        MutableLiveData<newChoreJob> job = new MutableLiveData<>(choresJob);
+
+        db.collection(HOUSES_COLLECTION_NAME)
+                .document(houseId).collection(CHORESS_COLLECTION_NAME)
+                .document(choreId)
+                .get()
+                .addOnCompleteListener(task ->  {
+                    if(task.isSuccessful()) {
+                        Chore chore = task.getResult().toObject(Chore.class);
+                        if(chore !=null) {
+                            List<Chore> choreList = chores.getValue();
+                            choreList.remove(chore);
+                            String pattern = "dd/MM/yyyy HH:mm";
+                            DateFormat df = new SimpleDateFormat(pattern);
+                            try {
+                                chore.set_dueDate(df.parse(dueDate));
+                            } catch (ParseException e) {
+                                e.printStackTrace();
+                            }
+                            choreList.add(chore);
+                            chores.setValue(choreList);
+                            db.collection(HOUSES_COLLECTION_NAME)
+                                    .document(houseId).collection(CHORESS_COLLECTION_NAME)
+                                    .document(choreId).update("_dueDate",chore.get_dueDate());
+
+                            choresJob.setChore(task.getResult().toObject(Chore.class));
+                            choresJob.setJobStatus(FirestoreJob.JobStatus.SUCCESS);
+                            job.setValue(choresJob);
+                        }
+                    } else {
+                        choresJob.setJobStatus(FirestoreJob.JobStatus.ERROR);
+                        choresJob.setJobErrorCode(FirestoreJob.JobErrorCode.GENERAL);
+                        job.setValue(choresJob);
+                    }
+
+    });
+        return job;
     }
 }

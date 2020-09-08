@@ -55,9 +55,9 @@ public class NewChoreFragmentViewModel extends ViewModel {
                                             task1.getResult().getDocuments().get(0).toObject(Chore.class)
 
                                     );
+                                    setChoreId(task.getResult().getId(), chore,house);
                                     newChoreJob.setJobStatus(FirestoreJob.JobStatus.SUCCESS);
                                     job.setValue(newChoreJob);
-                                    setChoreId(task.getResult().getId(), chore,house);
                                 } else {
                                     newChoreJob.setJobStatus(FirestoreJob.JobStatus.ERROR);
                                     newChoreJob.setJobErrorCode(FirestoreJob.JobErrorCode.GENERAL);

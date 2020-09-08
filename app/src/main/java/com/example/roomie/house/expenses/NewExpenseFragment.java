@@ -21,7 +21,6 @@ import com.example.roomie.R;
 import com.example.roomie.Roommate;
 import com.example.roomie.house.HouseActivityViewModel;
 import com.example.roomie.house.chores.chore.newChoreFragment;
-import com.example.roomie.house.chores.chore.newChoreJob;
 import com.skydoves.powerspinner.OnSpinnerItemSelectedListener;
 import com.skydoves.powerspinner.PowerSpinnerView;
 
@@ -156,7 +155,7 @@ public class NewExpenseFragment extends Fragment
                     createExpenseButton.setEnabled(false);
                     break;
                 case SUCCESS:
-                    navController.navigate(R.id.action_choreFragment_to_house_chores_fragment_dest);
+                    navController.navigate(R.id.action_newChoreFragment_to_house_chores_fragment_dest);
                     break;
                 case ERROR:
                     createExpenseButton.setEnabled(true);

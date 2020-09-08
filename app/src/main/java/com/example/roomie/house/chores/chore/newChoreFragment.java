@@ -11,7 +11,6 @@ import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
@@ -25,19 +24,14 @@ import com.example.roomie.house.HouseActivityViewModel;
 import com.github.florent37.singledateandtimepicker.dialog.SingleDateAndTimePickerDialog;
 import com.google.firebase.auth.FirebaseAuth;
 import com.skydoves.powerspinner.OnSpinnerItemSelectedListener;
-import com.skydoves.powerspinner.OnSpinnerOutsideTouchListener;
 import com.skydoves.powerspinner.PowerSpinnerView;
 
-
-import org.jetbrains.annotations.NotNull;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
-import java.util.Map;
-import java.util.Set;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -83,20 +77,12 @@ public class newChoreFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         newChoreFragmentViewModel = new ViewModelProvider(this).get(NewChoreFragmentViewModel.class);
-
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        View v = inflater.inflate(R.layout.fragment_new_chore, container, false);
-
-
-
-        //define behaviour for the date picker button
-        return v;
-
+        return inflater.inflate(R.layout.fragment_new_chore, container, false);
     }
 
     @Override
@@ -114,6 +100,7 @@ public class newChoreFragment extends Fragment {
     private void initViews(View view) {
         houseActivityViewModel = new ViewModelProvider(requireActivity()).get(HouseActivityViewModel.class);
         house = houseActivityViewModel.getHouse();
+
         createChoreButton = view.findViewById(R.id.createChoreBtn);
         navController = Navigation.findNavController(view);
         differentTitleEditText = view.findViewById(R.id.differentTitleEditText);
@@ -200,7 +187,7 @@ public class newChoreFragment extends Fragment {
                     createChoreButton.setEnabled(false);
                     break;
                 case SUCCESS:
-                    navController.navigate(R.id.action_choreFragment_to_house_chores_fragment_dest);
+                    navController.navigate(R.id.action_newChoreFragment_to_house_chores_fragment_dest);
                     break;
                 case ERROR:
                     createChoreButton.setEnabled(true);

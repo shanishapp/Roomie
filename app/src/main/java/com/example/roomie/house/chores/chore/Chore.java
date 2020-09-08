@@ -2,6 +2,9 @@ package com.example.roomie.house.chores.chore;
 
 import android.util.Pair;
 
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 
 public class  Chore {
@@ -63,5 +66,20 @@ public class  Chore {
 
     public void set_assignee(String _assignee) {
         this._assignee = _assignee;
+    }
+
+    public void set_title(String _title){
+        this._title = _title;
+    }
+
+    public void set_dueDate(Date _dueDate) {
+        this._dueDate = _dueDate;
+//        String pattern = "dd/MM/yyyy HH:mm";
+//        DateFormat df = new SimpleDateFormat(pattern);
+//        try {
+//            this._dueDate = df.parse(dueDate);
+//        } catch (ParseException e) {
+//            e.printStackTrace();
+//        }
     }
 }

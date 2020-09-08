@@ -122,4 +122,9 @@
     <string name="roomie_profile_fragmnet_brooms">מטאטאים</string>
     <string name="roomie_profile_fragmnet_chores">מטלות</string>
     <string name="roomie_profile_fragmnet_expenses">הוצאות</string>
+    <string name="edit">ערכ\י</string>
+    <string name="changeTitle">החלף/י שם</string>
+    <string name="enterNewTitle">הכנס/י שם חדש</string>
+    <string name="changeAssignee">שנה/י ממונה</string>
+    <string name="pickNewAssignee">בחר/י ממונה חדש</string>
 </resources>

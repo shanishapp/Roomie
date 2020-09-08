@@ -49,6 +49,13 @@
         android:label="@string/house_chores_fragment_title"
         tools:layout="@layout/fragment_house_chores" >
         <action
+            android:id="@+id/action_house_chores_fragment_dest_to_newChoreFragment"
+            app:destination="@id/newChoreFragment"
+            app:popEnterAnim="@anim/slide_in_right"
+            app:popExitAnim="@anim/slide_out_left"
+            app:enterAnim="@anim/slide_in_left"
+            app:exitAnim="@anim/slide_out_right"/>
+        <action
             android:id="@+id/action_house_chores_fragment_dest_to_choreFragment"
             app:destination="@id/choreFragment"
             app:popEnterAnim="@anim/slide_in_right"
@@ -72,12 +79,12 @@
         android:label="@string/house_invite_roomie_fragment_title"
         tools:layout="@layout/fragment_house_invite_roomie" />
     <fragment
-        android:id="@+id/choreFragment"
+        android:id="@+id/newChoreFragment"
         android:name="com.example.roomie.house.chores.chore.newChoreFragment"
         android:label="fragment_chore"
         tools:layout="@layout/fragment_new_chore" >
         <action
-            android:id="@+id/action_choreFragment_to_house_chores_fragment_dest"
+            android:id="@+id/action_newChoreFragment_to_house_chores_fragment_dest"
             app:destination="@id/house_chores_fragment_dest"
             app:popEnterAnim="@anim/slide_in_right"
             app:popExitAnim="@anim/slide_out_left"
@@ -125,5 +132,32 @@
         <argument
             android:name="userId"
             app:argType="string" />
+    </fragment>
+    <fragment
+        android:id="@+id/choreFragment"
+        android:name="com.example.roomie.house.chores.ChoreFragment"
+        android:label="fragment_chore"
+        tools:layout="@layout/fragment_chore" >
+        <argument
+            android:name="choreId"
+            app:argType="string" />
+        <argument
+            android:name="choreTitle"
+            app:argType="string" />
+        <argument
+            android:name="choreAssignee"
+            app:argType="string" />
+        <argument
+            android:name="choreDueDate"
+            app:argType="string"/>
+        <action
+            android:id="@+id/action_choreFragment_to_house_chores_fragment_dest"
+            app:destination="@id/house_chores_fragment_dest"
+            app:popEnterAnim="@anim/slide_in_right"
+            app:popExitAnim="@anim/slide_out_left"
+            app:enterAnim="@anim/slide_in_left"
+            app:exitAnim="@anim/slide_out_right"
+            app:popUpTo="@id/house_chores_fragment_dest"
+            app:popUpToInclusive="true"/>
     </fragment>
 </navigation>

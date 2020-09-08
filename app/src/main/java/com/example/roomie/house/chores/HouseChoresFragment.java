@@ -23,8 +23,9 @@ import com.example.roomie.R;
 import com.example.roomie.house.HouseActivityViewModel;
 import com.example.roomie.house.chores.chore.Chore;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.List;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -89,7 +90,7 @@ public class HouseChoresFragment extends Fragment implements ChoreAdapter.OnChor
         //set up add button
         button.setOnClickListener(view1 -> {
             if(view1 != null){
-                navController.navigate(R.id.action_house_chores_fragment_dest_to_choreFragment);
+                navController.navigate(R.id.action_house_chores_fragment_dest_to_newChoreFragment);
             }
         });
     }
@@ -97,6 +98,18 @@ public class HouseChoresFragment extends Fragment implements ChoreAdapter.OnChor
 
     @Override
     public void onChoreClick(int pos) {
+        Chore chore = choreList.get(pos);
+        showChoreFragment(chore);
+    }
 
+    private void showChoreFragment(Chore chore) {
+        Bundle result = new Bundle();
+        result.putString("choreTitle",chore.get_title());
+        result.putString("choreId",chore.get_id());
+        result.putString("choreAssignee",chore.get_assignee());
+        String pattern = "dd/MM/yyyy HH:mm";
+        DateFormat df = new SimpleDateFormat(pattern);
+        result.putString("choreDueDate",df.format(chore.get_dueDate()).toString());
+        navController.navigate(R.id.action_house_chores_fragment_dest_to_choreFragment, result);
     }
 }
