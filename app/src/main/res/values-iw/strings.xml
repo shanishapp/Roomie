@@ -151,4 +151,10 @@
         <item>גודל</item>
         <item>הצג הכל</item>
     </string-array>
+
+    <string name="firebase_auth_sign_in_title">התחברות</string>
+    <string name="firebase_auth_sign_in_create_new_account">יצירת חשבון חדש</string>
+    <string name="firebase_auth_sign_in_or">או</string>
+    <string name="firebase_auth_sign_in_google">התחבר באמצעות גוגל</string>
+    <string name="firebase_auth_sign_in_facebook">התחבר באמצעות פייסבוק</string>
 </resources>

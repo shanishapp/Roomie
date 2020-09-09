@@ -19,6 +19,7 @@ import com.example.roomie.repositories.UserRepository;
 import com.example.roomie.splash.GetUserHouseJob;
 import com.example.roomie.splash.SplashScreenActivity;
 import com.example.roomie.splash.SplashScreenViewModel;
+import com.firebase.ui.auth.AuthMethodPickerLayout;
 import com.firebase.ui.auth.AuthUI;
 import com.firebase.ui.auth.IdpResponse;
 import com.google.firebase.auth.FirebaseAuth;
@@ -163,6 +164,12 @@ public class SignInActivity extends AppCompatActivity {
                 new AuthUI.IdpConfig.EmailBuilder().build(),
                 new AuthUI.IdpConfig.GoogleBuilder().build());
 
+        // add custom sign in layout
+        AuthMethodPickerLayout customLayout = new AuthMethodPickerLayout.Builder(R.layout.firebase_auth_sign_in)
+                .setEmailButtonId(R.id.firebase_auth_sign_in_create_account_button)
+                .setGoogleButtonId(R.id.firebase_auth_sign_in_google_button)
+                .build();
+
         // Create and launch sign-in intent
         startActivityForResult(
                 AuthUI.getInstance()
@@ -170,6 +177,7 @@ public class SignInActivity extends AppCompatActivity {
                         .setAvailableProviders(providers)
                         .setLogo(R.drawable.app_logo)
                         .setTheme(R.style.SignInTheme)
+                        .setAuthMethodPickerLayout(customLayout)
                         .build(),
                 RC_SIGN_IN);
     }
