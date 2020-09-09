@@ -4,6 +4,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
+import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
@@ -103,11 +104,24 @@ public class HouseActivity extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
+        Fragment fragment = getSupportFragmentManager().findFragmentById(R.id.house_nav_host_fragment);
+        Fragment f = fragment == null ? null : fragment.getChildFragmentManager().getFragments().get(0);
+
+        if ((f instanceof IOnBackPressed)) {
+            if( ((IOnBackPressed) f).onBackPressed()) {
+                if (drawerLayout.isDrawerOpen(GravityCompat.START)) {
+                    drawerLayout.closeDrawer(GravityCompat.START);
+                }//TODO MAYBE NOT NEEDED
+                return;
+            }
+        }
+
         if (drawerLayout.isDrawerOpen(GravityCompat.START)) {
             drawerLayout.closeDrawer(GravityCompat.START);
         } else {
             super.onBackPressed();
         }
+
     }
 
     public void signOut(MenuItem item) {
@@ -119,4 +133,14 @@ public class HouseActivity extends AppCompatActivity {
                     finish();
                 });
     }
+
+    public interface IOnBackPressed {
+        /**
+         * If you return true the back press will not be taken into account, otherwise the activity will act naturally
+         * @return true if your processing has priority if not false
+         */
+        boolean onBackPressed();
+    }
+
+
 }

@@ -127,4 +127,5 @@
     <string name="enterNewTitle">הכנס/י שם חדש</string>
     <string name="changeAssignee">שנה/י ממונה</string>
     <string name="pickNewAssignee">בחר/י ממונה חדש</string>
+    <string name="delete">delete</string>
 </resources>

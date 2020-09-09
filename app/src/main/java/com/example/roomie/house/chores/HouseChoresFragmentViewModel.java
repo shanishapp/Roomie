@@ -114,9 +114,18 @@ public class HouseChoresFragmentViewModel extends ViewModel implements ChoreAdap
         return job;
     }
 
-
     @Override
     public void onChoreClick(int pos) {
+        //TODO implement
+    }
+
+    @Override
+    public void onDeleteClick(int pos) {
+        //TODO implement
+    }
+
+    @Override
+    public void onEditClick(int pos) {
         //TODO implement
     }
 

@@ -157,6 +157,7 @@
     <string name="enterNewTitle">Enter new title</string>
     <string name="changeAssignee">CHANGE ASSIGNEE</string>
     <string name="pickNewAssignee">pick new assignee</string>
+    <string name="delete">delete</string>
 
     <string-array name="default_titles">
         <item>washing dishes</item>

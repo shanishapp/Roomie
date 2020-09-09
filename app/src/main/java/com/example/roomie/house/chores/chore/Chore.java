@@ -16,16 +16,18 @@ public class  Chore {
     private String _title;
     private Pair<String,Integer> _kind;
     private String _assignee; //TODO change to residence class
+    private boolean _showMenu;
 
     Chore(){}
 
-    Chore(String title, String assignee, Date dueDate) {
+    Chore(String title, String assignee, Date dueDate, boolean showMenu) {
         _title = title;
         _assignee = assignee;
         _dueDate = dueDate;
         _creationDate = new Date();
         _lastUpdatedDate = _creationDate;
         _snoozeDate = null;
+        _showMenu = showMenu;
     }
 
     public Date get_dueDate() {
@@ -81,5 +83,13 @@ public class  Chore {
 //        } catch (ParseException e) {
 //            e.printStackTrace();
 //        }
+    }
+
+    public void setShowMenu(boolean bool) {
+        this._showMenu = bool;
+    }
+
+    public boolean isShowMenu() {
+        return _showMenu;
     }
 }
