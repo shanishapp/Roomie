@@ -20,13 +20,13 @@ public class  Chore {
 
     Chore(){}
 
-    Chore(String title, String assignee, Date dueDate, boolean showMenu) {
+    Chore(String title, String assignee, Date dueDate, boolean showMenu,Date snoozeDate) {
         _title = title;
         _assignee = assignee;
         _dueDate = dueDate;
         _creationDate = new Date();
         _lastUpdatedDate = _creationDate;
-        _snoozeDate = null;
+        _snoozeDate = snoozeDate;
         _showMenu = showMenu;
     }
 
@@ -94,5 +94,9 @@ public class  Chore {
 
     public boolean isShowMenu() {
         return _showMenu;
+    }
+
+    public void set_snoozeDate(Date snoozeDate){
+        _snoozeDate = snoozeDate;
     }
 }

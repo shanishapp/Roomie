@@ -135,7 +135,7 @@
     </fragment>
     <fragment
         android:id="@+id/choreFragment"
-        android:name="com.example.roomie.house.chores.ChoreFragment"
+        android:name="com.example.roomie.house.chores.chore.ChoreFragment"
         android:label="fragment_chore"
         tools:layout="@layout/fragment_chore" >
         <argument

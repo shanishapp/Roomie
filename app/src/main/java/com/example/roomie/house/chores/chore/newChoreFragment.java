@@ -1,12 +1,18 @@
 package com.example.roomie.house.chores.chore;
 
+import android.app.AlarmManager;
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
+import android.content.Context;
+import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.LiveData;
-import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
@@ -17,9 +23,11 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.FrameLayout;
+import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.airbnb.lottie.LottieAnimationView;
 import com.example.roomie.House;
 import com.example.roomie.R;
 import com.example.roomie.User;
@@ -27,7 +35,6 @@ import com.example.roomie.house.HouseActivityViewModel;
 import com.example.roomie.repositories.GetHouseRoomiesJob;
 import com.example.roomie.repositories.HouseRepository;
 import com.github.florent37.singledateandtimepicker.dialog.SingleDateAndTimePickerDialog;
-import com.google.firebase.auth.FirebaseAuth;
 import com.skydoves.powerspinner.OnSpinnerItemSelectedListener;
 import com.skydoves.powerspinner.PowerSpinnerView;
 
@@ -35,7 +42,6 @@ import com.skydoves.powerspinner.PowerSpinnerView;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Date;
 
 /**
@@ -49,17 +55,19 @@ public class newChoreFragment extends Fragment {
     private PowerSpinnerView titleSpinner;
     private EditText differentTitleEditText;
     private PowerSpinnerView assigneeSpinner;
-    private Button setDateImageView;
+    private ImageButton setDateImageView;
     private TextView presentDateTextView;
     private HouseActivityViewModel houseActivityViewModel;
     private House house;
     private Button createChoreButton;
     private NavController navController ;
     private ArrayList<String> roommatesList;
-    private Date date = null;
+    private Date dueDate = null;
+    private Date snoozeDate = null;
     private String title = null;
     private String assignee = null;
     private FrameLayout loadingOverlay;
+    private LottieAnimationView remindMe;
 
 
     public newChoreFragment() {
@@ -96,6 +104,7 @@ public class newChoreFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
         //set up add button
 
+        createNotificationChannel();
         initViews(view);
         toggleLoadingOverlay(true);
         loadRoommies(view);
@@ -115,10 +124,11 @@ public class newChoreFragment extends Fragment {
         assigneeSpinner = view.findViewById(R.id.assigneeSpinner);
         setDateImageView = view.findViewById(R.id.setDueDateButton);
         presentDateTextView = view.findViewById(R.id.presentDateTextView);
-        date = new Date();
+        remindMe = view.findViewById(R.id.reminder_animation);
+        dueDate = new Date();
         String pattern = "dd/MM/yyyy HH:mm";
         DateFormat df = new SimpleDateFormat(pattern);
-        presentDateTextView.setText(df.format(date));
+        presentDateTextView.setText(df.format(dueDate));
         initAnimationListener();
         loadingOverlay = view.findViewById(R.id.new_chore_loading_overlay);
         createChoreButton.setOnClickListener(view1 -> {
@@ -134,10 +144,18 @@ public class newChoreFragment extends Fragment {
                .curved()
                .title("Pick a Date")
                .listener(date -> {
-                   newChoreFragment.this.date = date;
+                   newChoreFragment.this.dueDate = date;
                    String pattern = "dd/MM/yyyy HH:mm";
                    DateFormat df = new SimpleDateFormat(pattern);
                    presentDateTextView.setText(df.format(date));
+               }).display());
+       remindMe.setOnClickListener(view -> new SingleDateAndTimePickerDialog.Builder(getContext())
+               .bottomSheet()
+               .curved()
+               .title("Pick a Date")
+               .listener(date -> {
+                   //TODO save the snooze date in firestore
+                   snoozeDate = date;
                }).display());
     }
 
@@ -195,7 +213,9 @@ public class newChoreFragment extends Fragment {
              }
         }
 
-        LiveData<newChoreJob> job = newChoreFragmentViewModel.createNewChore(house,title,date,assignee);
+
+
+        LiveData<newChoreJob> job = newChoreFragmentViewModel.createNewChore(house,title, dueDate,assignee,snoozeDate);
 
         job.observe(getViewLifecycleOwner(), createNewChoreJob -> {
             switch (createNewChoreJob.getJobStatus()) {
@@ -203,6 +223,8 @@ public class newChoreFragment extends Fragment {
                     createChoreButton.setEnabled(false);
                     break;
                 case SUCCESS:
+                    if(snoozeDate != null)
+                        setSnooze(createNewChoreJob);
                     navController.navigate(R.id.action_newChoreFragment_to_house_chores_fragment_dest);
                     break;
                 case ERROR:
@@ -213,6 +235,18 @@ public class newChoreFragment extends Fragment {
                 default:
             }
         });
+
+    }
+
+    private void setSnooze(newChoreJob createNewChoreJob) {
+        Intent intent = new Intent(getContext(), SnoozerBroadcast.class);
+        intent.putExtra("title",createNewChoreJob.getChore().get_title());
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(getContext(),0,intent,0);
+
+        AlarmManager alarmManager = (AlarmManager) getActivity().getSystemService(Context.ALARM_SERVICE);
+        alarmManager.set(AlarmManager.RTC_WAKEUP,
+                snoozeDate.getTime(),
+                pendingIntent);
     }
 
     private void toggleLoadingOverlay(boolean isVisible) {
@@ -222,6 +256,19 @@ public class newChoreFragment extends Fragment {
         } else {
             loadingOverlay.setVisibility(View.GONE);
             createChoreButton.setEnabled(true);
+        }
+    }
+
+    private void createNotificationChannel() {
+        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            CharSequence name = "notifyRoommie";
+            String description = "to be added later";
+            int importance = NotificationManager.IMPORTANCE_DEFAULT;
+            NotificationChannel channel = new NotificationChannel("notifyRoommie",name,importance);
+            channel.setDescription(description);
+
+            NotificationManager notificationManager = getActivity().getSystemService(NotificationManager.class);
+            notificationManager.createNotificationChannel(channel);
         }
     }
 }

@@ -1,7 +1,6 @@
-package com.example.roomie.house.chores;
+package com.example.roomie.house.chores.chore;
 
 import android.app.AlertDialog;
-import android.app.Notification;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
@@ -22,7 +21,6 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.ImageButton;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -30,12 +28,10 @@ import com.example.roomie.House;
 import com.example.roomie.R;
 import com.example.roomie.User;
 import com.example.roomie.house.HouseActivityViewModel;
-import com.example.roomie.house.chores.chore.Chore;
-import com.example.roomie.house.chores.chore.newChoreJob;
+import com.example.roomie.house.chores.HouseChoresFragmentViewModel;
 import com.example.roomie.repositories.GetHouseRoomiesJob;
 import com.example.roomie.repositories.HouseRepository;
 import com.github.florent37.singledateandtimepicker.dialog.SingleDateAndTimePickerDialog;
-import com.google.firebase.auth.FirebaseAuth;
 import com.skydoves.powerspinner.OnSpinnerItemSelectedListener;
 import com.skydoves.powerspinner.PowerSpinnerView;
 
@@ -43,7 +39,6 @@ import com.skydoves.powerspinner.PowerSpinnerView;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Arrays;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -84,7 +79,6 @@ public class ChoreFragment extends Fragment {
      * @param param2 Parameter 2.
      * @return A new instance of fragment ChoreFragment.
      */
-    // TODO: Rename and change types and number of parameters
     public static ChoreFragment newInstance(String param1, String param2) {
         return new ChoreFragment();
     }
@@ -239,7 +233,6 @@ public class ChoreFragment extends Fragment {
         loadingOverlay = view.findViewById(R.id.chore_loading_overlay);
 
     }
-
 
     private void toggleLoadingOverlay(boolean isVisible) {
         if (isVisible) {

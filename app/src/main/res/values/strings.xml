@@ -158,6 +158,7 @@
     <string name="changeAssignee">CHANGE ASSIGNEE</string>
     <string name="pickNewAssignee">pick new assignee</string>
     <string name="delete">delete</string>
+    <string name="remindMe">Remind me</string>
 
     <string-array name="default_titles">
         <item>washing dishes</item>
