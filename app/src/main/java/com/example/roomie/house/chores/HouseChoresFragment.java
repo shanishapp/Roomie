@@ -6,6 +6,7 @@ import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.collection.ArraySet;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.LiveData;
@@ -19,21 +20,27 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.FrameLayout;
 import android.widget.Toast;
 
 
 import com.example.roomie.FirestoreJob;
 import com.example.roomie.MovableFloatingActionButton;
 import com.example.roomie.R;
+import com.example.roomie.User;
 import com.example.roomie.house.HouseActivity;
 import com.example.roomie.house.HouseActivityViewModel;
 import com.example.roomie.house.chores.chore.Chore;
+import com.example.roomie.repositories.GetHouseRoomiesJob;
+import com.example.roomie.repositories.HouseRepository;
 
 import org.jetbrains.annotations.NotNull;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -49,6 +56,11 @@ public class HouseChoresFragment extends Fragment implements ChoreAdapter.OnChor
     private ArrayList<Chore> choreList;
     private MovableFloatingActionButton button;
     private NavController navController;
+    private FrameLayout loadingOverlay;
+    private boolean firstArrived = false;
+    private ArrayList<String> roommatesNamesList;
+    private ArrayList<String> rommatesMap;
+
 
     public HouseChoresFragment() {
         // Required empty public constructor
@@ -81,18 +93,28 @@ public class HouseChoresFragment extends Fragment implements ChoreAdapter.OnChor
         job.observe(getViewLifecycleOwner(), allChoresJob -> {
             if(allChoresJob.getJobStatus() == FirestoreJob.JobStatus.SUCCESS) {
                 choreList = (ArrayList<Chore>) allChoresJob.getChoreList();
-                adapter = new ChoreAdapter(choreList,HouseChoresFragment.this);
-                RecyclerView recyclerView = v.findViewById(R.id.recyclerView);
-                recyclerView.setAdapter(adapter);
-                recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-                ItemTouchHelper itemTouchHelperLeft = getItemTouchHelperLeft();
-                itemTouchHelperLeft.attachToRecyclerView(recyclerView);
-                ItemTouchHelper itemTouchHelperRight = getItemTouchHelperRight();
-                itemTouchHelperRight.attachToRecyclerView(recyclerView);
+                if(firstArrived) {
+                    toggleLoadingOverlay(false);
+                    setRecyclerView(v);
+                }
+                else
+                    firstArrived = true;
             }
         });
         return v;
     }
+
+    private void setRecyclerView(View v) {
+        adapter = new ChoreAdapter(choreList, HouseChoresFragment.this,roommatesNamesList,rommatesMap);
+        RecyclerView recyclerView = v.findViewById(R.id.recyclerView);
+        recyclerView.setAdapter(adapter);
+        recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+        ItemTouchHelper itemTouchHelperLeft = getItemTouchHelperLeft();
+        itemTouchHelperLeft.attachToRecyclerView(recyclerView);
+        ItemTouchHelper itemTouchHelperRight = getItemTouchHelperRight();
+        itemTouchHelperRight.attachToRecyclerView(recyclerView);
+    }
+
 
     private ItemTouchHelper getItemTouchHelperRight() {
         ItemTouchHelper.SimpleCallback touchHelperCallback = new ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.RIGHT) {
@@ -176,6 +198,11 @@ public class HouseChoresFragment extends Fragment implements ChoreAdapter.OnChor
                 navController.navigate(R.id.action_house_chores_fragment_dest_to_newChoreFragment);
             }
         });
+        rommatesMap = new ArrayList<>();
+        roommatesNamesList = new ArrayList<>();
+        loadingOverlay = view.findViewById(R.id.chores_loading_overlay);
+        toggleLoadingOverlay(true);
+        loadRoommies(view);
     }
 
     @Override
@@ -203,6 +230,7 @@ public class HouseChoresFragment extends Fragment implements ChoreAdapter.OnChor
         result.putString("choreTitle",chore.get_title());
         result.putString("choreId",chore.get_id());
         result.putString("choreAssignee",chore.get_assignee());
+        result.putStringArrayList("roommiesNames",roommatesNamesList);
         String pattern = "dd/MM/yyyy HH:mm";
         DateFormat df = new SimpleDateFormat(pattern);
         result.putString("choreDueDate", df.format(chore.get_dueDate()));
@@ -217,5 +245,33 @@ public class HouseChoresFragment extends Fragment implements ChoreAdapter.OnChor
         } else {
             return false;
         }
+    }
+
+    private void toggleLoadingOverlay(boolean isVisible) {
+        if (isVisible) {
+            loadingOverlay.setVisibility(View.VISIBLE);
+        } else {
+            loadingOverlay.setVisibility(View.GONE);
+        }
+    }
+
+    private void loadRoommies(View view) {
+        LiveData<GetHouseRoomiesJob> job = HouseRepository.getInstance().getHouseRoomies(houseActivityViewModel.getHouse().getId());
+        job.observe(getViewLifecycleOwner(), getHouseRoomiesJob -> {
+            switch (getHouseRoomiesJob.getJobStatus()){
+                case SUCCESS:
+                    for (User user: getHouseRoomiesJob.getRoomiesList()){
+                        roommatesNamesList.add(user.getUsername());
+                        rommatesMap.add(user.getProfilePicture());
+                    }
+
+                    if(firstArrived){
+                        toggleLoadingOverlay(false);
+                        setRecyclerView(view);
+                    }
+                    else
+                        firstArrived = true;
+            }
+        });
     }
 }

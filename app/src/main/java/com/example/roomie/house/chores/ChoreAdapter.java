@@ -15,11 +15,16 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.roomie.R;
 import com.example.roomie.house.chores.chore.Chore;
+import com.example.roomie.repositories.HouseRepository;
+import com.example.roomie.repositories.UserRepository;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.squareup.picasso.Picasso;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 public class ChoreAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
@@ -28,10 +33,15 @@ public class ChoreAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
     private static final int HIDE_MENU = 2;
     private List<Chore> _choreList;
     private OnChoreListener _mOnChoreListener;
+    private HashMap<String,String> _rommiesNameToImages;
 
-    public ChoreAdapter(List<Chore> choreList, OnChoreListener onChoreListener) {
+    public ChoreAdapter(List<Chore> choreList, OnChoreListener onChoreListener, ArrayList<String> roommiesNames, ArrayList<String> rommiesProfiles) {
         _choreList = choreList;
         _mOnChoreListener = onChoreListener;
+        _rommiesNameToImages = new HashMap<>();
+        for(int i = 0; i < roommiesNames.size(); i++){
+            _rommiesNameToImages.put(roommiesNames.get(i),rommiesProfiles.get(i));
+        }
     }
 
     @Override
@@ -68,7 +78,7 @@ public class ChoreAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
             TextView titleView = holder1.title;
             TextView dueDateView = holder1.dueDate;
             TextView assigneeView = holder1.assignee;
-
+            ImageView profileImage = holder1.profile;
             titleView.setText(choreItem.get_title());
             String pattern = "dd/MM/yyyy HH:mm";
             DateFormat df = new SimpleDateFormat(pattern);
@@ -79,6 +89,7 @@ public class ChoreAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
                 holder1.locked.setVisibility(View.INVISIBLE);
                 holder1.unlocked.setVisibility(View.VISIBLE);
             } else {
+                setAssigneeImage(holder1.profile,choreItem.get_assignee());
                 holder1.locked.setVisibility(View.VISIBLE);
                 holder1.unlocked.setVisibility(View.INVISIBLE);
             }
@@ -89,6 +100,13 @@ public class ChoreAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
         }
     }
 
+    private void setAssigneeImage(ImageView profile, String assignee) {
+        if(_rommiesNameToImages.containsKey(assignee) && _rommiesNameToImages.get(assignee) != null && !_rommiesNameToImages.get(assignee).equals("")) {
+            Picasso.get().load(_rommiesNameToImages.get(assignee)).into(profile);
+        }
+    }
+
+
     @Override
     public int getItemCount() {
         return _choreList.size();
@@ -98,6 +116,7 @@ public class ChoreAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
 
         public ImageView locked;
         public ImageView unlocked;
+        public ImageView profile;
         public TextView title;
         public TextView dueDate;
         public TextView assignee;
@@ -110,6 +129,7 @@ public class ChoreAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
             title = view.findViewById(R.id.choreTitleHolderView);
             dueDate = view.findViewById(R.id.choreDueDateHolderView);
             assignee = view.findViewById(R.id.choreAssigneeHolderView);
+            profile = view.findViewById(R.id.assigneeImageView);
             this.onChoreListener = onChoreListener;
             view.setOnClickListener(this);
         }

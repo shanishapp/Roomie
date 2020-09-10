@@ -63,6 +63,9 @@ public class  Chore {
     }
 
     public String get_assignee() {
+        if(_assignee == null){
+            return "";
+        }
         return _assignee;
     }
 

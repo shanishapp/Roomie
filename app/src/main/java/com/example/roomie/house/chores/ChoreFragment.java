@@ -20,6 +20,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.FrameLayout;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -27,9 +28,12 @@ import android.widget.Toast;
 
 import com.example.roomie.House;
 import com.example.roomie.R;
+import com.example.roomie.User;
 import com.example.roomie.house.HouseActivityViewModel;
 import com.example.roomie.house.chores.chore.Chore;
 import com.example.roomie.house.chores.chore.newChoreJob;
+import com.example.roomie.repositories.GetHouseRoomiesJob;
+import com.example.roomie.repositories.HouseRepository;
 import com.github.florent37.singledateandtimepicker.dialog.SingleDateAndTimePickerDialog;
 import com.google.firebase.auth.FirebaseAuth;
 import com.skydoves.powerspinner.OnSpinnerItemSelectedListener;
@@ -64,6 +68,9 @@ public class ChoreFragment extends Fragment {
     private String title;
     private String dueDate;
     private String assignee;
+    private FrameLayout loadingOverlay;
+    private PowerSpinnerView assigneeSpinner;
+
 
     public ChoreFragment() {
         // Required empty public constructor
@@ -99,6 +106,8 @@ public class ChoreFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
         initViews(view);
         setButtons();
+        toggleLoadingOverlay(true);
+        loadRoommies(view);
     }
 
     private void setButtons() {
@@ -154,7 +163,7 @@ public class ChoreFragment extends Fragment {
             AlertDialog alertDialog = builder.create();
             final View customLayout = getLayoutInflater().inflate(R.layout.dialog_change_assignee,null);
             Button changeBtn = customLayout.findViewById(R.id.changeAssigneeBtn);
-            PowerSpinnerView assigneeSpinner = customLayout.findViewById(R.id.newAssigneeSpinner);
+            assigneeSpinner = customLayout.findViewById(R.id.newAssigneeSpinner);
             setAssigneeSpinner(assigneeSpinner);
             alertDialog.setView(customLayout);
             changeBtn.setOnClickListener((v) -> {
@@ -182,7 +191,6 @@ public class ChoreFragment extends Fragment {
     }
 
     private void setAssigneeSpinner(PowerSpinnerView assigneeSpinner) {
-        roommatesList = getRoommies();
         assigneeSpinner.setItems(roommatesList);
         assigneeSpinner.setOnSpinnerItemSelectedListener((OnSpinnerItemSelectedListener<String>) (i, s) -> {
             assignee = s;
@@ -227,12 +235,33 @@ public class ChoreFragment extends Fragment {
         presentDateTextView.setText(dueDate);
         presentAssigneeTextView.setText(assignee);
         presentTitleTextView.setText(title);
+        roommatesList = new ArrayList<>();
+        loadingOverlay = view.findViewById(R.id.chore_loading_overlay);
+
     }
 
-    private ArrayList<String> getRoommies() {
-        FirebaseAuth auth = FirebaseAuth.getInstance();
-        Object[] arr = house.getRoomies().keySet().toArray();
-        String[] stringArray = Arrays.asList(arr).toArray(new String[arr.length]);
-        return new ArrayList<>(Arrays.asList(stringArray));
+
+    private void toggleLoadingOverlay(boolean isVisible) {
+        if (isVisible) {
+            loadingOverlay.setVisibility(View.VISIBLE);
+            editAssigneeBtn.setEnabled(false);
+        } else {
+            loadingOverlay.setVisibility(View.GONE);
+            editAssigneeBtn.setEnabled(true);
+        }
+    }
+
+    private void loadRoommies(View view) {
+        LiveData<GetHouseRoomiesJob> job = HouseRepository.getInstance().getHouseRoomies(house.getId());
+        job.observe(getViewLifecycleOwner(), getHouseRoomiesJob -> {
+            switch (getHouseRoomiesJob.getJobStatus()){
+                case SUCCESS:
+                    for (User user: getHouseRoomiesJob.getRoomiesList()){
+                        roommatesList.add(user.getUsername());
+                    }
+                    editAssigneeBtn.setEnabled(true);
+                    toggleLoadingOverlay(false);
+            }
+        });
     }
 }

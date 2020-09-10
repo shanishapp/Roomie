@@ -6,6 +6,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.LiveData;
+import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
@@ -15,12 +16,16 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.FrameLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.roomie.House;
 import com.example.roomie.R;
+import com.example.roomie.User;
 import com.example.roomie.house.HouseActivityViewModel;
+import com.example.roomie.repositories.GetHouseRoomiesJob;
+import com.example.roomie.repositories.HouseRepository;
 import com.github.florent37.singledateandtimepicker.dialog.SingleDateAndTimePickerDialog;
 import com.google.firebase.auth.FirebaseAuth;
 import com.skydoves.powerspinner.OnSpinnerItemSelectedListener;
@@ -54,6 +59,7 @@ public class newChoreFragment extends Fragment {
     private Date date = null;
     private String title = null;
     private String assignee = null;
+    private FrameLayout loadingOverlay;
 
 
     public newChoreFragment() {
@@ -88,13 +94,12 @@ public class newChoreFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        initViews(view);
         //set up add button
-        createChoreButton.setOnClickListener(view1 -> {
-            if (view1 != null) {
-                doCreateNewChore(view);
-            }
-        });
+
+        initViews(view);
+        toggleLoadingOverlay(true);
+        loadRoommies(view);
+
     }
 
     private void initViews(View view) {
@@ -105,9 +110,9 @@ public class newChoreFragment extends Fragment {
         navController = Navigation.findNavController(view);
         differentTitleEditText = view.findViewById(R.id.differentTitleEditText);
         titleSpinner = view.findViewById(R.id.titleSpinner) ;
+        roommatesList = new ArrayList<>();
         setTitleSpinner();
         assigneeSpinner = view.findViewById(R.id.assigneeSpinner);
-        setAssigneeSpinner();
         setDateImageView = view.findViewById(R.id.setDueDateButton);
         presentDateTextView = view.findViewById(R.id.presentDateTextView);
         date = new Date();
@@ -115,6 +120,12 @@ public class newChoreFragment extends Fragment {
         DateFormat df = new SimpleDateFormat(pattern);
         presentDateTextView.setText(df.format(date));
         initAnimationListener();
+        loadingOverlay = view.findViewById(R.id.new_chore_loading_overlay);
+        createChoreButton.setOnClickListener(view1 -> {
+            if (view1 != null) {
+                doCreateNewChore(view);
+            }
+        });
     }
 
     private void initAnimationListener() {
@@ -131,9 +142,6 @@ public class newChoreFragment extends Fragment {
     }
 
     private void setAssigneeSpinner() {
-        String[] arr = {"shani","avihi","uri"};
-        roommatesList = new ArrayList<String>(Arrays.asList(arr));
-        roommatesList = getRoommies();
         assigneeSpinner.setItems(roommatesList);
         assigneeSpinner.setOnSpinnerItemSelectedListener((OnSpinnerItemSelectedListener<String>) (i, s) -> {
             assignee = s;
@@ -142,11 +150,19 @@ public class newChoreFragment extends Fragment {
         assigneeSpinner.setLifecycleOwner(getViewLifecycleOwner());
     }
 
-    private ArrayList<String> getRoommies() {
-        FirebaseAuth auth = FirebaseAuth.getInstance();
-        Object[] arr = house.getRoomies().keySet().toArray();
-        String[] stringArray = Arrays.asList(arr).toArray(new String[arr.length]);
-        return new ArrayList<>(Arrays.asList(stringArray));
+    private void loadRoommies(View view) {
+        LiveData<GetHouseRoomiesJob> job = HouseRepository.getInstance().getHouseRoomies(house.getId());
+        job.observe(getViewLifecycleOwner(), getHouseRoomiesJob -> {
+            switch (getHouseRoomiesJob.getJobStatus()){
+                case SUCCESS:
+                    for (User user: getHouseRoomiesJob.getRoomiesList()){
+                        roommatesList.add(user.getUsername());
+                    }
+                    createChoreButton.setEnabled(true);
+                    toggleLoadingOverlay(false);
+                    setAssigneeSpinner();
+            }
+        });
     }
 
     private void setTitleSpinner() {
@@ -197,5 +213,15 @@ public class newChoreFragment extends Fragment {
                 default:
             }
         });
+    }
+
+    private void toggleLoadingOverlay(boolean isVisible) {
+        if (isVisible) {
+            loadingOverlay.setVisibility(View.VISIBLE);
+            createChoreButton.setEnabled(false);
+        } else {
+            loadingOverlay.setVisibility(View.GONE);
+            createChoreButton.setEnabled(true);
+        }
     }
 }
