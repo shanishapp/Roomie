@@ -152,6 +152,12 @@
     <string name="enter_title">please enter title</string>
     <string name="no_title_error_msg">please choose a title or choose \'other\' and enter your own</string>
     <string name="change_due_date">change date</string>
+    <string name="edit">edit</string>
+    <string name="changeTitle">CHANGE TITLE</string>
+    <string name="enterNewTitle">Enter new title</string>
+    <string name="changeAssignee">CHANGE ASSIGNEE</string>
+    <string name="pickNewAssignee">pick new assignee</string>
+    <string name="delete">delete</string>
 
     <string-array name="default_titles">
         <item>washing dishes</item>

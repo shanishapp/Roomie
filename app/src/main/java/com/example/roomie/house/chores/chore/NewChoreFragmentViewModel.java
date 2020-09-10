@@ -30,7 +30,7 @@ public class NewChoreFragmentViewModel extends ViewModel {
         MutableLiveData<com.example.roomie.house.chores.chore.newChoreJob> job = new MutableLiveData<>(newChoreJob);
 
         //create new chore
-        Chore chore = new Chore(title, assignee, dueDate);
+        Chore chore = new Chore(title, assignee, dueDate,false );
 
         //add new chore to firestore
         db.collection(HOUSES_COLLECTION_NAME).
@@ -55,9 +55,9 @@ public class NewChoreFragmentViewModel extends ViewModel {
                                             task1.getResult().getDocuments().get(0).toObject(Chore.class)
 
                                     );
+                                    setChoreId(task.getResult().getId(), chore,house);
                                     newChoreJob.setJobStatus(FirestoreJob.JobStatus.SUCCESS);
                                     job.setValue(newChoreJob);
-                                    setChoreId(task.getResult().getId(), chore,house);
                                 } else {
                                     newChoreJob.setJobStatus(FirestoreJob.JobStatus.ERROR);
                                     newChoreJob.setJobErrorCode(FirestoreJob.JobErrorCode.GENERAL);
