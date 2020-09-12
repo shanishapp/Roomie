@@ -65,9 +65,13 @@
     </fragment>
     <fragment
         android:id="@+id/house_groceries_fragment_dest"
-        android:name="com.example.roomie.house.groceries.houseGroceriesFragment"
+        android:name="com.example.roomie.house.groceries.HouseGroceriesFragment"
         android:label="@string/house_groceries_fragment_title"
-        tools:layout="@layout/fragment_house_groceries" />
+        tools:layout="@layout/fragment_house_groceries" >
+        <action
+            android:id="@+id/action_house_groceries_fragment_dest_to_newGroceryFragment"
+            app:destination="@id/newGroceryFragment" />
+    </fragment>
     <fragment
         android:id="@+id/house_expenses_fragment_dest"
         android:name="com.example.roomie.house.expenses.houseExpensesFragment"
@@ -159,5 +163,14 @@
             app:exitAnim="@anim/slide_out_right"
             app:popUpTo="@id/house_chores_fragment_dest"
             app:popUpToInclusive="true"/>
+    </fragment>
+    <fragment
+        android:id="@+id/newGroceryFragment"
+        android:name="com.example.roomie.house.groceries.grocery.NewGroceryFragment"
+        android:label="fragment_new_grocery"
+        tools:layout="@layout/fragment_new_grocery" >
+        <action
+            android:id="@+id/action_newGroceryFragment_to_house_groceries_fragment_dest"
+            app:destination="@id/house_groceries_fragment_dest" />
     </fragment>
 </navigation>

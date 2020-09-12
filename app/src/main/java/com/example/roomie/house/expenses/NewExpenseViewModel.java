@@ -9,7 +9,7 @@ import com.example.roomie.Roommate;
 import com.google.firebase.firestore.FieldPath;
 import com.google.firebase.firestore.FirebaseFirestore;
 
-import static com.example.roomie.util.FirestoreUtil.CHORESS_COLLECTION_NAME;
+import static com.example.roomie.util.FirestoreUtil.CHORES_COLLECTION_NAME;
 import static com.example.roomie.util.FirestoreUtil.EXPENSES_COLLECTION_NAME;
 import static com.example.roomie.util.FirestoreUtil.HOUSES_COLLECTION_NAME;
 
@@ -34,11 +34,11 @@ public class NewExpenseViewModel
         Expense expense = new Expense(title, description, cost, purchaseDate, type, roommate);
         db.collection(HOUSES_COLLECTION_NAME).
                 document(house.getId()).
-                collection(CHORESS_COLLECTION_NAME).add(expense).addOnCompleteListener(task -> {
+                collection(CHORES_COLLECTION_NAME).add(expense).addOnCompleteListener(task -> {
             if (task.isSuccessful())
             {
                 db.collection(HOUSES_COLLECTION_NAME)
-                        .document(house.getId()).collection(CHORESS_COLLECTION_NAME)
+                        .document(house.getId()).collection(CHORES_COLLECTION_NAME)
                         .whereEqualTo(FieldPath.documentId(), task.getResult().getId())
                         .get()
                         .addOnCompleteListener(task1 -> {

@@ -63,7 +63,7 @@
     <string name="content">הערות</string>
     <string name="assignee">ממונה</string>
     <string name="create">צור</string>
-    <string name="create_new_chore_err_msg">ארעה שגיאה בעת יצירת המטלה, אנא נסה שוב.</string>
+    <string name="create_new_item_err_msg">ארעה שגיאה בעת יצירת הפריט, אנא נסה שוב.</string>
     <string name="currently_no_assignee">אין כרגע ממונה על המטלה</string>
     <string name="due_date">תאריך יעד</string>
     <string name="chore_title">שם המטלה</string>
@@ -127,4 +127,8 @@
     <string name="pickNewAssignee">בחר/י ממונה חדש</string>
     <string name="delete">מחק</string>
     <string name="remindMe">צר/י תזכורת</string>
+    <string name="size">גודל קנייה</string>
+    <string name="big">גדול</string>
+    <string name="medium">medium</string>
+    <string name="small">small</string>
 </resources>

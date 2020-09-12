@@ -11,7 +11,7 @@ import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.Date;
 
-import static com.example.roomie.util.FirestoreUtil.CHORESS_COLLECTION_NAME;
+import static com.example.roomie.util.FirestoreUtil.CHORES_COLLECTION_NAME;
 import static com.example.roomie.util.FirestoreUtil.HOUSES_COLLECTION_NAME;
 
 public class NewChoreFragmentViewModel extends ViewModel {
@@ -34,12 +34,14 @@ public class NewChoreFragmentViewModel extends ViewModel {
         Chore chore = new Chore(title, assignee, dueDate,false, snoozeDate );
 
         //add new chore to firestore
-        db.collection(HOUSES_COLLECTION_NAME).
-                document(house.getId()).
-                collection(CHORESS_COLLECTION_NAME).add(chore).addOnCompleteListener( task -> {
+        db.collection(HOUSES_COLLECTION_NAME)
+                .document(house.getId())
+                .collection(CHORES_COLLECTION_NAME)
+                .add(chore)
+                .addOnCompleteListener(task -> {
                     if (task.isSuccessful()) {
                         db.collection(HOUSES_COLLECTION_NAME)
-                            .document(house.getId()).collection(CHORESS_COLLECTION_NAME)
+                            .document(house.getId()).collection(CHORES_COLLECTION_NAME)
                             .whereEqualTo(FieldPath.documentId(),task.getResult().getId())
                             .get()
                             .addOnCompleteListener(task1 -> {
@@ -80,7 +82,7 @@ public class NewChoreFragmentViewModel extends ViewModel {
         chore.set_id(id);
         db.collection(HOUSES_COLLECTION_NAME).
                 document(house.getId()).
-                collection(CHORESS_COLLECTION_NAME).document(id).set(chore);
+                collection(CHORES_COLLECTION_NAME).document(id).set(chore);
     }
 
 }

@@ -16,7 +16,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.example.roomie.util.FirestoreUtil.CHORESS_COLLECTION_NAME;
+import static com.example.roomie.util.FirestoreUtil.CHORES_COLLECTION_NAME;
 import static com.example.roomie.util.FirestoreUtil.HOUSES_COLLECTION_NAME;
 
 public class HouseChoresFragmentViewModel extends ViewModel implements ChoreAdapter.OnChoreListener {
@@ -36,7 +36,7 @@ public class HouseChoresFragmentViewModel extends ViewModel implements ChoreAdap
         MutableLiveData<newChoreJob> job = new MutableLiveData<>(choresJob);
 
         db.collection(HOUSES_COLLECTION_NAME)
-                .document(houseId).collection(CHORESS_COLLECTION_NAME)
+                .document(houseId).collection(CHORES_COLLECTION_NAME)
                 .document(choreId)
                 .get()
                 .addOnCompleteListener(task ->  {
@@ -49,7 +49,7 @@ public class HouseChoresFragmentViewModel extends ViewModel implements ChoreAdap
                             choreList.add(chore);
                             chores.setValue(choreList);
                             db.collection(HOUSES_COLLECTION_NAME)
-                                    .document(houseId).collection(CHORESS_COLLECTION_NAME)
+                                    .document(houseId).collection(CHORES_COLLECTION_NAME)
                                     .document(choreId).update("_assignee",assignee);
 
                             choresJob.setChore(task.getResult().toObject(Chore.class));
@@ -73,7 +73,7 @@ public class HouseChoresFragmentViewModel extends ViewModel implements ChoreAdap
 
         chores.getValue().remove(chore); // TODO does it work ?
         db.collection(HOUSES_COLLECTION_NAME)
-                .document(houseId).collection(CHORESS_COLLECTION_NAME)
+                .document(houseId).collection(CHORES_COLLECTION_NAME)
                 .document(chore.get_id()).delete()
                 .addOnCompleteListener(task -> {
                     if(task.isSuccessful()) {
@@ -93,7 +93,7 @@ public class HouseChoresFragmentViewModel extends ViewModel implements ChoreAdap
         MutableLiveData<allChoresJob> job = new MutableLiveData<>(choresJob);
 
         db.collection(HOUSES_COLLECTION_NAME)
-                .document(houseId).collection(CHORESS_COLLECTION_NAME)
+                .document(houseId).collection(CHORES_COLLECTION_NAME)
                 .get().addOnCompleteListener(task -> {
                     if(task.isSuccessful()) {
                         List<Chore> fetchedList = new ArrayList<>();
@@ -134,7 +134,7 @@ public class HouseChoresFragmentViewModel extends ViewModel implements ChoreAdap
         MutableLiveData<newChoreJob> job = new MutableLiveData<>(choresJob);
 
         db.collection(HOUSES_COLLECTION_NAME)
-                .document(houseId).collection(CHORESS_COLLECTION_NAME)
+                .document(houseId).collection(CHORES_COLLECTION_NAME)
                 .document(choreId)
                 .get()
                 .addOnCompleteListener(task ->  {
@@ -147,7 +147,7 @@ public class HouseChoresFragmentViewModel extends ViewModel implements ChoreAdap
                             choreList.add(chore);
                             chores.setValue(choreList);
                             db.collection(HOUSES_COLLECTION_NAME)
-                                    .document(houseId).collection(CHORESS_COLLECTION_NAME)
+                                    .document(houseId).collection(CHORES_COLLECTION_NAME)
                                     .document(choreId).update("_title",title);
 
                             choresJob.setChore(task.getResult().toObject(Chore.class));
@@ -169,7 +169,7 @@ public class HouseChoresFragmentViewModel extends ViewModel implements ChoreAdap
         MutableLiveData<newChoreJob> job = new MutableLiveData<>(choresJob);
 
         db.collection(HOUSES_COLLECTION_NAME)
-                .document(houseId).collection(CHORESS_COLLECTION_NAME)
+                .document(houseId).collection(CHORES_COLLECTION_NAME)
                 .document(choreId)
                 .get()
                 .addOnCompleteListener(task ->  {
@@ -188,7 +188,7 @@ public class HouseChoresFragmentViewModel extends ViewModel implements ChoreAdap
                             choreList.add(chore);
                             chores.setValue(choreList);
                             db.collection(HOUSES_COLLECTION_NAME)
-                                    .document(houseId).collection(CHORESS_COLLECTION_NAME)
+                                    .document(houseId).collection(CHORES_COLLECTION_NAME)
                                     .document(choreId).update("_dueDate",chore.get_dueDate());
 
                             choresJob.setChore(task.getResult().toObject(Chore.class));

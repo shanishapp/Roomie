@@ -140,7 +140,7 @@
     <string name="content">Content</string>
     <string name="assignee">Assignee</string>
     <string name="create">create</string>
-    <string name="create_new_chore_err_msg"> there was an error creating the chore, please try again</string>
+    <string name="create_new_item_err_msg"> there was an error creating the item, please try again</string>
     <string name="expenseType">Expense Type</string>
     <string name="enter_custom_expense">Enter the title of your expense here</string>
     <string name="cost">Cost</string>
@@ -159,6 +159,10 @@
     <string name="pickNewAssignee">pick new assignee</string>
     <string name="delete">delete</string>
     <string name="remindMe">Remind me</string>
+    <string name="size">grocery size</string>
+    <string name="big">big</string>
+    <string name="medium">medium</string>
+    <string name="small">small</string>
 
     <string-array name="default_titles">
         <item>washing dishes</item>

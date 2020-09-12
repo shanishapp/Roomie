@@ -229,10 +229,11 @@ public class newChoreFragment extends Fragment {
                     break;
                 case ERROR:
                     createChoreButton.setEnabled(true);
-                    Toast.makeText(getContext(), getString(R.string.create_new_chore_err_msg),
+                    Toast.makeText(getContext(), getString(R.string.create_new_item_err_msg),
                             Toast.LENGTH_LONG).show();
                     break;
                 default:
+                    break;
             }
         });
 

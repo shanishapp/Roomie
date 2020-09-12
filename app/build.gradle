@@ -81,6 +81,9 @@ dependencies {
     implementation 'com.squareup.picasso:picasso:2.71828'
     // error massage
     implementation 'com.google.android.material:material:1.0.0'
+    //nice checkbox library
+    implementation 'net.igenius:customcheckbox:1.3'
+
 
 
 }

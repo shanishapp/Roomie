@@ -31,6 +31,7 @@ public class ChoreAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
 
     private static final int SHOW_MENU = 1;
     private static final int HIDE_MENU = 2;
+
     private List<Chore> _choreList;
     private OnChoreListener _mOnChoreListener;
     private HashMap<String,String> _rommiesNameToImages;
@@ -106,7 +107,6 @@ public class ChoreAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
         }
     }
 
-
     @Override
     public int getItemCount() {
         return _choreList.size();
@@ -165,7 +165,6 @@ public class ChoreAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
         _choreList.get(position).setShowMenu(true);
         notifyDataSetChanged();// TODO is this working ?
     }
-
 
     public boolean isMenuShown() {
         for(int i=0; i<_choreList.size(); i++){
