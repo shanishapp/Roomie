@@ -1,5 +1,7 @@
 package com.example.roomie.house.groceries;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -38,7 +40,8 @@ public class HouseGroceriesFragment extends Fragment implements GroceryAdapter.O
     private HouseActivityViewModel houseActivityViewModel;
     private HouseGroceriesFragmentViewModel vm;
     private ArrayList<Grocery> groceryList;
-    private MovableFloatingActionButton button;
+    private MovableFloatingActionButton addChoreButton;
+    private MovableFloatingActionButton moveToExpensesBtn;
     private NavController navController;
     private FrameLayout loadingOverlay;
     private ArrayList<Grocery> pickedGroceries;
@@ -96,20 +99,37 @@ public class HouseGroceriesFragment extends Fragment implements GroceryAdapter.O
         }
     }
 
-    @Override
-    public void onGroceryClick(int pos) {
 
+    @Override
+    public boolean onGroceryLongClick(int pos) {
+        Toast.makeText(getContext(),"long clicked",Toast.LENGTH_LONG).show();
+        new AlertDialog.Builder(getContext())
+                .setTitle("Delete entry")
+                .setMessage("Are you sure you want to delete this entry?")
+                // Specifying a listener allows you to take an action before dismissing the dialog.
+                // The dialog is automatically dismissed when a dialog button is clicked.
+                .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        // Continue with delete operation
+                        vm.deleteGroceryForever(groceryList.get(pos),houseActivityViewModel.getHouse().getId());
+                        adapter.notifyDataSetChanged();
+                    }
+                })
+                // A null listener allows the button to dismiss the dialog and take no further action.
+                .setNegativeButton(android.R.string.cancel, null)
+                .show();
+        return true;
     }
 
     @Override
     public void onGroceryPicked(Grocery grocery) {
-        groceryList.add(grocery);
+        pickedGroceries.add(grocery);
         Toast.makeText(getContext(),grocery.get_name()+" added to expenses",Toast.LENGTH_LONG).show();
     }
 
     @Override
     public void onGroceryUnPicked(Grocery grocery) {
-        groceryList.remove(grocery);
+        pickedGroceries.remove(grocery);
         Toast.makeText(getContext(),grocery.get_name()+" removed from expenses",Toast.LENGTH_LONG).show();
     }
 
@@ -119,12 +139,33 @@ public class HouseGroceriesFragment extends Fragment implements GroceryAdapter.O
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         navController = Navigation.findNavController(view);
-        button = view.findViewById(R.id.fab);
+        addChoreButton = view.findViewById(R.id.fab);
+        moveToExpensesBtn = view.findViewById(R.id.addToExpensesBtn);
         pickedGroceries = new ArrayList<>();
         //set up add button
-        button.setOnClickListener(view1 -> {
+        addChoreButton.setOnClickListener(view1 -> {
             if(view1 != null){
                 navController.navigate(R.id.action_house_groceries_fragment_dest_to_newGroceryFragment);
+            }
+        });
+
+        moveToExpensesBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                new AlertDialog.Builder(getContext())
+                        .setTitle("Add to expenses")
+                        .setMessage("you have "+pickedGroceries.size()+ " chosen groceries\nwould you like to combine them to one expense?")
+
+                        // Specifying a listener allows you to take an action before dismissing the dialog.
+                        // The dialog is automatically dismissed when a dialog button is clicked.
+                        .setPositiveButton(android.R.string.yes, (dialog, which) -> {
+                            //addToExpenses(pickedGroceries); //TODO talk with uri
+                        })
+
+                        // A null listener allows the button to dismiss the dialog and take no further action.
+                        .setNegativeButton(android.R.string.no, null)
+                        .setIcon(android.R.drawable.ic_dialog_alert)
+                        .show();
             }
         });
         loadingOverlay = view.findViewById(R.id.groceries_loading_overlay);

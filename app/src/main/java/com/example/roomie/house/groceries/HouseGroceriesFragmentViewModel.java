@@ -16,7 +16,7 @@ import java.util.List;
 import static com.example.roomie.util.FirestoreUtil.GROCERIES_COLLECTION_NAME;
 import static com.example.roomie.util.FirestoreUtil.HOUSES_COLLECTION_NAME;
 
-public class HouseGroceriesFragmentViewModel extends ViewModel implements GroceryAdapter.OnGroceryListener{
+public class HouseGroceriesFragmentViewModel extends ViewModel {
 
     private FirebaseFirestore db;
     private MutableLiveData<List<Grocery>> groceries;
@@ -72,20 +72,5 @@ public class HouseGroceriesFragmentViewModel extends ViewModel implements Grocer
                     }
                 });
         return job;
-    }
-
-    @Override
-    public void onGroceryClick(int pos) {
-
-    }
-
-    @Override
-    public void onGroceryPicked(Grocery grocery) {
-
-    }
-
-    @Override
-    public void onGroceryUnPicked(Grocery grocery) {
-
     }
 }

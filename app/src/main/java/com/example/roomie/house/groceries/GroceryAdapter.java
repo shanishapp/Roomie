@@ -56,12 +56,12 @@ public class GroceryAdapter  extends RecyclerView.Adapter<RecyclerView.ViewHolde
     }
 
     public interface OnGroceryListener{
-        void onGroceryClick(int pos);
+        boolean onGroceryLongClick(int pos);
         void onGroceryPicked(Grocery grocery);
         void onGroceryUnPicked(Grocery grocery);
     }
 
-    public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+    public class ViewHolder extends RecyclerView.ViewHolder implements View.OnLongClickListener {
 
         public CustomCheckBox pickGroceryCheckBox;
         public TextView presetGroceryTextView;
@@ -72,13 +72,13 @@ public class GroceryAdapter  extends RecyclerView.Adapter<RecyclerView.ViewHolde
             pickGroceryCheckBox = view.findViewById(R.id.pickGroceryCheckBox);
             presetGroceryTextView = view.findViewById(R.id.presentGroceryTextView);
             this.onGroceryListener = onGroceryListener;
-            view.setOnClickListener(this);
+            view.setOnLongClickListener(this);
         }
 
 
         @Override
-        public void onClick(View view) {
-            onGroceryListener.onGroceryClick(getAdapterPosition());
+        public boolean onLongClick(View view) {
+            return onGroceryListener.onGroceryLongClick(getAdapterPosition());
         }
     }
 

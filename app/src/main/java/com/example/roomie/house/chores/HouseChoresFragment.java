@@ -217,6 +217,7 @@ public class HouseChoresFragment extends Fragment implements ChoreAdapter.OnChor
         Toast.makeText(getContext(),chore.get_title()+" is deleted",Toast.LENGTH_LONG).show();
         adapter.closeMenu();
         vm.deleteChoreForever(chore,houseActivityViewModel.getHouse().getId());
+        adapter.notifyDataSetChanged();
     }
 
     @Override

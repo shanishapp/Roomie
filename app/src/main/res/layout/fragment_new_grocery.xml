@@ -36,7 +36,7 @@
                 android:layout_marginTop="30dp"
                 app:lottie_autoPlay="true"
                 android:layout_marginBottom="-80dp"
-                app:lottie_fileName="28321-checklist-cubaan.json"
+                app:lottie_fileName="21249-shopping-cart.json"
                 app:lottie_loop="true"
                 android:background="@drawable/user_profile_picture_circle_border"/>
 
@@ -74,6 +74,7 @@
                 android:layout_marginStart="20dp"
                 android:layout_marginEnd="20dp"
                 android:layout_marginTop="20dp"
+                android:singleLine="true"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/titleTextView" />

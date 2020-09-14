@@ -26,6 +26,16 @@
         android:src="@drawable/ic_action_add"
         app:backgroundTint="@color/buttonColor" />
 
+    <com.example.roomie.MovableFloatingActionButton
+        android:id="@+id/addToExpensesBtn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/fab"
+        android:layout_alignStart="@+id/fab"
+        android:layout_alignEnd="@+id/fab"
+        android:src="@drawable/money"
+        android:layout_marginBottom="10dp" />
+
     <FrameLayout
         android:id="@+id/groceries_loading_overlay"
         android:layout_width="match_parent"
