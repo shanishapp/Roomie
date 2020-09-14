@@ -23,6 +23,7 @@ public class ExpenseAdapter extends RecyclerView.Adapter<ExpenseAdapter.ViewHold
     {
         _expenses = expenses;
         _myExpenseListener = onExpenseListener;
+
     }
 
     @NonNull
@@ -37,7 +38,7 @@ public class ExpenseAdapter extends RecyclerView.Adapter<ExpenseAdapter.ViewHold
 
     public void setExpenseIcon(ImageView image, Expense.ExpenseType expenseType)
     {
-        int iconCode = 0;
+        int iconCode;
         switch (expenseType)
         {
             case PROFESSIONAL:
@@ -81,12 +82,11 @@ public class ExpenseAdapter extends RecyclerView.Adapter<ExpenseAdapter.ViewHold
     @Override
     public int getItemCount()
     {
-        return 0;
+        return _expenses.size();
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener
     {
-
         public ImageView viewReceiptIcon;
         public ImageView expenseTypeIcon;
         public TextView title;

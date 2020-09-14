@@ -137,7 +137,7 @@
     <fragment
         android:id="@+id/newExpenseFragment"
         android:name="com.example.roomie.house.expenses.NewExpenseFragment"
-        android:label="fragment_create_expense"
+        android:label="Add Expense"
         tools:layout="@layout/fragment_create_expense">
         <action
             android:id="@+id/action_newExpenseFragment_to_house_expenses_fragment_dest"
