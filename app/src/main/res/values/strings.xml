@@ -165,7 +165,11 @@
     <string name="small">small</string>
     <string name="markAsDone">mark as done</string>
     <string name="choreSize">Chore Size</string>
-
+    <string name="general">General</string>
+    <string name="create_expense_error_msg">There was an error creating the expense. Try again
+        later</string>
+    <string name="description">Description</string>
+    <string name="paid_for_by">Paid For By</string>
     <string-array name="default_titles">
         <item>washing dishes</item>
         <item>floor</item>

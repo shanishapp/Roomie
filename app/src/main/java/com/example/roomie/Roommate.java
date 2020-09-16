@@ -7,10 +7,15 @@ import java.util.List;
 
 public class Roommate
 {
-    //TODO: profile pic, chores?
+    //TODO: profile pic
     private String _name;
     private int _housePoints;
     private List<Chore> _chores;
+
+    public Roommate()
+    {
+
+    }
 
     public Roommate(String name)
     {
