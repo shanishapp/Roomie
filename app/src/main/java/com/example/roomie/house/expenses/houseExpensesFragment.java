@@ -1,27 +1,45 @@
 package com.example.roomie.house.expenses;
 
 import android.os.Bundle;
-
-import androidx.fragment.app.Fragment;
-
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
+import androidx.lifecycle.LiveData;
+import androidx.lifecycle.ViewModelProvider;
+import androidx.navigation.NavController;
+import androidx.navigation.Navigation;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
+import com.example.roomie.FirestoreJob;
+import com.example.roomie.MovableFloatingActionButton;
 import com.example.roomie.R;
-import com.google.firebase.auth.FirebaseAuth;
+import com.example.roomie.house.HouseActivityViewModel;
+
+import java.util.ArrayList;
 
 /**
  * A simple {@link Fragment} subclass.
  * Use the {@link houseExpensesFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class houseExpensesFragment extends Fragment
+public class houseExpensesFragment extends Fragment implements ExpenseAdapter.OnExpenseListener
 {
+    private RecyclerView recyclerView;
+    private RecyclerView.Adapter<ExpenseAdapter.ViewHolder> adapter = null;
+    private HouseActivityViewModel houseActivityViewModel;
+    private houseExpensesViewModel viewModel;
+    private ArrayList<Expense> expenses;
+    private MovableFloatingActionButton addExpenseButton;
+    private NavController navController;
 
     public houseExpensesFragment()
     {
-        // Required empty public constructor
+
     }
 
     /**
@@ -45,9 +63,41 @@ public class houseExpensesFragment extends Fragment
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState)
     {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_house_expenses, container, false);
+        View v = inflater.inflate(R.layout.fragment_house_expenses, container, false);
+        houseActivityViewModel = new ViewModelProvider(requireActivity()).get(HouseActivityViewModel.class);
+        viewModel = new ViewModelProvider(this).get(houseExpensesViewModel.class);
+        LiveData<allExpensesJob> job = viewModel.getExpenses(houseActivityViewModel.getHouse().getId());
+        job.observe(getViewLifecycleOwner(), allExpensesJob -> {
+            if (allExpensesJob.getJobStatus() == FirestoreJob.JobStatus.SUCCESS)
+            {
+                expenses = (ArrayList<Expense>) allExpensesJob.getExpenses();
+                adapter = new ExpenseAdapter(expenses, houseExpensesFragment.this);
+                RecyclerView recyclerView = v.findViewById(R.id.expensesRecyclerView);
+                recyclerView.setAdapter(adapter);
+                recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+            }
+        });
+        return v;
     }
 
-    //TODO: need a view for total
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState)
+    {
+        super.onViewCreated(view, savedInstanceState);
+        navController = Navigation.findNavController(view);
+        addExpenseButton = view.findViewById(R.id.expensesFab);
+        addExpenseButton.setOnClickListener(view1 -> {
+            if (view1 != null)
+            {
+                navController.navigate(R.id.action_house_expenses_fragment_dest_to_newExpenseFragment);
+            }
+        });
+    }
+
+    @Override
+    public void onExpenseClick(int pos)
+    {
+    }
+
+    //TODO: add a view for total debts
 }

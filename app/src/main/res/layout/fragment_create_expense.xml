@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:screenOrientation="portrait"
-    tools:context=".house.chores.chore.newChoreFragment">
+    tools:context=".house.expenses.NewExpenseFragment">
 
     <FrameLayout
         android:id="@+id/expense_fragment"
@@ -30,7 +30,7 @@
         android:layout_marginTop="30dp"
         android:hint="@string/enter_expense_price"
         android:inputType="number"
-        android:textSize="24sp"
+        android:textSize="20sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/costTextView" />
@@ -50,13 +50,38 @@
 
     <com.skydoves.powerspinner.PowerSpinnerView
         android:id="@+id/expenseTypeSpinner"
+
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="20dp"
+
+
         android:layout_marginEnd="20dp"
+        android:background="@drawable/input_bg"
+        android:padding="10dp"
+        android:textColor="#000000"
+
+        android:textColorHint="@color/colorAccent"
+        android:textSize="14.5sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/expenseTypeTextView" />
+
+        app:layout_constraintTop_toBottomOf="@+id/expenseTypeTextView"
+
+
+        app:spinner_arrow_animate="true"
+        app:spinner_arrow_gravity="start"
+        app:spinner_arrow_padding="8dp"
+
+        app:spinner_arrow_tint="@color/black"
+        app:spinner_divider_color="@color/gray_holo_light"
+        app:spinner_divider_show="true"
+        app:spinner_divider_size="0.4dp"
+
+        app:spinner_item_array="@array/default_titles"
+        app:spinner_popup_animation="dropdown"
+        app:spinner_popup_background="@color/white"
+        app:spinner_popup_elevation="14dp" />
 
 
     <EditText
@@ -76,18 +101,18 @@
         app:layout_constraintTop_toBottomOf="@+id/expenseTypeSpinner" />
 
     <TextView
-        android:id="@+id/expenseContentTextView"
+        android:id="@+id/expenseDescriptionTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="10dp"
-        android:text="@string/content"
+        android:text="@string/description"
         android:textSize="20sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/customExpenseTypeEditText" />
 
     <EditText
-        android:id="@+id/expenseContentEditText"
+        android:id="@+id/expenseDescriptionEditText"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_marginStart="20dp"
@@ -99,28 +124,54 @@
         app:layout_constraintBottom_toTopOf="@+id/expensePayerTextView"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/expenseContentTextView" />
+        app:layout_constraintTop_toBottomOf="@+id/expenseDescriptionTextView" />
 
     <TextView
         android:id="@+id/expensePayerTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/assignee"
+        android:text="@string/paid_for_by"
         android:textSize="20sp"
         app:layout_constraintBottom_toTopOf="@+id/expensePayerSpinner"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/expenseDescriptionEditText" />
 
     <com.skydoves.powerspinner.PowerSpinnerView
         android:id="@+id/expensePayerSpinner"
-        android:layout_width="match_parent"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="20dp"
+        android:layout_marginTop="10dp"
         android:layout_marginEnd="20dp"
         android:layout_marginBottom="200dp"
+
+
+        android:background="@drawable/input_bg"
+        android:padding="10dp"
+        android:textColor="#000000"
+
+
+        android:textColorHint="@color/colorAccent"
+        android:textSize="14.5sp"
         app:layout_constraintBottom_toBottomOf="parent"
+
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintStart_toStartOf="parent"
+
+        app:layout_constraintTop_toBottomOf="@+id/expensePayerTextView"
+        app:spinner_arrow_animate="true"
+        app:spinner_arrow_gravity="start"
+
+        app:spinner_arrow_padding="8dp"
+        app:spinner_arrow_tint="@color/black"
+        app:spinner_divider_color="@color/gray_holo_light"
+        app:spinner_divider_show="true"
+
+        app:spinner_divider_size="0.4dp"
+        app:spinner_popup_animation="dropdown"
+        app:spinner_popup_background="@color/white"
+        app:spinner_popup_elevation="14dp" />
 
 
     <Button

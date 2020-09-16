@@ -135,4 +135,7 @@
     <string name="small">קטן</string>
     <string name="markAsDone">סמנ/י כבוצע</string>
     <string name="choreSize">גודל מטלה</string>
+    <string name="general">כללי</string>
+    <string name="create_expense_error_msg">אירעה שגיאה ביצירת ההוצאה. נסה שנית</string>
+    <string name="description">תיאור</string>
 </resources>

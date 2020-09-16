@@ -2,6 +2,7 @@ package com.example.roomie.house.expenses;
 
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
+import androidx.lifecycle.ViewModel;
 
 import com.example.roomie.FirestoreJob;
 import com.example.roomie.House;
@@ -9,13 +10,13 @@ import com.example.roomie.Roommate;
 import com.google.firebase.firestore.FieldPath;
 import com.google.firebase.firestore.FirebaseFirestore;
 
-import static com.example.roomie.util.FirestoreUtil.CHORES_COLLECTION_NAME;
-import static com.example.roomie.util.FirestoreUtil.EXPENSES_COLLECTION_NAME;
-import static com.example.roomie.util.FirestoreUtil.HOUSES_COLLECTION_NAME;
 
 import java.util.Date;
 
-public class NewExpenseViewModel
+import static com.example.roomie.util.FirestoreUtil.EXPENSES_COLLECTION_NAME;
+import static com.example.roomie.util.FirestoreUtil.HOUSES_COLLECTION_NAME;
+
+public class NewExpenseViewModel extends ViewModel
 {
     private FirebaseFirestore db;
 
@@ -24,7 +25,7 @@ public class NewExpenseViewModel
         db = FirebaseFirestore.getInstance();
     }
 
-    public LiveData<CreateNewExpenseJob> createNewExpense(House house, String title, String description, float cost,
+    public LiveData<CreateNewExpenseJob> createNewExpense(House house, String title, String description, double cost,
                                                           Roommate roommate, Expense.ExpenseType type,
                                                           Date purchaseDate)
     {
@@ -34,11 +35,12 @@ public class NewExpenseViewModel
         Expense expense = new Expense(title, description, cost, purchaseDate, type, roommate);
         db.collection(HOUSES_COLLECTION_NAME).
                 document(house.getId()).
-                collection(CHORES_COLLECTION_NAME).add(expense).addOnCompleteListener(task -> {
+
+                collection(EXPENSES_COLLECTION_NAME).add(expense).addOnCompleteListener(task -> {
             if (task.isSuccessful())
             {
                 db.collection(HOUSES_COLLECTION_NAME)
-                        .document(house.getId()).collection(CHORES_COLLECTION_NAME)
+                        .document(house.getId()).collection(EXPENSES_COLLECTION_NAME)
                         .whereEqualTo(FieldPath.documentId(), task.getResult().getId())
                         .get()
                         .addOnCompleteListener(task1 -> {
