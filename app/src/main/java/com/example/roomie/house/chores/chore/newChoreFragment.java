@@ -24,6 +24,8 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.ImageButton;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -34,6 +36,7 @@ import com.example.roomie.User;
 import com.example.roomie.house.HouseActivityViewModel;
 import com.example.roomie.repositories.GetHouseRoomiesJob;
 import com.example.roomie.repositories.HouseRepository;
+import com.example.roomie.util.FirestoreUtil;
 import com.github.florent37.singledateandtimepicker.dialog.SingleDateAndTimePickerDialog;
 import com.skydoves.powerspinner.OnSpinnerItemSelectedListener;
 import com.skydoves.powerspinner.PowerSpinnerView;
@@ -57,6 +60,8 @@ public class newChoreFragment extends Fragment {
     private PowerSpinnerView assigneeSpinner;
     private ImageButton setDateImageView;
     private TextView presentDateTextView;
+    private RadioGroup radioGroup;
+    private RadioButton radioButton;
     private HouseActivityViewModel houseActivityViewModel;
     private House house;
     private Button createChoreButton;
@@ -66,6 +71,7 @@ public class newChoreFragment extends Fragment {
     private Date snoozeDate = null;
     private String title = null;
     private String assignee = null;
+    private int score = 0;
     private FrameLayout loadingOverlay;
     private LottieAnimationView remindMe;
 
@@ -121,6 +127,7 @@ public class newChoreFragment extends Fragment {
         titleSpinner = view.findViewById(R.id.titleSpinner) ;
         roommatesList = new ArrayList<>();
         setTitleSpinner();
+        radioGroup = view.findViewById(R.id.choreSizeRadioGroup);
         assigneeSpinner = view.findViewById(R.id.assigneeSpinner);
         setDateImageView = view.findViewById(R.id.setDueDateButton);
         presentDateTextView = view.findViewById(R.id.presentDateTextView);
@@ -213,9 +220,9 @@ public class newChoreFragment extends Fragment {
              }
         }
 
+        checkButton(view);
 
-
-        LiveData<newChoreJob> job = newChoreFragmentViewModel.createNewChore(house,title, dueDate,assignee,snoozeDate);
+        LiveData<newChoreJob> job = newChoreFragmentViewModel.createNewChore(house,title, dueDate,assignee,snoozeDate,score);
 
         job.observe(getViewLifecycleOwner(), createNewChoreJob -> {
             switch (createNewChoreJob.getJobStatus()) {
@@ -270,6 +277,20 @@ public class newChoreFragment extends Fragment {
 
             NotificationManager notificationManager = getActivity().getSystemService(NotificationManager.class);
             notificationManager.createNotificationChannel(channel);
+        }
+    }
+
+    public void checkButton(View v){
+        int radioId = radioGroup.getCheckedRadioButtonId();
+        radioButton = v.findViewById(radioId);
+        CharSequence text = radioButton.getText();
+
+        if (getString(R.string.big).contentEquals(text)) {
+            score = FirestoreUtil.LARGE_SCORE;
+        } else if (getString(R.string.medium).contentEquals(text)) {
+            score = FirestoreUtil.MEDIUM_SCORE;
+        } else {
+            score = FirestoreUtil.SMALL_SCORE;
         }
     }
 }

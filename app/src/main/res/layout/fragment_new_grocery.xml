@@ -83,7 +83,7 @@
                 android:id="@+id/sizeTextView"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/size"
+                android:text="@string/grocerySize"
                 android:textSize="20sp"
                 android:layout_marginTop="20dp"
                 app:layout_constraintEnd_toEndOf="parent"

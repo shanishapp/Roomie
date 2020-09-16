@@ -34,6 +34,7 @@ public class NewGroceryFragment extends Fragment {
     private Button createGroceryButton;
     private NavController navController ;
     private String name = null;
+    private int score = 1;
     private FrameLayout loadingOverlay;
 
     public NewGroceryFragment(){
@@ -129,11 +130,8 @@ public class NewGroceryFragment extends Fragment {
     }
 
     public void checkButton(){
-        radioGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(RadioGroup radioGroup, int i) {
+        radioGroup.setOnCheckedChangeListener((radioGroup, i) -> {
 
-            }
         });
     }
 }

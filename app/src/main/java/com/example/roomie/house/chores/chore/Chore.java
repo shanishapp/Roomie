@@ -14,13 +14,14 @@ public class  Chore {
     private Date _lastUpdatedDate;
     private Date _snoozeDate;//TODO need to be changed dynamically through the running
     private String _title;
-    private Pair<String,Integer> _kind;
+    private int _score;
     private String _assignee; //TODO change to residence class
     private boolean _showMenu;
+    private boolean _choreDone;
 
     Chore(){}
 
-    Chore(String title, String assignee, Date dueDate, boolean showMenu,Date snoozeDate) {
+    Chore(String title, String assignee, Date dueDate, boolean showMenu,Date snoozeDate, int score) {
         _title = title;
         _assignee = assignee;
         _dueDate = dueDate;
@@ -28,10 +29,20 @@ public class  Chore {
         _lastUpdatedDate = _creationDate;
         _snoozeDate = snoozeDate;
         _showMenu = showMenu;
+        _score = score;
+        _choreDone = false;
     }
 
     public Date get_dueDate() {
         return _dueDate;
+    }
+
+    public boolean is_choreDone() {
+        return _choreDone;
+    }
+
+    public void set_choreDone(boolean _choreDone) {
+        this._choreDone = _choreDone;
     }
 
     public Date get_creationDate() {
@@ -50,8 +61,12 @@ public class  Chore {
         return _title;
     }
 
-    public Pair<String, Integer> get_kind() {
-        return _kind;
+    public int get_score() {
+        return _score;
+    }
+
+    public void set_score(int _score) {
+        this._score = _score;
     }
 
     public String get_id() {

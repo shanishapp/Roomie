@@ -19,7 +19,7 @@ import java.util.List;
 import static com.example.roomie.util.FirestoreUtil.CHORES_COLLECTION_NAME;
 import static com.example.roomie.util.FirestoreUtil.HOUSES_COLLECTION_NAME;
 
-public class HouseChoresFragmentViewModel extends ViewModel implements ChoreAdapter.OnChoreListener {
+public class HouseChoresFragmentViewModel extends ViewModel {
 
     private FirebaseFirestore db;
     private MutableLiveData<List<Chore>> chores;
@@ -114,21 +114,6 @@ public class HouseChoresFragmentViewModel extends ViewModel implements ChoreAdap
         return job;
     }
 
-    @Override
-    public void onChoreClick(int pos) {
-        //TODO implement
-    }
-
-    @Override
-    public void onDeleteClick(int pos) {
-        //TODO implement
-    }
-
-    @Override
-    public void onEditClick(int pos) {
-        //TODO implement
-    }
-
     public LiveData<newChoreJob>  setTitle(String choreId, String title, String houseId) {
         newChoreJob choresJob = new newChoreJob(FirestoreJob.JobStatus.IN_PROGRESS);
         MutableLiveData<newChoreJob> job = new MutableLiveData<>(choresJob);
@@ -150,6 +135,40 @@ public class HouseChoresFragmentViewModel extends ViewModel implements ChoreAdap
                                     .document(houseId).collection(CHORES_COLLECTION_NAME)
                                     .document(choreId).update("_title",title);
 
+                            choresJob.setChore(task.getResult().toObject(Chore.class));
+                            choresJob.setJobStatus(FirestoreJob.JobStatus.SUCCESS);
+                            job.setValue(choresJob);
+                        }
+                    } else {
+                        choresJob.setJobStatus(FirestoreJob.JobStatus.ERROR);
+                        choresJob.setJobErrorCode(FirestoreJob.JobErrorCode.GENERAL);
+                        job.setValue(choresJob);
+                    }
+                });
+
+        return job;
+    }
+
+    public LiveData<newChoreJob>  setDone(String choreId, boolean done, String houseId) {
+        newChoreJob choresJob = new newChoreJob(FirestoreJob.JobStatus.IN_PROGRESS);
+        MutableLiveData<newChoreJob> job = new MutableLiveData<>(choresJob);
+
+        db.collection(HOUSES_COLLECTION_NAME)
+                .document(houseId).collection(CHORES_COLLECTION_NAME)
+                .document(choreId)
+                .get()
+                .addOnCompleteListener(task ->  {
+                    if(task.isSuccessful()) {
+                        Chore chore = task.getResult().toObject(Chore.class);
+                        if(chore !=null) {
+                            List<Chore> choreList = chores.getValue();
+                            choreList.remove(chore);
+                            chore.set_choreDone(done);
+                            choreList.add(chore);
+                            chores.setValue(choreList);
+                            db.collection(HOUSES_COLLECTION_NAME)
+                                    .document(houseId).collection(CHORES_COLLECTION_NAME)
+                                    .document(choreId).update("_choreDone",done);
                             choresJob.setChore(task.getResult().toObject(Chore.class));
                             choresJob.setJobStatus(FirestoreJob.JobStatus.SUCCESS);
                             job.setValue(choresJob);

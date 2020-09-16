@@ -1,6 +1,7 @@
 package com.example.roomie.house.chores;
 
 import android.content.Context;
+import android.graphics.Paint;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -85,6 +86,16 @@ public class ChoreAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
             DateFormat df = new SimpleDateFormat(pattern);
             dueDateView.setText(df.format(choreItem.get_dueDate()));
             assigneeView.setText(choreItem.get_assignee());
+            if(choreItem.is_choreDone()){
+                titleView.setPaintFlags(titleView.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
+                dueDateView.setPaintFlags(dueDateView.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
+                assigneeView.setPaintFlags(assigneeView.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
+            } else {
+                titleView.setPaintFlags(titleView.getPaintFlags() & ~Paint.STRIKE_THRU_TEXT_FLAG);
+                dueDateView.setPaintFlags(dueDateView.getPaintFlags() & ~Paint.STRIKE_THRU_TEXT_FLAG);
+                assigneeView.setPaintFlags(assigneeView.getPaintFlags() & ~Paint.STRIKE_THRU_TEXT_FLAG);
+            }
+
 
             if (choreItem.get_assignee() == null) {
                 holder1.locked.setVisibility(View.INVISIBLE);
@@ -98,6 +109,7 @@ public class ChoreAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
             MenuViewHolder holder1 = (MenuViewHolder) holder;
             holder1.editLayout.setOnClickListener(view -> _mOnChoreListener.onEditClick(position));
             holder1.deleteLayout.setOnClickListener(view -> _mOnChoreListener.onDeleteClick(position));
+            holder1.markAsDoneLayout.setOnClickListener(view -> _mOnChoreListener.onMarkAsDoneClick(position));
         }
     }
 
@@ -144,17 +156,20 @@ public class ChoreAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
         void onChoreClick(int pos);
         void onDeleteClick(int pos);
         void onEditClick(int pos);
+        void onMarkAsDoneClick(int pos);
     }
 
     //Our menu view
     public class MenuViewHolder extends RecyclerView.ViewHolder{
         public RelativeLayout deleteLayout;
         public RelativeLayout editLayout;
+        public RelativeLayout markAsDoneLayout;
 
         public MenuViewHolder(View view){
             super(view);
             deleteLayout =view.findViewById(R.id.deleteLayoutButton);
             editLayout = view.findViewById(R.id.editLayoutButton);
+            markAsDoneLayout = view.findViewById(R.id.markAsDoneLayoutButton);
         }
     }
 
