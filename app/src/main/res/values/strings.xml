@@ -159,10 +159,12 @@
     <string name="pickNewAssignee">pick new assignee</string>
     <string name="delete">delete</string>
     <string name="remindMe">Remind me</string>
-    <string name="size">grocery size</string>
+    <string name="grocerySize">grocery size</string>
     <string name="big">big</string>
     <string name="medium">medium</string>
     <string name="small">small</string>
+    <string name="markAsDone">mark as done</string>
+    <string name="choreSize">Chore Size</string>
 
     <string-array name="default_titles">
         <item>washing dishes</item>

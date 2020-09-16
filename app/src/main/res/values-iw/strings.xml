@@ -127,8 +127,10 @@
     <string name="pickNewAssignee">בחר/י ממונה חדש</string>
     <string name="delete">מחק</string>
     <string name="remindMe">צר/י תזכורת</string>
-    <string name="size">גודל קנייה</string>
+    <string name="grocerySize">גודל קנייה</string>
     <string name="big">גדול</string>
-    <string name="medium">medium</string>
-    <string name="small">small</string>
+    <string name="medium">בינוני</string>
+    <string name="small">קטן</string>
+    <string name="markAsDone">סמן כבוצע</string>
+    <string name="choreSize">גודל מטלה</string>
 </resources>

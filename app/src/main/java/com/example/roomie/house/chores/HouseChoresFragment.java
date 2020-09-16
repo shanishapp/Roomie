@@ -226,6 +226,15 @@ public class HouseChoresFragment extends Fragment implements ChoreAdapter.OnChor
         showChoreFragment(chore);
     }
 
+    @Override
+    public void onMarkAsDoneClick(int pos) {
+        //TODO change done in chore and notify
+        Chore chore = choreList.get(pos);
+        vm.setDone(chore.get_id(),!chore.is_choreDone(),houseActivityViewModel.getHouse().getId());
+        adapter.notifyDataSetChanged();
+        adapter.closeMenu();
+    }
+
     public void showChoreFragment(Chore chore) {
         Bundle result = new Bundle();
         result.putString("choreTitle",chore.get_title());

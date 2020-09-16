@@ -35,7 +35,7 @@
             android:layout_height="150dp"
             android:layout_marginTop="30dp"
             app:lottie_autoPlay="true"
-            android:layout_marginBottom="-80dp"
+            android:layout_marginBottom="-50dp"
             app:lottie_fileName="28321-checklist-cubaan.json"
             app:lottie_loop="true"
             android:background="@drawable/user_profile_picture_circle_border"/>
@@ -46,7 +46,7 @@
             android:id="@+id/constraintLayout"
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_marginTop="64dp"
+            android:layout_marginTop="50dp"
             android:padding="16dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
@@ -131,7 +131,6 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="20dp"
-                android:layout_marginTop="10dp"
 
 
                 android:layout_marginEnd="20dp"
@@ -173,15 +172,60 @@
                 app:layout_constraintTop_toBottomOf="@+id/dueDate" />
 
             <TextView
-                android:id="@+id/dueDate"
+                android:id="@+id/sizeTextView"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
+                android:text="@string/choreSize"
+                android:textSize="20sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/assigneeSpinner" />
+
+            <RadioGroup
+                android:id="@+id/choreSizeRadioGroup"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:padding="5dp"
+                android:background="@drawable/input_bg"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                android:orientation="horizontal"
+                app:layout_constraintTop_toBottomOf="@+id/sizeTextView">
+
+                <RadioButton
+                    android:id="@+id/radioBtnBigChore"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/big"
+                    android:layout_marginEnd="10dp"/>
+
+                <RadioButton
+                    android:id="@+id/radioBtnMediumChore"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/medium"
+                    android:layout_marginEnd="10dp"/>
+
+                <RadioButton
+                    android:id="@+id/radioBtnSmallChore"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/small"
+                    android:checked="true"/>
+
+            </RadioGroup>
+
+            <TextView
+                android:id="@+id/dueDate"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
                 android:text="@string/due_date"
                 android:textSize="20sp"
                 app:layout_constraintEnd_toStartOf="@+id/view"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/assigneeSpinner" />
+                app:layout_constraintTop_toBottomOf="@+id/choreSizeRadioGroup" />
 
             <TextView
                 android:id="@+id/presentDateTextView"
@@ -209,12 +253,13 @@
                 android:id="@+id/view"
                 android:layout_width="1dp"
                 android:layout_height="0dp"
-                android:layout_marginTop="10dp"
+                android:layout_marginTop="25dp"
+                android:layout_marginBottom="-10dp"
                 android:background="@color/black"
                 app:layout_constraintBottom_toBottomOf="@+id/reminder_animation"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/assigneeSpinner" />
+                app:layout_constraintTop_toBottomOf="@+id/choreSizeRadioGroup" />
 
             <TextView
                 android:id="@+id/textView3"
@@ -223,13 +268,13 @@
                 android:layout_alignParentStart="true"
                 android:layout_alignParentEnd="true"
                 android:layout_alignParentBottom="true"
-                android:layout_marginTop="10dp"
                 android:gravity="center"
                 android:text="@string/remindMe"
+                android:layout_marginTop="20dp"
                 android:textSize="20sp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toEndOf="@+id/view"
-                app:layout_constraintTop_toBottomOf="@+id/assigneeSpinner" />
+                app:layout_constraintTop_toBottomOf="@+id/choreSizeRadioGroup" />
 
             <Button
                 android:id="@+id/createChoreBtn"
