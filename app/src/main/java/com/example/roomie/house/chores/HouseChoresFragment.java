@@ -31,6 +31,7 @@ import com.example.roomie.User;
 import com.example.roomie.house.HouseActivity;
 import com.example.roomie.house.HouseActivityViewModel;
 import com.example.roomie.house.chores.chore.Chore;
+import com.example.roomie.house.chores.chore.newChoreJob;
 import com.example.roomie.repositories.GetHouseRoomiesJob;
 import com.example.roomie.repositories.HouseRepository;
 
@@ -228,11 +229,14 @@ public class HouseChoresFragment extends Fragment implements ChoreAdapter.OnChor
 
     @Override
     public void onMarkAsDoneClick(int pos) {
-        //TODO change done in chore and notify
         Chore chore = choreList.get(pos);
-        vm.setDone(chore.get_id(),!chore.is_choreDone(),houseActivityViewModel.getHouse().getId());
-        adapter.notifyDataSetChanged();
-        adapter.closeMenu();
+        LiveData<newChoreJob> job = vm.setDone(chore, !chore.is_choreDone(), houseActivityViewModel.getHouse().getId());
+        job.observe(getViewLifecycleOwner(), newChoreJob -> {
+            if(newChoreJob.getJobStatus() == FirestoreJob.JobStatus.SUCCESS) {
+                adapter.notifyDataSetChanged();
+                adapter.closeMenu();
+            }
+        });
     }
 
     public void showChoreFragment(Chore chore) {
@@ -268,19 +272,17 @@ public class HouseChoresFragment extends Fragment implements ChoreAdapter.OnChor
     private void loadRoommies(View view) {
         LiveData<GetHouseRoomiesJob> job = HouseRepository.getInstance().getHouseRoomies(houseActivityViewModel.getHouse().getId());
         job.observe(getViewLifecycleOwner(), getHouseRoomiesJob -> {
-            switch (getHouseRoomiesJob.getJobStatus()){
-                case SUCCESS:
-                    for (User user: getHouseRoomiesJob.getRoomiesList()){
-                        roommatesNamesList.add(user.getUsername());
-                        rommatesMap.add(user.getProfilePicture());
-                    }
+            if (getHouseRoomiesJob.getJobStatus() == FirestoreJob.JobStatus.SUCCESS) {
+                for (User user : getHouseRoomiesJob.getRoomiesList()) {
+                    roommatesNamesList.add(user.getUsername());
+                    rommatesMap.add(user.getProfilePicture());
+                }
 
-                    if(firstArrived){
-                        toggleLoadingOverlay(false);
-                        setRecyclerView(view);
-                    }
-                    else
-                        firstArrived = true;
+                if (firstArrived) {
+                    toggleLoadingOverlay(false);
+                    setRecyclerView(view);
+                } else
+                    firstArrived = true;
             }
         });
     }

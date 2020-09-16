@@ -149,30 +149,25 @@ public class HouseChoresFragmentViewModel extends ViewModel {
         return job;
     }
 
-    public LiveData<newChoreJob>  setDone(String choreId, boolean done, String houseId) {
+    public LiveData<newChoreJob>  setDone(Chore chore, boolean done, String houseId) {
         newChoreJob choresJob = new newChoreJob(FirestoreJob.JobStatus.IN_PROGRESS);
         MutableLiveData<newChoreJob> job = new MutableLiveData<>(choresJob);
 
         db.collection(HOUSES_COLLECTION_NAME)
                 .document(houseId).collection(CHORES_COLLECTION_NAME)
-                .document(choreId)
+                .document(chore.get_id())
                 .get()
                 .addOnCompleteListener(task ->  {
                     if(task.isSuccessful()) {
-                        Chore chore = task.getResult().toObject(Chore.class);
-                        if(chore !=null) {
-                            List<Chore> choreList = chores.getValue();
-                            choreList.remove(chore);
-                            chore.set_choreDone(done);
-                            choreList.add(chore);
-                            chores.setValue(choreList);
-                            db.collection(HOUSES_COLLECTION_NAME)
-                                    .document(houseId).collection(CHORES_COLLECTION_NAME)
-                                    .document(choreId).update("_choreDone",done);
-                            choresJob.setChore(task.getResult().toObject(Chore.class));
-                            choresJob.setJobStatus(FirestoreJob.JobStatus.SUCCESS);
-                            job.setValue(choresJob);
-                        }
+                        List<Chore> choreList = chores.getValue();
+                        chore.set_choreDone(done);
+                        chores.setValue(choreList);
+                        db.collection(HOUSES_COLLECTION_NAME)
+                                .document(houseId).collection(CHORES_COLLECTION_NAME)
+                                .document(chore.get_id()).update("_choreDone",done);
+                        choresJob.setChore(task.getResult().toObject(Chore.class));
+                        choresJob.setJobStatus(FirestoreJob.JobStatus.SUCCESS);
+                        job.setValue(choresJob);
                     } else {
                         choresJob.setJobStatus(FirestoreJob.JobStatus.ERROR);
                         choresJob.setJobErrorCode(FirestoreJob.JobErrorCode.GENERAL);
