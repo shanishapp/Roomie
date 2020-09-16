@@ -1,7 +1,10 @@
 package com.example.roomie.house.chores;
 
+import android.app.AlertDialog;
 import android.graphics.Canvas;
+import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -17,11 +20,17 @@ import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
+import android.widget.PopupMenu;
 import android.widget.Toast;
+import androidx.appcompat.widget.Toolbar;
 
 
 import com.example.roomie.FirestoreJob;
@@ -37,11 +46,15 @@ import com.example.roomie.repositories.HouseRepository;
 
 import org.jetbrains.annotations.NotNull;
 
+import java.lang.reflect.Field;
+import java.lang.reflect.Method;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
+
+import static com.firebase.ui.auth.AuthUI.getApplicationContext;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -88,6 +101,7 @@ public class HouseChoresFragment extends Fragment implements ChoreAdapter.OnChor
         // Inflate the layout for this fragment
         View v =  inflater.inflate(R.layout.fragment_house_chores, container, false);
         //init variables
+        setHasOptionsMenu(true);
         houseActivityViewModel = new ViewModelProvider(requireActivity()).get(HouseActivityViewModel.class);
         vm = new ViewModelProvider(this).get(HouseChoresFragmentViewModel.class);
         LiveData<allChoresJob> job  = vm.getAllChores(houseActivityViewModel.getHouse().getId());
@@ -103,6 +117,57 @@ public class HouseChoresFragment extends Fragment implements ChoreAdapter.OnChor
             }
         });
         return v;
+    }
+
+    @Override
+    public void onCreateOptionsMenu(@NonNull Menu menu, @NonNull MenuInflater inflater) {
+        inflater.inflate(R.menu.chore_toolbar_menu,menu);
+        super.onCreateOptionsMenu(menu, inflater);
+    }
+
+    @Override
+    public void onPrepareOptionsMenu(@NonNull Menu menu) {
+        if (menu.getClass().getSimpleName().equals("MenuBuilder")) {
+            try {
+                Method m = menu.getClass().getDeclaredMethod(
+                        "setOptionalIconsVisible", Boolean.TYPE);
+                m.setAccessible(true);
+                m.invoke(menu, true);
+            } catch (Exception e) {
+                Log.e(getClass().getSimpleName(), "onMenuOpened...unable to set icons for overflow menu", e);
+            }
+        }
+        super.onPrepareOptionsMenu(menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        if(item.getItemId() == R.id.filterOption) {
+            showFilterDialog();
+            Toast.makeText(getContext(), "filter selected", Toast.LENGTH_LONG).show();
+            return true;
+        } else if(item.getItemId() == R.id.sortOption){
+            Toast.makeText(getContext(), "sort selected", Toast.LENGTH_LONG).show();
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
+    private void showFilterDialog() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+        AlertDialog alertDialog = builder.create();
+        // set the custom layout
+        final View customLayout = getLayoutInflater().inflate(R.layout.dialog_filter_by,null);
+        alertDialog.setView(customLayout);
+
+        // add a button
+
+        alertDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+
+        // create and show
+        // the alert dialog
+
+        alertDialog.show();
     }
 
     private void setRecyclerView(View v) {
@@ -202,6 +267,7 @@ public class HouseChoresFragment extends Fragment implements ChoreAdapter.OnChor
         rommatesMap = new ArrayList<>();
         roommatesNamesList = new ArrayList<>();
         loadingOverlay = view.findViewById(R.id.chores_loading_overlay);
+
         toggleLoadingOverlay(true);
         loadRoommies(view);
     }
