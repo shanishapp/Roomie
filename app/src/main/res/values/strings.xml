@@ -180,6 +180,12 @@
         <item>@string/small</item>
     </string-array>
 
+    <string-array name="sort_by_options">
+        <item>@string/assignee</item>
+        <item>@string/due_date</item>
+        <item>@string/choreSize</item>
+    </string-array>
+
     <string-array name="default_titles">
         <item>washing dishes</item>
         <item>floor</item>

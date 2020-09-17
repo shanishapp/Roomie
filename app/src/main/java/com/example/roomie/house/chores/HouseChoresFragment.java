@@ -50,6 +50,7 @@ import java.lang.reflect.Method;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Comparator;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -72,6 +73,7 @@ public class HouseChoresFragment extends Fragment implements ChoreAdapter.OnChor
     private String filterByAssignee = "";
     private String filterByChosenString = "";
     private String filterBySize = "";
+    private String sortBy = "";
 
 
     public HouseChoresFragment() {
@@ -145,32 +147,56 @@ public class HouseChoresFragment extends Fragment implements ChoreAdapter.OnChor
             Toast.makeText(getContext(), "filter selected", Toast.LENGTH_LONG).show();
             return true;
         } else if(item.getItemId() == R.id.sortOption){
+            showSortDialog();
             Toast.makeText(getContext(), "sort selected", Toast.LENGTH_LONG).show();
             return true;
         }
         return super.onOptionsItemSelected(item);
     }
 
-    private void showFilterDialog() {
+    private void showSortDialog() {
         AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
         AlertDialog alertDialog = builder.create();
-        // set the custom layout
-        final View customLayout = getLayoutInflater().inflate(R.layout.dialog_filter_by,null);
-        setFilterBySpinner(customLayout);
-        setDoFilterButton(customLayout);
+        final View customLayout = getLayoutInflater().inflate(R.layout.dialog_sort_chores,null);
+        setSortBySpinner(customLayout,alertDialog);
         alertDialog.setView(customLayout);
-
-        // add a button
-
         alertDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-
-        // create and show
-        // the alert dialog
-
         alertDialog.show();
     }
 
-    private void setDoFilterButton(View customLayout) {
+    private void setSortBySpinner(View customLayout,AlertDialog dialog) {
+        PowerSpinnerView spinner = customLayout.findViewById(R.id.sortBySpinner);
+        spinner.setOnSpinnerItemSelectedListener((OnSpinnerItemSelectedListener<String>) (i, s) -> {
+            sortBy = s;
+            choreList.sort((chore, t1) -> {
+                if(sortBy.equals(getString(R.string.assignee))){
+                    return chore.get_assignee().compareTo(t1.get_assignee());
+                } else if(sortBy.equals(getString(R.string.due_date))) {
+                    return chore.get_dueDate().compareTo(t1.get_dueDate());
+                } else if(sortBy.equals(getString(R.string.choreSize))){
+                    if(chore.get_score()>t1.get_score()){
+                        return 0;
+                    } return -1;
+                }
+                return 0;
+            });
+            adapter.notifyDataSetChanged();
+            dialog.cancel();
+        });
+    }
+
+    private void showFilterDialog() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+        AlertDialog alertDialog = builder.create();
+        final View customLayout = getLayoutInflater().inflate(R.layout.dialog_filter_by,null);
+        setFilterBySpinner(customLayout);
+        setDoFilterButton(customLayout, alertDialog);
+        alertDialog.setView(customLayout);
+        alertDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        alertDialog.show();
+    }
+
+    private void setDoFilterButton(View customLayout, AlertDialog dialog) {
         customLayout.findViewById(R.id.doFilterButton).setOnClickListener(view -> {
             LiveData<AllChoresJob> job;
             if(filterByChosenString.equals(getString(R.string.assignee))) {
@@ -203,6 +229,7 @@ public class HouseChoresFragment extends Fragment implements ChoreAdapter.OnChor
                     recyclerView.swapAdapter(adapter,false);
                 }
             });
+            dialog.cancel();
         });
     }
 
