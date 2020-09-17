@@ -4,15 +4,14 @@ import android.app.AlertDialog;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
-import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.collection.ArraySet;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.LiveData;
+import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
@@ -28,9 +27,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
-import android.widget.PopupMenu;
 import android.widget.Toast;
-import androidx.appcompat.widget.Toolbar;
 
 
 import com.example.roomie.FirestoreJob;
@@ -43,18 +40,16 @@ import com.example.roomie.house.chores.chore.Chore;
 import com.example.roomie.house.chores.chore.newChoreJob;
 import com.example.roomie.repositories.GetHouseRoomiesJob;
 import com.example.roomie.repositories.HouseRepository;
+import com.example.roomie.util.FirestoreUtil;
+import com.skydoves.powerspinner.OnSpinnerItemSelectedListener;
+import com.skydoves.powerspinner.PowerSpinnerView;
 
 import org.jetbrains.annotations.NotNull;
 
-import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
-
-import static com.firebase.ui.auth.AuthUI.getApplicationContext;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -74,6 +69,9 @@ public class HouseChoresFragment extends Fragment implements ChoreAdapter.OnChor
     private boolean firstArrived = false;
     private ArrayList<String> roommatesNamesList;
     private ArrayList<String> rommatesMap;
+    private String filterByAssignee = "";
+    private String filterByChosenString = "";
+    private String filterBySize;
 
 
     public HouseChoresFragment() {
@@ -104,7 +102,7 @@ public class HouseChoresFragment extends Fragment implements ChoreAdapter.OnChor
         setHasOptionsMenu(true);
         houseActivityViewModel = new ViewModelProvider(requireActivity()).get(HouseActivityViewModel.class);
         vm = new ViewModelProvider(this).get(HouseChoresFragmentViewModel.class);
-        LiveData<allChoresJob> job  = vm.getAllChores(houseActivityViewModel.getHouse().getId());
+        LiveData<AllChoresJob> job  = vm.getFilteredChores(houseActivityViewModel.getHouse().getId(),FirestoreUtil.CHORE_DONE_FIELD_NAME,"false",null);
         job.observe(getViewLifecycleOwner(), allChoresJob -> {
             if(allChoresJob.getJobStatus() == FirestoreJob.JobStatus.SUCCESS) {
                 choreList = (ArrayList<Chore>) allChoresJob.getChoreList();
@@ -158,6 +156,8 @@ public class HouseChoresFragment extends Fragment implements ChoreAdapter.OnChor
         AlertDialog alertDialog = builder.create();
         // set the custom layout
         final View customLayout = getLayoutInflater().inflate(R.layout.dialog_filter_by,null);
+        setFilterBySpinner(customLayout);
+        setDoFilterButton(customLayout);
         alertDialog.setView(customLayout);
 
         // add a button
@@ -170,9 +170,68 @@ public class HouseChoresFragment extends Fragment implements ChoreAdapter.OnChor
         alertDialog.show();
     }
 
+    private void setDoFilterButton(View customLayout) {
+        customLayout.findViewById(R.id.doFilterButton).setOnClickListener(view -> {
+            LiveData<AllChoresJob> job;
+            if(filterByChosenString.equals(getString(R.string.assignee))) {
+                 job = vm.getFilteredChores(houseActivityViewModel.getHouse().getId(), FirestoreUtil.ASSIGNEE_FIELD_NAME, filterByAssignee,null);
+            } else if(filterByChosenString.equals(getString(R.string.filterByDoneString))){
+                //filter by done
+                job = vm.getFilteredChores(houseActivityViewModel.getHouse().getId(), FirestoreUtil.CHORE_DONE_FIELD_NAME, "true",null);
+            } else if (filterByChosenString.equals(getString(R.string.filterByUndoneString))) {
+                //filter by undone
+                job = vm.getFilteredChores(houseActivityViewModel.getHouse().getId(), FirestoreUtil.CHORE_DONE_FIELD_NAME, "false",null);
+            }
+            else if (filterByChosenString.equals(getString(R.string.filterByLastWeekString))) {
+                // filter by last week
+                job = vm.getFilteredChores(houseActivityViewModel.getHouse().getId(), FirestoreUtil.CREATION_DATE_FIELD_NAME, "week",null);
+            }
+            else if (filterByChosenString.equals(getString(R.string.filterByLastMonthString)))
+                job = vm.getFilteredChores(houseActivityViewModel.getHouse().getId(), FirestoreUtil.CREATION_DATE_FIELD_NAME, "month",null);
+
+            else if(filterByChosenString.equals(getString(R.string.filterBySizeString))) {
+                job = vm.getFilteredChores(houseActivityViewModel.getHouse().getId(), FirestoreUtil.SIZE_FIELD_NAME, filterBySize,customLayout);
+
+            } else {
+                job = vm.getAllChores(houseActivityViewModel.getHouse().getId());
+            }
+
+            job.observe(getViewLifecycleOwner(), allChoresJob -> {
+                if(allChoresJob.getJobStatus() == FirestoreJob.JobStatus.SUCCESS) {
+                    choreList = (ArrayList<Chore>) allChoresJob.getChoreList();
+                    adapter = new ChoreAdapter(choreList,this,roommatesNamesList,rommatesMap);
+                    recyclerView.swapAdapter(adapter,false);
+                }
+            });
+        });
+    }
+
+    private void setFilterBySpinner(View customLayout) {
+        PowerSpinnerView filterBySpinner = customLayout.findViewById(R.id.filterBySpinner);
+        filterBySpinner.setOnSpinnerItemSelectedListener((OnSpinnerItemSelectedListener<String>) (i, s) -> {
+            filterByChosenString = s;
+            if(s.equals(getString(R.string.assignee))) {
+                PowerSpinnerView filterByRoomieSpinner = customLayout.findViewById(R.id.filterByRoomieSpinner);
+                filterByRoomieSpinner.setItems(roommatesNamesList);
+                filterByRoomieSpinner.setVisibility(View.VISIBLE);
+                filterByRoomieSpinner.setOnSpinnerItemSelectedListener((OnSpinnerItemSelectedListener<String>) (i1, s1) -> {
+                    filterByAssignee = s1;
+                });
+            } else if(s.equals(getString(R.string.filterBySizeString))) {
+                PowerSpinnerView filterBySizeSpinner = customLayout.findViewById(R.id.filterBySizeSpinner);
+                filterBySizeSpinner.setVisibility(View.VISIBLE);
+                filterBySizeSpinner.setOnSpinnerItemSelectedListener((OnSpinnerItemSelectedListener<String>) (i12, s12) -> {
+                    filterBySize = s12;
+                });
+            } else {
+                customLayout.findViewById(R.id.filterByRoomieSpinner).setVisibility(View.GONE);
+            }
+        });
+    }
+
     private void setRecyclerView(View v) {
         adapter = new ChoreAdapter(choreList, HouseChoresFragment.this,roommatesNamesList,rommatesMap);
-        RecyclerView recyclerView = v.findViewById(R.id.recyclerView);
+        recyclerView = v.findViewById(R.id.recyclerView);
         recyclerView.setAdapter(adapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         ItemTouchHelper itemTouchHelperLeft = getItemTouchHelperLeft();

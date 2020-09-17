@@ -1,23 +1,34 @@
 package com.example.roomie.house.chores;
 
+import android.view.View;
+
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
 import com.example.roomie.FirestoreJob;
+import com.example.roomie.R;
 import com.example.roomie.house.chores.chore.Chore;
 import com.example.roomie.house.chores.chore.newChoreJob;
+import com.example.roomie.util.FirestoreUtil;
+import com.google.firebase.Timestamp;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.Query;
 
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 import static com.example.roomie.util.FirestoreUtil.CHORES_COLLECTION_NAME;
+import static com.example.roomie.util.FirestoreUtil.CHORE_DONE_FIELD_NAME;
+import static com.example.roomie.util.FirestoreUtil.CREATION_DATE_FIELD_NAME;
 import static com.example.roomie.util.FirestoreUtil.HOUSES_COLLECTION_NAME;
+import static com.example.roomie.util.FirestoreUtil.SIZE_FIELD_NAME;
 
 public class HouseChoresFragmentViewModel extends ViewModel {
 
@@ -88,13 +99,14 @@ public class HouseChoresFragmentViewModel extends ViewModel {
         return job;
     }
 
-    public LiveData<allChoresJob> getAllChores(String houseId) {
-        allChoresJob choresJob = new allChoresJob(FirestoreJob.JobStatus.IN_PROGRESS);
-        MutableLiveData<allChoresJob> job = new MutableLiveData<>(choresJob);
+    public LiveData<AllChoresJob> getAllChores(String houseId) {
+        AllChoresJob choresJob = new AllChoresJob(FirestoreJob.JobStatus.IN_PROGRESS);
+        MutableLiveData<AllChoresJob> job = new MutableLiveData<>(choresJob);
 
         db.collection(HOUSES_COLLECTION_NAME)
                 .document(houseId).collection(CHORES_COLLECTION_NAME)
-                .get().addOnCompleteListener(task -> {
+                .get()
+                .addOnCompleteListener(task -> {
                     if(task.isSuccessful()) {
                         List<Chore> fetchedList = new ArrayList<>();
                         for(DocumentSnapshot documentSnapshot :  task.getResult()) {
@@ -216,6 +228,82 @@ public class HouseChoresFragmentViewModel extends ViewModel {
                     }
 
     });
+        return job;
+    }
+
+    public LiveData<AllChoresJob> getFilteredChores(String houseId, String field, String value, View view) {
+        AllChoresJob choresJob = new AllChoresJob(FirestoreJob.JobStatus.IN_PROGRESS);
+        MutableLiveData<AllChoresJob> job = new MutableLiveData<>(choresJob);
+
+        Query query;
+        if(field.equals(CHORE_DONE_FIELD_NAME)){
+            if(value.equals("true")){
+                query = db.collection(HOUSES_COLLECTION_NAME)
+                        .document(houseId).collection(CHORES_COLLECTION_NAME)
+                        .whereEqualTo(field,true);
+            } else {
+                query = db.collection(HOUSES_COLLECTION_NAME)
+                        .document(houseId).collection(CHORES_COLLECTION_NAME)
+                        .whereEqualTo(field,false);
+            }
+        } else if (field.equals(CREATION_DATE_FIELD_NAME)) {
+            if (value.equals("week")) {
+                Date date = new Date();
+                Calendar c = Calendar.getInstance();
+                c.setTime(date);
+                int i = c.get(Calendar.DAY_OF_WEEK) - c.getFirstDayOfWeek();
+                c.add(Calendar.DATE, -i - 7);
+                Date start = c.getTime();
+
+                query = db.collection(HOUSES_COLLECTION_NAME)
+                        .document(houseId).collection(CHORES_COLLECTION_NAME)
+                        .whereGreaterThan(field, start);
+            } else{
+                Date date = new Date();
+                Calendar c = Calendar.getInstance();
+                c.setTime(date);
+                c.add(Calendar.MONTH, -1);
+                Date start = c.getTime();
+
+                query = db.collection(HOUSES_COLLECTION_NAME)
+                        .document(houseId).collection(CHORES_COLLECTION_NAME)
+                        .whereGreaterThan(field, start);
+            }
+        }
+        else if(field.equals(SIZE_FIELD_NAME)){
+            int size = FirestoreUtil.SMALL_SCORE;
+
+            if(value.equals(view.getResources().getString(R.string.medium))){
+                size = FirestoreUtil.MEDIUM_SCORE;
+            }else if(value.equals(view.getResources().getString(R.string.big))){
+                size = FirestoreUtil.LARGE_SCORE;
+            }
+
+            query = db.collection(HOUSES_COLLECTION_NAME)
+                    .document(houseId).collection(CHORES_COLLECTION_NAME)
+                    .whereEqualTo(field, size);
+        } else {
+            query = db.collection(HOUSES_COLLECTION_NAME)
+                    .document(houseId).collection(CHORES_COLLECTION_NAME)
+                    .whereEqualTo(field, value);
+        }
+
+        query.get().addOnCompleteListener(task -> {
+            if(task.isSuccessful()) {
+                List<Chore> fetchedList = new ArrayList<>();
+                for(DocumentSnapshot documentSnapshot :  task.getResult()) {
+                    Chore chore = documentSnapshot.toObject(Chore.class);
+                    fetchedList.add(chore);
+                }
+                choresJob.setChoreList(fetchedList);
+                choresJob.setJobStatus(FirestoreJob.JobStatus.SUCCESS);
+                job.setValue(choresJob);
+            } else {
+                choresJob.setJobStatus(FirestoreJob.JobStatus.ERROR);
+                choresJob.setJobErrorCode(FirestoreJob.JobErrorCode.GENERAL);
+                job.setValue(choresJob);
+            }
+        });
         return job;
     }
 }

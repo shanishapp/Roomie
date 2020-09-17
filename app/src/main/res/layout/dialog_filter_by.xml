@@ -2,7 +2,7 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="300dp"
+    android:layout_height="wrap_content"
     android:layout_marginStart="15dp"
     android:layout_marginEnd="15dp"
     tools:context=".house.chores.HouseChoresFragment"
@@ -14,8 +14,8 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="20dp"
-        android:layout_marginEnd="20dp"
         android:layout_marginTop="10dp"
+        android:layout_marginEnd="20dp"
 
         android:background="@drawable/input_bg"
         android:padding="10dp"
@@ -37,6 +37,39 @@
         app:spinner_divider_show="true"
         app:spinner_divider_size="0.4dp"
         app:spinner_item_array="@array/filter_by_options"
+        app:spinner_popup_animation="dropdown"
+        app:spinner_popup_background="@color/white"
+        app:spinner_popup_elevation="14dp" />
+
+    <com.skydoves.powerspinner.PowerSpinnerView
+        android:id="@+id/filterBySizeSpinner"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginEnd="20dp"
+
+        android:background="@drawable/input_bg"
+        android:padding="10dp"
+        android:textColor="#000000"
+        android:textColorHint="@color/colorAccent"
+
+        android:textSize="14.5sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        android:visibility="gone"
+
+        app:layout_constraintTop_toBottomOf="@+id/filterBySpinner"
+        app:spinner_arrow_animate="true"
+
+        app:spinner_arrow_gravity="start"
+        app:spinner_arrow_padding="8dp"
+        app:spinner_arrow_tint="@color/black"
+        app:spinner_divider_color="@color/gray_holo_light"
+
+        app:spinner_divider_show="true"
+        app:spinner_divider_size="0.4dp"
+        app:spinner_item_array="@array/filter_by_sizes"
         app:spinner_popup_animation="dropdown"
         app:spinner_popup_background="@color/white"
         app:spinner_popup_elevation="14dp" />
@@ -69,7 +102,6 @@
 
         app:spinner_divider_show="true"
         app:spinner_divider_size="0.4dp"
-        app:spinner_item_array="@array/default_titles"
         app:spinner_popup_animation="dropdown"
         app:spinner_popup_background="@color/white"
         app:spinner_popup_elevation="14dp" />
@@ -86,33 +118,19 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <EditText
-        android:id="@+id/editTextTextPersonName"
-        android:layout_width="0dp"
-        android:layout_height="40dp"
-        android:layout_marginTop="10dp"
-        android:background="@drawable/input_bg"
-        android:layout_marginStart="20dp"
-        android:layout_marginEnd="20dp"
-        android:visibility="gone"
-        android:ems="10"
-        android:inputType="textPersonName"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/filterBySpinner" />
+
 
     <Button
-        android:id="@+id/button"
+        android:id="@+id/doFilterButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="95dp"
+        android:layout_marginTop="70dp"
         android:layout_marginBottom="15dp"
         android:background="@drawable/button_bg"
         android:text="@string/doFilter"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/filterByRoomieSpinner"
-        app:layout_constraintVertical_bias="1.0" />
+        app:layout_constraintTop_toBottomOf="@+id/filterBySpinner" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

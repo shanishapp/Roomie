@@ -168,6 +168,17 @@
     <string name="filter">filter by</string>
     <string name="sortBy">sort by</string>
     <string name="doFilter">filter</string>
+    <string name="filterByDoneString">Done</string>
+    <string name="filterByUndoneString">Undone</string>
+    <string name="filterByLastWeekString">from last week</string>
+    <string name="filterByLastMonthString">from last month</string>
+    <string name="filterBySizeString">size</string>
+
+    <string-array name="filter_by_sizes">
+        <item>@string/big</item>
+        <item>@string/medium</item>
+        <item>@string/small</item>
+    </string-array>
 
     <string-array name="default_titles">
         <item>washing dishes</item>
@@ -185,6 +196,7 @@
         <item>from last week</item>
         <item>from last month</item>
         <item>size</item>
+        <item>get all</item>
     </string-array>
 
 </resources>
