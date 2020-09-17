@@ -165,6 +165,26 @@
     <string name="small">small</string>
     <string name="markAsDone">mark as done</string>
     <string name="choreSize">Chore Size</string>
+    <string name="filter">filter by</string>
+    <string name="sortBy">sort by</string>
+    <string name="doFilter">filter</string>
+    <string name="filterByDoneString">Done</string>
+    <string name="filterByUndoneString">Undone</string>
+    <string name="filterByLastWeekString">from last week</string>
+    <string name="filterByLastMonthString">from last month</string>
+    <string name="filterBySizeString">size</string>
+
+    <string-array name="filter_by_sizes">
+        <item>@string/big</item>
+        <item>@string/medium</item>
+        <item>@string/small</item>
+    </string-array>
+
+    <string-array name="sort_by_options">
+        <item>@string/assignee</item>
+        <item>@string/due_date</item>
+        <item>@string/choreSize</item>
+    </string-array>
 
     <string-array name="default_titles">
         <item>washing dishes</item>
@@ -173,6 +193,16 @@
         <item>laundary</item>
         <item>trash</item>
         <item>other</item>
+    </string-array>
+
+    <string-array name="filter_by_options">
+        <item>Assignee</item>
+        <item>Done</item>
+        <item>Undone</item>
+        <item>from last week</item>
+        <item>from last month</item>
+        <item>size</item>
+        <item>get all</item>
     </string-array>
 
 </resources>

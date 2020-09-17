@@ -135,4 +135,23 @@
     <string name="small">קטן</string>
     <string name="markAsDone">סמנ/י כבוצע</string>
     <string name="choreSize">גודל מטלה</string>
+    <string name="filter">סנן לפי</string>
+    <string name="sortBy">סדר לפי</string>
+    <string name="doFilter">סנן</string>
+    <string name="filterByDoneString">בוצע</string>
+    <string name="filterByUndoneString">לא בוצע</string>
+    <string name="filterByLastWeekString">מהשבוע האחרון</string>
+    <string name="filterByLastMonthString">מהחודש האחרון</string>
+    <string name="filterBySizeString">גודל</string>
+
+
+    <string-array name="filter_by_options">
+        <item>ממונה</item>
+        <item>בוצע</item>
+        <item>לא בוצע</item>
+        <item>מהשבוע האחרון</item>
+        <item>מהחודש האחרון</item>
+        <item>גודל</item>
+        <item>הצג הכל</item>
+    </string-array>
 </resources>

@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    >
+
+    <item android:id="@+id/filterOption"
+        android:title="@string/filter"
+        android:icon="@drawable/baseline_filter_alt_black_18"
+
+
+        />
+
+    <item android:id="@+id/sortOption"
+        android:title="@string/sortBy"
+        android:icon="@drawable/baseline_sort_black_18dp"/>
+
+</menu>
