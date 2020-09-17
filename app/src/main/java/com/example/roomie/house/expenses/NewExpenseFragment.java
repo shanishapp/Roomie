@@ -10,9 +10,8 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
-import com.example.roomie.R;
 
-public class ExpenseFragment extends houseExpensesFragment
+public class NewExpenseFragment extends houseExpensesFragment
 {
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -24,14 +23,14 @@ public class ExpenseFragment extends houseExpensesFragment
     private String mParam1;
     private String mParam2;
 
-    public ExpenseFragment()
+    public NewExpenseFragment()
     {
     }
 
     // TODO: Rename and change types and number of parameters
-    public static ExpenseFragment newInstance(String param1, String param2)
+    public static NewExpenseFragment newInstance(String param1, String param2)
     {
-        ExpenseFragment fragment = new ExpenseFragment();
+        NewExpenseFragment fragment = new NewExpenseFragment();
         Bundle args = new Bundle();
         args.putString(ARG_PARAM1, param1);
         args.putString(ARG_PARAM2, param2);

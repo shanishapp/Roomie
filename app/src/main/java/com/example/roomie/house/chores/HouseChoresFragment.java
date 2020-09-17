@@ -71,7 +71,7 @@ public class HouseChoresFragment extends Fragment implements ChoreAdapter.OnChor
     private ArrayList<String> rommatesMap;
     private String filterByAssignee = "";
     private String filterByChosenString = "";
-    private String filterBySize;
+    private String filterBySize = "";
 
 
     public HouseChoresFragment() {
@@ -211,6 +211,7 @@ public class HouseChoresFragment extends Fragment implements ChoreAdapter.OnChor
         filterBySpinner.setOnSpinnerItemSelectedListener((OnSpinnerItemSelectedListener<String>) (i, s) -> {
             filterByChosenString = s;
             if(s.equals(getString(R.string.assignee))) {
+                customLayout.findViewById(R.id.filterBySizeSpinner).setVisibility(View.GONE);
                 PowerSpinnerView filterByRoomieSpinner = customLayout.findViewById(R.id.filterByRoomieSpinner);
                 filterByRoomieSpinner.setItems(roommatesNamesList);
                 filterByRoomieSpinner.setVisibility(View.VISIBLE);
@@ -218,6 +219,7 @@ public class HouseChoresFragment extends Fragment implements ChoreAdapter.OnChor
                     filterByAssignee = s1;
                 });
             } else if(s.equals(getString(R.string.filterBySizeString))) {
+                customLayout.findViewById(R.id.filterByRoomieSpinner).setVisibility(View.GONE);
                 PowerSpinnerView filterBySizeSpinner = customLayout.findViewById(R.id.filterBySizeSpinner);
                 filterBySizeSpinner.setVisibility(View.VISIBLE);
                 filterBySizeSpinner.setOnSpinnerItemSelectedListener((OnSpinnerItemSelectedListener<String>) (i12, s12) -> {
@@ -225,6 +227,7 @@ public class HouseChoresFragment extends Fragment implements ChoreAdapter.OnChor
                 });
             } else {
                 customLayout.findViewById(R.id.filterByRoomieSpinner).setVisibility(View.GONE);
+                customLayout.findViewById(R.id.filterBySizeSpinner).setVisibility(View.GONE);
             }
         });
     }
