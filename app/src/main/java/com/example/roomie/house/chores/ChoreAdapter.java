@@ -2,6 +2,7 @@ package com.example.roomie.house.chores;
 
 import android.content.Context;
 import android.graphics.Paint;
+import android.net.Uri;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -115,7 +116,9 @@ public class ChoreAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
 
     private void setAssigneeImage(ImageView profile, String assignee) {
         if(_rommiesNameToImages.containsKey(assignee) && _rommiesNameToImages.get(assignee) != null && !_rommiesNameToImages.get(assignee).equals("")) {
-            Picasso.get().load(_rommiesNameToImages.get(assignee)).into(profile);
+            Picasso.get().setLoggingEnabled(true);
+            Uri profilePictureUri = Uri.parse(_rommiesNameToImages.get(assignee));
+            Picasso.get().load(profilePictureUri).resize(60, 60).centerCrop().into(profile);
         }
     }
 
