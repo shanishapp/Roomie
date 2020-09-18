@@ -388,9 +388,6 @@ public class HouseChoresFragment extends Fragment implements ChoreAdapter.OnChor
         LiveData<newChoreJob> job = vm.setDone(chore, !chore.is_choreDone(), houseActivityViewModel.getHouse().getId());
         job.observe(getViewLifecycleOwner(), newChoreJob -> {
             if(newChoreJob.getJobStatus() == FirestoreJob.JobStatus.SUCCESS) {
-                if(chore.is_choreDone()) {
-                    choreList.remove(chore);
-                }
                 adapter.notifyDataSetChanged();
                 adapter.closeMenu();
             }

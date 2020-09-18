@@ -15,6 +15,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 
+import com.airbnb.lottie.LottieAnimationView;
 import com.example.roomie.R;
 import com.example.roomie.house.chores.chore.Chore;
 import com.example.roomie.repositories.HouseRepository;
@@ -110,6 +111,17 @@ public class ChoreAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
             MenuViewHolder holder1 = (MenuViewHolder) holder;
             holder1.editLayout.setOnClickListener(view -> _mOnChoreListener.onEditClick(position));
             holder1.deleteLayout.setOnClickListener(view -> _mOnChoreListener.onDeleteClick(position));
+            TextView textView = holder1.markAsDoneLayout.findViewById(R.id.markAsDoneTextView);
+            LottieAnimationView animationView = holder1.markAsDoneLayout.findViewById(R.id.lottieDoneAnimation);
+            if(choreItem.is_choreDone()) {
+                textView.setText(R.string.markAsUnDone);
+                animationView.setAnimation("28045-dislike.json");
+
+            } else {
+                textView.setText(R.string.markAsDone);
+                animationView.setAnimation("28044-like.json");
+            }
+
             holder1.markAsDoneLayout.setOnClickListener(view -> _mOnChoreListener.onMarkAsDoneClick(position));
         }
     }
@@ -181,7 +193,7 @@ public class ChoreAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
             _choreList.get(i).setShowMenu(false);
         }
         _choreList.get(position).setShowMenu(true);
-        notifyDataSetChanged();// TODO is this working ?
+        notifyDataSetChanged();
     }
 
     public boolean isMenuShown() {
