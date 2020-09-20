@@ -17,6 +17,8 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -49,14 +51,16 @@ import java.util.Date;
 
 /**
  * A simple {@link Fragment} subclass.
- * Use the {@link newChoreFragment#newInstance} factory method to
+ * Use the {@link NewChoreFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class newChoreFragment extends Fragment {
+public class NewChoreFragment extends Fragment {
 
     private NewChoreFragmentViewModel newChoreFragmentViewModel;
     private PowerSpinnerView titleSpinner;
     private EditText differentTitleEditText;
+    private TextView textViewChoreDescriptionLettersLeft;
+    private EditText editTextChoreDescription;
     private PowerSpinnerView assigneeSpinner;
     private ImageButton setDateImageView;
     private TextView presentDateTextView;
@@ -76,7 +80,7 @@ public class newChoreFragment extends Fragment {
     private LottieAnimationView remindMe;
 
 
-    public newChoreFragment() {
+    public NewChoreFragment() {
         // Required empty public constructor
     }
 
@@ -89,8 +93,8 @@ public class newChoreFragment extends Fragment {
      * @return A new instance of fragment ChoreFragment.
      */
     // TODO: Rename and change types and number of parameters
-    public static newChoreFragment newInstance(String param1, String param2) {
-        return new newChoreFragment();
+    public static NewChoreFragment newInstance(String param1, String param2) {
+        return new NewChoreFragment();
     }
 
     @Override
@@ -124,6 +128,9 @@ public class newChoreFragment extends Fragment {
         createChoreButton = view.findViewById(R.id.createChoreBtn);
         navController = Navigation.findNavController(view);
         differentTitleEditText = view.findViewById(R.id.differentTitleEditText);
+        textViewChoreDescriptionLettersLeft = view.findViewById(R.id.textViewChoreDescriptionLettersLeft);
+        editTextChoreDescription = view.findViewById(R.id.editTextChoreDescription);
+        setDescriptionEditText();
         titleSpinner = view.findViewById(R.id.titleSpinner) ;
         roommatesList = new ArrayList<>();
         setTitleSpinner();
@@ -145,13 +152,29 @@ public class newChoreFragment extends Fragment {
         });
     }
 
+    private void setDescriptionEditText() {
+        TextWatcher mTextEditorWatcher = new TextWatcher() {
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            }
+
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                //This sets a textview to the current length
+                textViewChoreDescriptionLettersLeft.setText(s.length() +"/100");
+            }
+
+            public void afterTextChanged(Editable s) {
+            }
+        };
+        editTextChoreDescription.addTextChangedListener(mTextEditorWatcher);
+    }
+
     private void initAnimationListener() {
        setDateImageView.setOnClickListener(view -> new SingleDateAndTimePickerDialog.Builder(getContext())
                .bottomSheet()
                .curved()
                .title("Pick a Date")
                .listener(date -> {
-                   newChoreFragment.this.dueDate = date;
+                   NewChoreFragment.this.dueDate = date;
                    String pattern = "dd/MM/yyyy HH:mm";
                    DateFormat df = new SimpleDateFormat(pattern);
                    presentDateTextView.setText(df.format(date));
@@ -222,7 +245,7 @@ public class newChoreFragment extends Fragment {
 
         checkButton(view);
 
-        LiveData<newChoreJob> job = newChoreFragmentViewModel.createNewChore(house,title, dueDate,assignee,snoozeDate,score);
+        LiveData<newChoreJob> job = newChoreFragmentViewModel.createNewChore(house,title,editTextChoreDescription.getText().toString(), dueDate,assignee,snoozeDate,score);
 
         job.observe(getViewLifecycleOwner(), createNewChoreJob -> {
             switch (createNewChoreJob.getJobStatus()) {

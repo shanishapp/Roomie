@@ -176,7 +176,6 @@
     <string name="general">General</string>
     <string name="create_expense_error_msg">There was an error creating the expense. Try again
         later</string>
-    <string name="description">Description</string>
     <string name="paid_for_by">Paid For By</string>
     <string name="currency_sign">₪</string>
     <string name="expense_title">Expense Title</string>
@@ -193,6 +192,9 @@
     <string name="you_are_owed">You are owed</string>
     <string name="you_owe">You owe</string>
     <string name="no_expenses_made_yet">No expenses made yet</string>
+    <string name="youCanAddDescription">short description,\nup to 100 letters (optional)</string>
+    <string name="description">Description (optional)</string>
+    <string name="editChoreContent">edit description</string>
 
     <string-array name="filter_by_sizes">
         <item>@string/big</item>

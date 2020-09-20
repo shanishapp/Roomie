@@ -171,4 +171,7 @@
     <string name="you_owe">אתה חייב</string>
     <string name="no_expenses_made_yet">טרם נוספו הוצאות</string>
     <string name="markAsUnDone">סמנ/י כלא בוצע</string>
+    <string name="youCanAddDescription">short deciption, up to 100 letters (optional)</string>
+    <string name="description">Description (optional)</string>
+    <string name="editChoreContent">edit description</string>
 </resources>

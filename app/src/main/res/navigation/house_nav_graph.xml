@@ -92,7 +92,7 @@
         tools:layout="@layout/fragment_house_invite_roomie" />
     <fragment
         android:id="@+id/newChoreFragment"
-        android:name="com.example.roomie.house.chores.chore.newChoreFragment"
+        android:name="com.example.roomie.house.chores.chore.NewChoreFragment"
         android:label="fragment_chore"
         tools:layout="@layout/fragment_new_chore" >
         <action
@@ -161,6 +161,9 @@
             app:argType="string" />
         <argument
             android:name="choreDueDate"
+            app:argType="string"/>
+        <argument
+            android:name="choreContent"
             app:argType="string"/>
         <action
             android:id="@+id/action_choreFragment_to_house_chores_fragment_dest"

@@ -1,5 +1,6 @@
 package com.example.roomie.house.chores;
 
+import android.text.Editable;
 import android.view.View;
 
 import androidx.lifecycle.LiveData;
@@ -304,6 +305,41 @@ public class HouseChoresFragmentViewModel extends ViewModel {
                 job.setValue(choresJob);
             }
         });
+        return job;
+    }
+
+    public LiveData<newChoreJob> setContent(String choreId, String content, String houseId) {
+        newChoreJob choresJob = new newChoreJob(FirestoreJob.JobStatus.IN_PROGRESS);
+        MutableLiveData<newChoreJob> job = new MutableLiveData<>(choresJob);
+
+        db.collection(HOUSES_COLLECTION_NAME)
+                .document(houseId).collection(CHORES_COLLECTION_NAME)
+                .document(choreId)
+                .get()
+                .addOnCompleteListener(task ->  {
+                    if(task.isSuccessful()) {
+                        Chore chore = task.getResult().toObject(Chore.class);
+                        if(chore !=null) {
+                            List<Chore> choreList = chores.getValue();
+                            choreList.remove(chore);
+                            chore.set_description(content);
+                            choreList.add(chore);
+                            chores.setValue(choreList);
+                            db.collection(HOUSES_COLLECTION_NAME)
+                                    .document(houseId).collection(CHORES_COLLECTION_NAME)
+                                    .document(choreId).update("_description",content);
+
+                            choresJob.setChore(task.getResult().toObject(Chore.class));
+                            choresJob.setJobStatus(FirestoreJob.JobStatus.SUCCESS);
+                            job.setValue(choresJob);
+                        }
+                    } else {
+                        choresJob.setJobStatus(FirestoreJob.JobStatus.ERROR);
+                        choresJob.setJobErrorCode(FirestoreJob.JobErrorCode.GENERAL);
+                        job.setValue(choresJob);
+                    }
+                });
+
         return job;
     }
 }

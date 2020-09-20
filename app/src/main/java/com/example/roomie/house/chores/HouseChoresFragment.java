@@ -403,6 +403,10 @@ public class HouseChoresFragment extends Fragment implements ChoreAdapter.OnChor
         String pattern = "dd/MM/yyyy HH:mm";
         DateFormat df = new SimpleDateFormat(pattern);
         result.putString("choreDueDate", df.format(chore.get_dueDate()));
+        if(chore.get_description() == null){
+            result.putString("choreContent","");
+        }else
+            result.putString("choreContent",chore.get_description());
         navController.navigate(R.id.action_house_chores_fragment_dest_to_choreFragment, result);
     }
 

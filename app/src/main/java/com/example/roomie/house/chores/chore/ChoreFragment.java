@@ -14,6 +14,8 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -51,6 +53,7 @@ public class ChoreFragment extends Fragment {
     private TextView presentDateTextView;
     private TextView presentAssigneeTextView;
     private TextView presentTitleTextView;
+    private TextView presetContentTextView;
     private HouseActivityViewModel houseActivityViewModel;
     private House house;
     private ImageButton editTitleBtn;
@@ -63,8 +66,10 @@ public class ChoreFragment extends Fragment {
     private String title;
     private String dueDate;
     private String assignee;
+    private String content;
     private FrameLayout loadingOverlay;
     private PowerSpinnerView assigneeSpinner;
+    private ImageButton editContentBtn;
 
 
     public ChoreFragment() {
@@ -182,6 +187,45 @@ public class ChoreFragment extends Fragment {
                     choreFragmentViewModel.setDueDate(choreId,ChoreFragment.this.dueDate,house.getId());
                     presentDateTextView.setText(ChoreFragment.this.dueDate);
                 }).display());
+
+        editContentBtn.setOnClickListener(view -> {
+            AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+            AlertDialog alertDialog = builder.create();
+            final View customLayout = getLayoutInflater().inflate(R.layout.dialog_change_content,null);
+            Button changeBtn = customLayout.findViewById(R.id.editChoreContentBtn);
+            EditText contentEditText = customLayout.findViewById(R.id.editTextChoreDescription);
+            TextView contentLeftTextView = customLayout.findViewById(R.id.textViewChoreDescriptionLettersLeft);
+            setDescriptionEditText(contentLeftTextView,contentEditText);
+            contentEditText.setText(content);
+
+            alertDialog.setView(customLayout);
+            changeBtn.setOnClickListener((v) -> {
+                content = contentEditText.getText().toString();
+                choreFragmentViewModel.setContent(choreId, content, house.getId());
+                presetContentTextView.setText(content);
+                alertDialog.cancel();
+
+            });
+            alertDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+
+            alertDialog.show();
+        });
+    }
+
+    private void setDescriptionEditText(TextView textView, EditText editText) {
+        TextWatcher mTextEditorWatcher = new TextWatcher() {
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            }
+
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                //This sets a textview to the current length
+                textView.setText(s.length() +"/100");
+            }
+
+            public void afterTextChanged(Editable s) {
+            }
+        };
+        editText.addTextChangedListener(mTextEditorWatcher);
     }
 
     private void setAssigneeSpinner(PowerSpinnerView assigneeSpinner) {
@@ -218,17 +262,21 @@ public class ChoreFragment extends Fragment {
         title = getArguments().getString("choreTitle","");
         dueDate = getArguments().getString("choreDueDate","1111");
         assignee = getArguments().getString("choreAssignee","");
+        content = getArguments().getString("choreContent","");
 
         editTitleBtn = view.findViewById(R.id.editTitleBtn);
         editAssigneeBtn = view.findViewById(R.id.editAssigneeBtn);
         editDueDateBtn= view.findViewById(R.id.editDueDateBtn);
+        editContentBtn = view.findViewById(R.id.editContentBtn);
 
         presentDateTextView = view.findViewById(R.id.presentDateTextView);
         presentAssigneeTextView = view.findViewById(R.id.presentAssigneeTextView);
         presentTitleTextView = view.findViewById(R.id.presentTitleTextView);
+        presetContentTextView = view.findViewById(R.id.presentContentTextView);
         presentDateTextView.setText(dueDate);
         presentAssigneeTextView.setText(assignee);
         presentTitleTextView.setText(title);
+        presetContentTextView.setText(content);
         roommatesList = new ArrayList<>();
         loadingOverlay = view.findViewById(R.id.chore_loading_overlay);
 
