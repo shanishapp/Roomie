@@ -184,16 +184,16 @@
     <fragment
         android:id="@+id/newExpenseFragment"
         android:name="com.example.roomie.house.expenses.NewExpenseFragment"
-        android:label="fragment_create_expense"
-        tools:layout="@layout/fragment_create_expense" >
+        android:label="Add Expense"
+        tools:layout="@layout/fragment_create_expense">
         <action
             android:id="@+id/action_newExpenseFragment_to_house_expenses_fragment_dest"
             app:destination="@id/house_expenses_fragment_dest"
-            app:popEnterAnim="@anim/slide_in_right"
-            app:popExitAnim="@anim/slide_out_left"
             app:enterAnim="@anim/slide_in_left"
             app:exitAnim="@anim/slide_out_right"
+            app:popEnterAnim="@anim/slide_in_right"
+            app:popExitAnim="@anim/slide_out_left"
             app:popUpTo="@id/house_chores_fragment_dest"
-            app:popUpToInclusive="true"/>
+            app:popUpToInclusive="true" />
     </fragment>
 </navigation>

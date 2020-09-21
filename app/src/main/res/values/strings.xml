@@ -170,6 +170,7 @@
         later</string>
     <string name="description">Description</string>
     <string name="paid_for_by">Paid For By</string>
+    <string name="currency_sign">$</string>
     <string-array name="default_titles">
         <item>washing dishes</item>
         <item>floor</item>

@@ -138,4 +138,6 @@
     <string name="general">כללי</string>
     <string name="create_expense_error_msg">אירעה שגיאה ביצירת ההוצאה. נסה שנית</string>
     <string name="description">תיאור</string>
+    <string name="paid_for_by">שולם ע\"י</string>
+    <string name="currency_sign">₪</string>
 </resources>

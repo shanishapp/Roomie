@@ -21,18 +21,22 @@ import androidx.navigation.Navigation;
 import com.example.roomie.House;
 import com.example.roomie.R;
 import com.example.roomie.Roommate;
+import com.example.roomie.User;
 import com.example.roomie.house.HouseActivityViewModel;
+import com.example.roomie.repositories.GetHouseRoomiesJob;
+import com.example.roomie.repositories.HouseRepository;
 import com.google.firebase.auth.FirebaseAuth;
 import com.skydoves.powerspinner.OnSpinnerItemSelectedListener;
 import com.skydoves.powerspinner.PowerSpinnerView;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Currency;
 import java.util.Date;
 import java.util.List;
 
 import me.abhinay.input.CurrencyEditText;
+
+//TODO: translate menu options to hebrew?
 
 /**
  * A simple {@link Fragment} subclass.
@@ -41,24 +45,19 @@ import me.abhinay.input.CurrencyEditText;
  */
 public class NewExpenseFragment extends Fragment
 {
-
     private NewExpenseViewModel newExpenseViewModel;
     private PowerSpinnerView titleSpinner;
     private EditText customTitleEditText;
     private EditText expenseDescription;
     private PowerSpinnerView payerSpinner;
     private CurrencyEditText priceEditText;
-    private HouseActivityViewModel houseActivityViewModel;
     private House house;
     private Button addExpenseButton;
     private NavController navController;
     private ArrayList<String> roommatesList;
     private Date date = new Date();
     private String title = null;
-    private String description = null;
     private String payerName = null;
-    private Expense.ExpenseType type;
-    private double cost = 0.0;
 
     public NewExpenseFragment()
     {
@@ -84,6 +83,7 @@ public class NewExpenseFragment extends Fragment
     {
         super.onCreate(savedInstanceState);
         newExpenseViewModel = new ViewModelProvider(this).get(NewExpenseViewModel.class);
+        roommatesList = new ArrayList<>();
     }
 
     @Override
@@ -106,11 +106,13 @@ public class NewExpenseFragment extends Fragment
                 createExpense(view);
             }
         });
+        loadRoommies(view);
     }
 
     private void initViews(View view)
     {
-        houseActivityViewModel = new ViewModelProvider(requireActivity()).get(HouseActivityViewModel.class);
+        HouseActivityViewModel houseActivityViewModel =
+                new ViewModelProvider(requireActivity()).get(HouseActivityViewModel.class);
         house = houseActivityViewModel.getHouse();
         addExpenseButton = view.findViewById(R.id.createExpenseBtn);
         navController = Navigation.findNavController(view);
@@ -125,39 +127,18 @@ public class NewExpenseFragment extends Fragment
         priceEditText = view.findViewById(R.id.expenseCostEditText);
         priceEditText.setDecimals(false);
 
-        //TODO: string resource for currency symbols
-        priceEditText.setCurrency("₪");
         //TODO: change/pick currency, maybe in house settings
+        String currencySymbol = getString(R.string.currency_sign);
+        priceEditText.setCurrency(currencySymbol);
     }
 
     private void setupPayerSpinner()
     {
-        //TODO: change this to pick from actual roommates.
-//        Roommate Uri, Shani, Avihai;
-//        Uri = new Roommate("Uri");
-//        Shani = new Roommate("Shani");
-//        Avihai = new Roommate("Avihai");
-//
-//        Roommate[] roomiArray = {Uri, Shani, Avihai};
-//        roomieList = new ArrayList<>(Arrays.asList(roomiArray));
 
-        String[] arr = {"Shani", "Avihai", "Uri"};
-        roommatesList = new ArrayList<>(Arrays.asList(arr));
-//        roommatesList = getRoommies();
         payerSpinner.setItems(roommatesList);
-        payerSpinner.setOnSpinnerItemSelectedListener((OnSpinnerItemSelectedListener<String>) (i, s) -> {
-            payerName = s;
-        });
+        payerSpinner.setOnSpinnerItemSelectedListener((OnSpinnerItemSelectedListener<String>) (i, s) -> payerName = s);
         payerSpinner.setSpinnerOutsideTouchListener((view, motionEvent) -> payerSpinner.dismiss());
         payerSpinner.setLifecycleOwner(getViewLifecycleOwner());
-    }
-
-    private ArrayList<String> getRoommies()
-    {
-        FirebaseAuth auth = FirebaseAuth.getInstance();
-        Object[] arr = house.getRoomies().keySet().toArray();
-        String[] stringArray = Arrays.asList(arr).toArray(new String[arr.length]);
-        return new ArrayList<>(Arrays.asList(stringArray));
     }
 
     private void setupTypeSpinner()
@@ -183,6 +164,7 @@ public class NewExpenseFragment extends Fragment
 
     private void createExpense(View view)
     {
+        Expense.ExpenseType type;
         if (title == null)
         {
             TextView errorText = (TextView) titleSpinner;
@@ -201,8 +183,8 @@ public class NewExpenseFragment extends Fragment
         {
             type = Expense.typeFromString(title);
         }
-        description = expenseDescription.getText().toString();
-        cost = priceEditText.getCleanDoubleValue();
+        String description = expenseDescription.getText().toString();
+        double cost = priceEditText.getCleanDoubleValue();
 
 
         LiveData<CreateNewExpenseJob> job = newExpenseViewModel.createNewExpense(house, title, description, cost,
@@ -223,6 +205,22 @@ public class NewExpenseFragment extends Fragment
                             Toast.LENGTH_LONG).show();
                     break;
                 default:
+            }
+        });
+    }
+
+    private void loadRoommies(View view)
+    {
+        LiveData<GetHouseRoomiesJob> job = HouseRepository.getInstance().getHouseRoomies(house.getId());
+        job.observe(getViewLifecycleOwner(), getHouseRoomiesJob -> {
+            switch (getHouseRoomiesJob.getJobStatus())
+            {
+                case SUCCESS:
+                    for (User user : getHouseRoomiesJob.getRoomiesList())
+                    {
+                        roommatesList.add(user.getUsername());
+                    }
+                    //TODO: case FAILURE
             }
         });
     }

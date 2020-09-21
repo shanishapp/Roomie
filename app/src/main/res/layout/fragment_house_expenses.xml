@@ -24,4 +24,14 @@
         android:layout_marginBottom="10dp"
         android:src="@drawable/ic_action_add"
         app:backgroundTint="@color/buttonColor" />
+
+    <com.coorchice.library.SuperTextView
+        android:id="@+id/totalExpenses"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_marginTop="10dp"
+        android:layout_marginBottom="10dp"
+        android:background="@color/white"
+        app:stv_corner="25dp" />
 </RelativeLayout>

@@ -1,5 +1,7 @@
 package com.example.roomie.house.expenses;
 
+import android.graphics.drawable.Drawable;
+
 import com.example.roomie.Roommate;
 
 import java.util.Arrays;
@@ -8,7 +10,6 @@ import java.util.List;
 
 public class Expense
 {
-    //TODO: translate to hebrew?
     private static final String typeProfessionalString = "Professional";
     private static final String typeGroceryShoppingString = "Grocery Shopping";
     private static final String typeBillString = "Bill";
@@ -22,6 +23,7 @@ public class Expense
     //TODO: maybe only one date needed?
     private Date _creationDate;
     private Date _purchaseDate;
+    private Drawable receiptImage;
     private Roommate _payer;
     private boolean _hasReceipt;
 
@@ -50,7 +52,6 @@ public class Expense
         String[] arr = {typeBillString, typeGroceryShoppingString, typeProfessionalString, typeGeneralString};
         return Arrays.asList(arr);
     }
-    //TODO: receipt photo
 
     public boolean is_hasReceipt()
     {
@@ -91,6 +92,7 @@ public class Expense
         _purchaseDate = purchaseDate;
         _creationDate = new Date();
         _payer = payer;
+        boolean hasReceiptImage = false;
     }
 
     public Expense()

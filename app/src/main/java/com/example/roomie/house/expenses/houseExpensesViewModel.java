@@ -16,7 +16,8 @@ import java.util.Objects;
 import static com.example.roomie.util.FirestoreUtil.EXPENSES_COLLECTION_NAME;
 import static com.example.roomie.util.FirestoreUtil.HOUSES_COLLECTION_NAME;
 
-public class houseExpensesViewModel extends ViewModel implements ExpenseAdapter.OnExpenseListener
+public class houseExpensesViewModel extends ViewModel implements ExpenseAdapter.OnExpenseListener,
+        ExpenseAdapter.OnReceiptListener
 {
     private FirebaseFirestore db;
     private MutableLiveData<List<Expense>> expenses;
@@ -126,5 +127,11 @@ public class houseExpensesViewModel extends ViewModel implements ExpenseAdapter.
     public void onExpenseClick(int pos)
     {
         //TODO: implementation missing - expand to other fragment?
+    }
+
+    @Override
+    public void onReceiptClick()
+    {
+        //TODO:implement
     }
 }

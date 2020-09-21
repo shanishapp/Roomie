@@ -27,7 +27,8 @@ import java.util.ArrayList;
  * Use the {@link houseExpensesFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class houseExpensesFragment extends Fragment implements ExpenseAdapter.OnExpenseListener
+public class houseExpensesFragment extends Fragment implements ExpenseAdapter.OnExpenseListener,
+        ExpenseAdapter.OnReceiptListener
 {
     private RecyclerView recyclerView;
     private RecyclerView.Adapter<ExpenseAdapter.ViewHolder> adapter = null;
@@ -71,7 +72,7 @@ public class houseExpensesFragment extends Fragment implements ExpenseAdapter.On
             if (allExpensesJob.getJobStatus() == FirestoreJob.JobStatus.SUCCESS)
             {
                 expenses = (ArrayList<Expense>) allExpensesJob.getExpenses();
-                adapter = new ExpenseAdapter(expenses, houseExpensesFragment.this);
+                adapter = new ExpenseAdapter(expenses, houseExpensesFragment.this, houseExpensesFragment.this);
                 RecyclerView recyclerView = v.findViewById(R.id.expensesRecyclerView);
                 recyclerView.setAdapter(adapter);
                 recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
@@ -97,6 +98,12 @@ public class houseExpensesFragment extends Fragment implements ExpenseAdapter.On
     @Override
     public void onExpenseClick(int pos)
     {
+    }
+
+    @Override
+    public void onReceiptClick()
+    {
+        //TODO: Implement
     }
 
     //TODO: add a view for total debts
