@@ -87,7 +87,6 @@ public class ChoreAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
             String pattern = "dd/MM/yyyy HH:mm";
             DateFormat df = new SimpleDateFormat(pattern);
             dueDateView.setText(df.format(choreItem.get_dueDate()));
-            assigneeView.setText(choreItem.get_assignee());
             if(choreItem.is_choreDone()){
                 titleView.setPaintFlags(titleView.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
                 dueDateView.setPaintFlags(dueDateView.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
@@ -98,11 +97,13 @@ public class ChoreAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
                 assigneeView.setPaintFlags(assigneeView.getPaintFlags() & ~Paint.STRIKE_THRU_TEXT_FLAG);
             }
 
-
-            if (choreItem.get_assignee() == null) {
+            String assignee = choreItem.get_assignee();
+            if (assignee == null || assignee.equals("")) {
+                assigneeView.setText(R.string.currently_no_assignee);
                 holder1.locked.setVisibility(View.INVISIBLE);
                 holder1.unlocked.setVisibility(View.VISIBLE);
             } else {
+                assigneeView.setText(assignee);
                 setAssigneeImage(holder1.profile,choreItem.get_assignee());
                 holder1.locked.setVisibility(View.VISIBLE);
                 holder1.unlocked.setVisibility(View.INVISIBLE);

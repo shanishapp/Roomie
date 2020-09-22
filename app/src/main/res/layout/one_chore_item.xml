@@ -11,26 +11,28 @@
 
     <ImageView
         android:id="@+id/lockedView"
-        android:layout_width="50dp"
-        android:layout_height="50dp"
-        android:layout_marginEnd="10dp"
+        android:layout_width="20dp"
+        android:layout_height="20dp"
+        android:elevation="@dimen/activity_vertical_margin"
+        android:layout_marginStart="10dp"
+        android:layout_marginBottom="10dp"
         android:visibility="invisible"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintDimensionRatio="1.0"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
         app:srcCompat="@drawable/locked" />
-
     <ImageView
         android:id="@+id/unlockedView"
-        android:layout_width="50dp"
-        android:layout_height="50dp"
-        android:layout_marginEnd="10dp"
+        android:layout_width="20dp"
+        android:layout_height="20dp"
+        android:layout_marginStart="10dp"
+        android:layout_marginBottom="10dp"
+        android:elevation="@dimen/activity_vertical_margin"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintDimensionRatio="1.0"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
         app:srcCompat="@drawable/unlocked" />
+
 
     <TextView
         android:id="@+id/choreTitleHolderView"
@@ -39,8 +41,8 @@
         android:layout_marginTop="10dp"
         android:gravity="center"
         android:text="@string/chore_title"
-        app:layout_constraintEnd_toStartOf="@+id/lockedView"
-        app:layout_constraintStart_toStartOf="@+id/choreDueDateHolderView"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/assigneeImageCard"
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
@@ -50,7 +52,7 @@
         android:layout_marginTop="10dp"
         android:gravity="center"
         android:text="@string/due_date"
-        app:layout_constraintEnd_toStartOf="@+id/lockedView"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/assigneeImageCard"
         app:layout_constraintTop_toBottomOf="@+id/choreTitleHolderView" />
 
@@ -61,9 +63,10 @@
         android:layout_marginTop="10dp"
         android:gravity="center"
         android:text="@string/currently_no_assignee"
-        app:layout_constraintEnd_toStartOf="@+id/lockedView"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="@+id/choreDueDateHolderView"
         app:layout_constraintTop_toBottomOf="@+id/choreDueDateHolderView" />
+
 
     <androidx.cardview.widget.CardView
         android:id="@+id/assigneeImageCard"
@@ -73,18 +76,22 @@
         android:layout_centerVertical="true"
         android:layout_marginStart="10dp"
         app:cardCornerRadius="64dp"
+        app:cardPreventCornerOverlap="false"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:cardPreventCornerOverlap="false">
+        app:layout_constraintTop_toTopOf="parent">
 
         <ImageView
             android:id="@+id/assigneeImageView"
             android:layout_width="60dp"
-            android:contentDescription="@string/house_user_profile_fragment_profile_pic_desc"
             android:layout_height="60dp"
+            android:contentDescription="@string/house_user_profile_fragment_profile_pic_desc"
             app:srcCompat="@drawable/avatar_1" />
     </androidx.cardview.widget.CardView>
+
+
+
+
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
