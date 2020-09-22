@@ -18,9 +18,14 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.roomie.FirestoreJob;
 import com.example.roomie.MovableFloatingActionButton;
 import com.example.roomie.R;
+import com.example.roomie.User;
 import com.example.roomie.house.HouseActivityViewModel;
+import com.example.roomie.repositories.GetHouseRoomiesJob;
+import com.example.roomie.repositories.HouseRepository;
+import com.google.firebase.auth.FirebaseAuth;
 
 import java.util.ArrayList;
+import java.util.concurrent.atomic.AtomicReference;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -35,8 +40,10 @@ public class houseExpensesFragment extends Fragment implements ExpenseAdapter.On
     private HouseActivityViewModel houseActivityViewModel;
     private houseExpensesViewModel viewModel;
     private ArrayList<Expense> expenses;
+    private int numberOfRoommates;
     private MovableFloatingActionButton addExpenseButton;
     private NavController navController;
+    private FirebaseAuth auth;
 
     public houseExpensesFragment()
     {
@@ -64,9 +71,11 @@ public class houseExpensesFragment extends Fragment implements ExpenseAdapter.On
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState)
     {
+        auth = FirebaseAuth.getInstance();
         View v = inflater.inflate(R.layout.fragment_house_expenses, container, false);
         houseActivityViewModel = new ViewModelProvider(requireActivity()).get(HouseActivityViewModel.class);
         viewModel = new ViewModelProvider(this).get(houseExpensesViewModel.class);
+        getRoomateNumber();
         LiveData<allExpensesJob> job = viewModel.getExpenses(houseActivityViewModel.getHouse().getId());
         job.observe(getViewLifecycleOwner(), allExpensesJob -> {
             if (allExpensesJob.getJobStatus() == FirestoreJob.JobStatus.SUCCESS)
@@ -104,6 +113,57 @@ public class houseExpensesFragment extends Fragment implements ExpenseAdapter.On
     public void onReceiptClick()
     {
         //TODO: Implement
+    }
+
+    public double getTotalHouseExpenses()
+    {
+        double totalCost = 0;
+        for (Expense expense : expenses)
+        {
+            totalCost += expense.get_cost();
+        }
+        return totalCost;
+    }
+
+    public double getMySpending()
+    {
+        String myID = auth.getUid();
+        AtomicReference<Double> mySpending = new AtomicReference<>((double) 0);
+        LiveData<allExpensesJob> job = viewModel.getExpenses(houseActivityViewModel.getHouse().getId());
+        job.observe(getViewLifecycleOwner(), allExpensesJob -> {
+            if (allExpensesJob.getJobStatus() == FirestoreJob.JobStatus.SUCCESS)
+            {
+                expenses = (ArrayList<Expense>) allExpensesJob.getExpenses();
+                for (Expense expense : expenses)
+                {
+                    if (myID.equals(expense.get_payerID()))
+                    {
+                        mySpending.updateAndGet(v -> v + expense.get_cost());
+                    }
+                }
+            }
+        });
+        return mySpending.get();
+    }
+
+    public double getMyBalance()
+    {
+        return getTotalHouseExpenses() / numberOfRoommates - getMySpending();
+    }
+
+    private void getRoomateNumber()
+    {
+        LiveData<GetHouseRoomiesJob> job =
+                HouseRepository.getInstance().getHouseRoomies(houseActivityViewModel.getHouse().getId());
+        job.observe(getViewLifecycleOwner(), getHouseRoomiesJob -> {
+            switch (getHouseRoomiesJob.getJobStatus())
+            {
+                case SUCCESS:
+                    numberOfRoommates = getHouseRoomiesJob.getRoomiesList().size();
+                case ERROR:
+                    //TODO: implement
+            }
+        });
     }
 
     //TODO: add a view for total debts

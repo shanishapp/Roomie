@@ -17,6 +17,7 @@ public class Expense
 
     private String _id;
     private String _name;
+    private boolean _isSettled;
     private String _description;
     private ExpenseType _type;
     private double _cost;
@@ -25,6 +26,7 @@ public class Expense
     private Date _purchaseDate;
     private Drawable receiptImage;
     private Roommate _payer;
+    private String _payerID;
     private boolean _hasReceipt;
 
     public static ExpenseType typeFromString(String title)
@@ -73,6 +75,11 @@ public class Expense
         return _id;
     }
 
+    public void settle()
+    {
+        _isSettled = true;
+    }
+
 
     public enum ExpenseType
     {
@@ -92,6 +99,7 @@ public class Expense
         _purchaseDate = purchaseDate;
         _creationDate = new Date();
         _payer = payer;
+        _isSettled = false;
         boolean hasReceiptImage = false;
     }
 
@@ -125,6 +133,11 @@ public class Expense
         return _payer;
     }
 
+    public String get_payerID()
+    {
+        return _payerID;
+    }
+
     public String get_description()
     {
         return _description;
@@ -153,6 +166,11 @@ public class Expense
     public void set_payer(Roommate _payer)
     {
         this._payer = _payer;
+    }
+
+    public void set_payerID(String _payerID)
+    {
+        this._payerID = _payerID;
     }
 
     public void set_type(ExpenseType _type)

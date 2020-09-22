@@ -6,6 +6,7 @@ import androidx.lifecycle.ViewModel;
 
 import com.example.roomie.FirestoreJob;
 import com.example.roomie.Roommate;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 
@@ -72,6 +73,7 @@ public class houseExpensesViewModel extends ViewModel implements ExpenseAdapter.
     public LiveData<CreateNewExpenseJob> deleteExpense(Expense expense, String houseId)
     {
 
+
         CreateNewExpenseJob expenseJob = new CreateNewExpenseJob(FirestoreJob.JobStatus.IN_PROGRESS);
         MutableLiveData<CreateNewExpenseJob> job = new MutableLiveData<>(expenseJob);
 
@@ -90,6 +92,45 @@ public class houseExpensesViewModel extends ViewModel implements ExpenseAdapter.
                     }
                     job.setValue(expenseJob);
                 });
+        return job;
+    }
+
+    public LiveData<allExpensesJob> settleExpenses(String houseId)
+    {
+        allExpensesJob expensesJob = new allExpensesJob(FirestoreJob.JobStatus.IN_PROGRESS);
+        MutableLiveData<allExpensesJob> job = new MutableLiveData<>(expensesJob);
+
+        db.collection(HOUSES_COLLECTION_NAME)
+                .document(houseId).collection(EXPENSES_COLLECTION_NAME)
+                .get().addOnCompleteListener(task -> {
+            if (task.isSuccessful())
+            {
+                List<Expense> expenseList = expenses.getValue();
+                for (DocumentSnapshot documentSnapshot : Objects.requireNonNull(task.getResult()))
+                {
+                    Expense expense = documentSnapshot.toObject(Expense.class);
+                    assert expenseList != null;
+                    expenseList.remove(expense);
+                    assert expense != null;
+                    String expensID = expense.get_id();
+                    expense.settle();
+                    expenseList.add(expense);
+                    db.collection(HOUSES_COLLECTION_NAME)
+                            .document(houseId)
+                            .collection(EXPENSES_COLLECTION_NAME)
+                            .document(expensID).update("settled", true);
+                }
+                expenses.setValue(expenseList);
+                expensesJob.setExpenses(expenseList);
+                expensesJob.setJobStatus(FirestoreJob.JobStatus.SUCCESS);
+                job.setValue(expensesJob);
+            } else
+            {
+                expensesJob.setJobStatus(FirestoreJob.JobStatus.ERROR);
+                expensesJob.setJobErrorCode(FirestoreJob.JobErrorCode.GENERAL);
+                job.setValue(expensesJob);
+            }
+        });
         return job;
     }
 
@@ -123,10 +164,11 @@ public class houseExpensesViewModel extends ViewModel implements ExpenseAdapter.
         return job;
     }
 
+
     @Override
     public void onExpenseClick(int pos)
     {
-        //TODO: implementation missing - expand to other fragment?
+        //TODO: implementation missing - delete/settle dialog
     }
 
     @Override

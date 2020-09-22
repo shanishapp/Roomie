@@ -78,7 +78,7 @@ public class ExpenseAdapter extends RecyclerView.Adapter<ExpenseAdapter.ViewHold
         String costString = String.valueOf(expense.get_cost());
         String payerName = expense.get_payer().get_name();
 
-        titleView.setText(expense.get_name());
+        titleView.setText(expense.get_description());
         setExpenseIcon(holder.expenseTypeIcon, expense.get_type());
         costView.setText(costString);
         payerView.setText(payerName);

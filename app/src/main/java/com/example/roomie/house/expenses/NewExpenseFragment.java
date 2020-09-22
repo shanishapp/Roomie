@@ -25,13 +25,12 @@ import com.example.roomie.User;
 import com.example.roomie.house.HouseActivityViewModel;
 import com.example.roomie.repositories.GetHouseRoomiesJob;
 import com.example.roomie.repositories.HouseRepository;
-import com.google.firebase.auth.FirebaseAuth;
 import com.skydoves.powerspinner.OnSpinnerItemSelectedListener;
 import com.skydoves.powerspinner.PowerSpinnerView;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 
 import me.abhinay.input.CurrencyEditText;
@@ -54,11 +53,12 @@ public class NewExpenseFragment extends Fragment
     private House house;
     private Button addExpenseButton;
     private NavController navController;
-    private ArrayList<String> roommatesList;
+    private ArrayList<String> roommateNamesList;
     private Date date = new Date();
     private String title = null;
     private String payerName = null;
-
+    private String payerID = null;
+    private HashMap<String,String> idByNameMap = new HashMap<>();
     public NewExpenseFragment()
     {
         // Required empty public constructor
@@ -83,7 +83,7 @@ public class NewExpenseFragment extends Fragment
     {
         super.onCreate(savedInstanceState);
         newExpenseViewModel = new ViewModelProvider(this).get(NewExpenseViewModel.class);
-        roommatesList = new ArrayList<>();
+        roommateNamesList = new ArrayList<>();
     }
 
     @Override
@@ -135,7 +135,7 @@ public class NewExpenseFragment extends Fragment
     private void setupPayerSpinner()
     {
 
-        payerSpinner.setItems(roommatesList);
+        payerSpinner.setItems(roommateNamesList);
         payerSpinner.setOnSpinnerItemSelectedListener((OnSpinnerItemSelectedListener<String>) (i, s) -> payerName = s);
         payerSpinner.setSpinnerOutsideTouchListener((view, motionEvent) -> payerSpinner.dismiss());
         payerSpinner.setLifecycleOwner(getViewLifecycleOwner());
@@ -164,6 +164,7 @@ public class NewExpenseFragment extends Fragment
 
     private void createExpense(View view)
     {
+        payerID = idByNameMap.get(payerName);
         Expense.ExpenseType type;
         if (title == null)
         {
@@ -188,7 +189,7 @@ public class NewExpenseFragment extends Fragment
 
 
         LiveData<CreateNewExpenseJob> job = newExpenseViewModel.createNewExpense(house, title, description, cost,
-                new Roommate(payerName), type, date);
+                new Roommate(payerName,payerID), type, date);
 
         job.observe(getViewLifecycleOwner(), CreateNewExpenseJob -> {
             switch (CreateNewExpenseJob.getJobStatus())
@@ -218,7 +219,11 @@ public class NewExpenseFragment extends Fragment
                 case SUCCESS:
                     for (User user : getHouseRoomiesJob.getRoomiesList())
                     {
-                        roommatesList.add(user.getUsername());
+                        //TODO: problem with two roommates with same exact name
+                        String id = user.getUid();
+                        String name = user.getUid();
+                        roommateNamesList.add(user.getUsername());
+                        idByNameMap.put(name,id);
                     }
                     //TODO: case FAILURE
             }

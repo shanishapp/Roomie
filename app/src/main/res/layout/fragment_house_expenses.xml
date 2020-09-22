@@ -21,17 +21,17 @@
         android:layout_alignParentEnd="true"
         android:layout_alignParentBottom="true"
         android:layout_marginEnd="10dp"
-        android:layout_marginBottom="10dp"
+        android:layout_marginBottom="43dp"
         android:src="@drawable/ic_action_add"
         app:backgroundTint="@color/buttonColor" />
 
-    <com.coorchice.library.SuperTextView
-        android:id="@+id/totalExpenses"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+    <include
+        layout="@layout/balance_bubble"
+        android:layout_width="379dp"
+        android:layout_height="114dp"
+        android:layout_alignTop="@+id/"
         android:layout_alignParentBottom="true"
-        android:layout_marginTop="10dp"
+        android:layout_marginEnd="18dp"
         android:layout_marginBottom="10dp"
-        android:background="@color/white"
-        app:stv_corner="25dp" />
+        android:layout_toStartOf="@+id/expensesFab" />
 </RelativeLayout>
