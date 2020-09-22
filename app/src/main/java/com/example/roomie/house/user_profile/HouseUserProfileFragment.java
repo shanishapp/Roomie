@@ -32,7 +32,7 @@ import com.squareup.picasso.Picasso;
  */
 public class HouseUserProfileFragment extends Fragment {
 
-    NavController navController;
+    private NavController navController;
 
     private HouseActivityViewModel houseActivityViewModel;
 

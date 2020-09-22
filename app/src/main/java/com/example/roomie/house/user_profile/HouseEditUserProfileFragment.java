@@ -181,7 +181,7 @@ public class HouseEditUserProfileFragment extends Fragment {
                 profilePictureUri = result.getUri();
                 Picasso.get().load(profilePictureUri).resize(256, 256).centerCrop().into(profilePicture);
             } else if (resultCode == CropImage.CROP_IMAGE_ACTIVITY_RESULT_ERROR_CODE) {
-                Toast.makeText(getContext(), "There was an error laoding the image, please try again", Toast.LENGTH_LONG).show();
+                Toast.makeText(getContext(), "There was an error loading the image, please try again", Toast.LENGTH_LONG).show();
             }
         }
     }
@@ -191,7 +191,7 @@ public class HouseEditUserProfileFragment extends Fragment {
         String username = this.username.getText().toString();
         if (!FormValidator.isValidUsername(username)) {
             toggleLoadingOverlay(false);
-            Toast.makeText(getContext(), "Invalid username.", Toast.LENGTH_LONG).show();
+            Toast.makeText(getContext(), getString(R.string.house_edit_user_profie_fragment_invalid_username), Toast.LENGTH_LONG).show();
             return;
         }
 
@@ -199,7 +199,7 @@ public class HouseEditUserProfileFragment extends Fragment {
             switch (updateUserProfileJob.getJobStatus()) {
                 case SUCCESS:
                     toggleLoadingOverlay(false);
-                    Toast.makeText(getContext(), "Profile updated successfully.", Toast.LENGTH_LONG).show();
+                    Toast.makeText(getContext(), getString(R.string.house_edit_user_profile_fragment_success), Toast.LENGTH_LONG).show();
                     navController.navigate(R.id.action_house_edit_user_profile_fragment_dest_to_house_user_profile_fragment_dest);
                     break;
                 case ERROR:

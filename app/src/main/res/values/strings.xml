@@ -120,6 +120,8 @@
     <string name="house_edit_user_profile_fragment_change_picture_desc">Change Profile Picture</string>
     <string name="house_edit_user_profile_fragment_username_text">Username</string>
     <string name="house_edit_user_profile_fragment_save_changes">Save Changes</string>
+    <string name="house_edit_user_profie_fragment_invalid_username">Invalid username.</string>
+    <string name="house_edit_user_profile_fragment_success">Profile updated successfully.</string>
 
     <!-- Join House Activity  -->
     <string name="join_house_activity_title">Join House</string>

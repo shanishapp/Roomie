@@ -160,4 +160,6 @@
     <string name="firebase_auth_sign_in_or">או</string>
     <string name="firebase_auth_sign_in_google">התחבר באמצעות גוגל</string>
     <string name="firebase_auth_sign_in_facebook">התחבר באמצעות פייסבוק</string>
+    <string name="house_edit_user_profie_fragment_invalid_username">שם משתמש לא תקין.</string>
+    <string name="house_edit_user_profile_fragment_success">הפרופיל עודכן בהצלחה.</string>
 </resources>
