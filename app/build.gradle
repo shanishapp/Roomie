@@ -84,6 +84,8 @@ dependencies {
     //nice checkbox library
     implementation 'net.igenius:customcheckbox:1.3'
 
+    // image cropper
+    implementation 'com.theartofdev.edmodo:android-image-cropper:2.8.0'
 
 
 }
