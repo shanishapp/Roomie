@@ -31,6 +31,7 @@ import com.example.roomie.R;
 import com.example.roomie.util.FormValidator;
 import com.squareup.picasso.Callback;
 import com.squareup.picasso.Picasso;
+import com.theartofdev.edmodo.cropper.CropImage;
 
 import java.io.File;
 
@@ -135,8 +136,7 @@ public class HouseEditUserProfileFragment extends Fragment {
     }
 
     private void sendSelectProfilePictureIntent() {
-        Intent openGalleryIntent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-        startActivityForResult(openGalleryIntent, SELECT_PROFILE_PICTURE_CODE);
+        CropImage.activity().start(getContext(), this);
     }
 
     private void selectProfilePicture(View view) {
@@ -175,10 +175,14 @@ public class HouseEditUserProfileFragment extends Fragment {
     @Override
     public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == SELECT_PROFILE_PICTURE_CODE && resultCode == Activity.RESULT_OK) {
-            Picasso.get().setLoggingEnabled(true);
-            profilePictureUri = data.getData();
-            Picasso.get().load(profilePictureUri).resize(256, 256).centerCrop().into(profilePicture);
+        if (requestCode == CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE) {
+            CropImage.ActivityResult result = CropImage.getActivityResult(data);
+            if (resultCode == Activity.RESULT_OK) {
+                profilePictureUri = result.getUri();
+                Picasso.get().load(profilePictureUri).resize(256, 256).centerCrop().into(profilePicture);
+            } else if (resultCode == CropImage.CROP_IMAGE_ACTIVITY_RESULT_ERROR_CODE) {
+                Toast.makeText(getContext(), "There was an error loading the image, please try again", Toast.LENGTH_LONG).show();
+            }
         }
     }
 
@@ -187,7 +191,7 @@ public class HouseEditUserProfileFragment extends Fragment {
         String username = this.username.getText().toString();
         if (!FormValidator.isValidUsername(username)) {
             toggleLoadingOverlay(false);
-            Toast.makeText(getContext(), "Invalid username.", Toast.LENGTH_LONG).show();
+            Toast.makeText(getContext(), getString(R.string.house_edit_user_profie_fragment_invalid_username), Toast.LENGTH_LONG).show();
             return;
         }
 
@@ -195,7 +199,7 @@ public class HouseEditUserProfileFragment extends Fragment {
             switch (updateUserProfileJob.getJobStatus()) {
                 case SUCCESS:
                     toggleLoadingOverlay(false);
-                    Toast.makeText(getContext(), "Profile updated successfully.", Toast.LENGTH_LONG).show();
+                    Toast.makeText(getContext(), getString(R.string.house_edit_user_profile_fragment_success), Toast.LENGTH_LONG).show();
                     navController.navigate(R.id.action_house_edit_user_profile_fragment_dest_to_house_user_profile_fragment_dest);
                     break;
                 case ERROR:

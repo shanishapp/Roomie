@@ -185,11 +185,10 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="32dp"
-                android:background="@color/buttonColorDark"
+                android:background="@drawable/button_bg"
                 android:text="@string/house_user_profile_fragment_edit_profile_button"
                 android:textAllCaps="false"
                 android:textColor="@color/white"
-                android:textSize="18sp"
                 app:layout_constraintTop_toBottomOf="@id/user_profile_stats_layout_1"
                 tools:layout_editor_absoluteX="24dp" />
 

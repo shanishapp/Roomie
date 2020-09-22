@@ -10,6 +10,11 @@
     <!--  Sign in activity  -->
     <string name="sign_in_welcome_msg">Hey, roomie!</string>
     <string name="sign_in_sign_in">Sign In</string>
+    <string name="firebase_auth_sign_in_title">SIGN IN</string>
+    <string name="firebase_auth_sign_in_create_new_account">Create New Account</string>
+    <string name="firebase_auth_sign_in_or">or</string>
+    <string name="firebase_auth_sign_in_google">Sign in with Google</string>
+    <string name="firebase_auth_sign_in_facebook">Sign in with Facebook</string>
 
     <!--  Choose house activity  -->
     <!--  Choose house fragment  -->
@@ -115,6 +120,8 @@
     <string name="house_edit_user_profile_fragment_change_picture_desc">Change Profile Picture</string>
     <string name="house_edit_user_profile_fragment_username_text">Username</string>
     <string name="house_edit_user_profile_fragment_save_changes">Save Changes</string>
+    <string name="house_edit_user_profie_fragment_invalid_username">Invalid username.</string>
+    <string name="house_edit_user_profile_fragment_success">Profile updated successfully.</string>
 
     <!-- Join House Activity  -->
     <string name="join_house_activity_title">Join House</string>
