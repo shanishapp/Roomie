@@ -7,6 +7,7 @@
     tools:context=".house.expenses.houseExpensesFragment">
 
     <!--    TODO fix fragment being overridden by bottom bar-->
+
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/expensesRecyclerView"
         android:layout_width="match_parent"
@@ -20,18 +21,19 @@
         android:layout_height="wrap_content"
         android:layout_alignParentEnd="true"
         android:layout_alignParentBottom="true"
-        android:layout_marginEnd="10dp"
-        android:layout_marginBottom="43dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginBottom="20dp"
         android:src="@drawable/ic_action_add"
         app:backgroundTint="@color/buttonColor" />
 
     <include
         layout="@layout/balance_bubble"
-        android:layout_width="379dp"
-        android:layout_height="114dp"
-        android:layout_alignTop="@+id/"
+        android:layout_width="match_parent"
+        android:layout_height="70dp"
+        android:layout_marginStart="15dp"
+        android:layout_alignBottom="@id/expensesFab"
         android:layout_alignParentBottom="true"
-        android:layout_marginEnd="18dp"
-        android:layout_marginBottom="10dp"
+        android:layout_marginEnd="15dp"
+        android:layout_marginBottom="12dp"
         android:layout_toStartOf="@+id/expensesFab" />
 </RelativeLayout>

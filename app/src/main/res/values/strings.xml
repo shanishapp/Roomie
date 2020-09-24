@@ -179,10 +179,8 @@
     <string name="paid_for_by">Paid For By</string>
     <string name="currency_sign">$</string>
     <string name="expense_title">Expense Title</string>
-    <string name="cost">Cost</string>
     <string name="no_payer_set">No Payer Set</string>
     <string name="total_house_spending">Total House Spending:</string>
-    <string name="your_balance">Your Balance:</string>
     <string name="filter">filter by</string>
     <string name="sortBy">sort by</string>
     <string name="doFilter">filter</string>
@@ -191,6 +189,9 @@
     <string name="filterByLastWeekString">from last week</string>
     <string name="filterByLastMonthString">from last month</string>
     <string name="filterBySizeString">size</string>
+    <string name="you_are_owed">You are owed</string>
+    <string name="you_owe">You owe</string>
+    <string name="no_expenses_made_yet">No expenses made yet</string>
 
     <string-array name="filter_by_sizes">
         <item>@string/big</item>

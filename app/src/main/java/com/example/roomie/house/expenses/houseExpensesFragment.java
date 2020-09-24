@@ -4,9 +4,11 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.ViewModelProvider;
@@ -18,14 +20,12 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.roomie.FirestoreJob;
 import com.example.roomie.MovableFloatingActionButton;
 import com.example.roomie.R;
-import com.example.roomie.User;
 import com.example.roomie.house.HouseActivityViewModel;
 import com.example.roomie.repositories.GetHouseRoomiesJob;
 import com.example.roomie.repositories.HouseRepository;
 import com.google.firebase.auth.FirebaseAuth;
 
 import java.util.ArrayList;
-import java.util.concurrent.atomic.AtomicReference;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -36,6 +36,8 @@ public class houseExpensesFragment extends Fragment implements ExpenseAdapter.On
         ExpenseAdapter.OnReceiptListener
 {
     private RecyclerView recyclerView;
+    private TextView myBalanceTextView;
+    private TextView houseBalanceTextView;
     private RecyclerView.Adapter<ExpenseAdapter.ViewHolder> adapter = null;
     private HouseActivityViewModel houseActivityViewModel;
     private houseExpensesViewModel viewModel;
@@ -73,21 +75,57 @@ public class houseExpensesFragment extends Fragment implements ExpenseAdapter.On
     {
         auth = FirebaseAuth.getInstance();
         View v = inflater.inflate(R.layout.fragment_house_expenses, container, false);
-        houseActivityViewModel = new ViewModelProvider(requireActivity()).get(HouseActivityViewModel.class);
+        houseActivityViewModel =
+                new ViewModelProvider(requireActivity()).get(HouseActivityViewModel.class);
         viewModel = new ViewModelProvider(this).get(houseExpensesViewModel.class);
         getRoomateNumber();
-        LiveData<allExpensesJob> job = viewModel.getExpenses(houseActivityViewModel.getHouse().getId());
+        LiveData<allExpensesJob> job =
+                viewModel.getExpenses(houseActivityViewModel.getHouse().getId());
         job.observe(getViewLifecycleOwner(), allExpensesJob -> {
             if (allExpensesJob.getJobStatus() == FirestoreJob.JobStatus.SUCCESS)
             {
                 expenses = (ArrayList<Expense>) allExpensesJob.getExpenses();
-                adapter = new ExpenseAdapter(expenses, houseExpensesFragment.this, houseExpensesFragment.this);
-                RecyclerView recyclerView = v.findViewById(R.id.expensesRecyclerView);
+                adapter = new ExpenseAdapter(expenses, houseExpensesFragment.this,
+                        houseExpensesFragment.this);
+                recyclerView = v.findViewById(R.id.expensesRecyclerView);
                 recyclerView.setAdapter(adapter);
                 recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+                houseBalanceTextView = v.findViewById(R.id.houseBalanceTextView);
+                myBalanceTextView = v.findViewById(R.id.myBalanceAmountTextView);
+
             }
         });
         return v;
+    }
+
+    private void handleBalances()
+    {
+        String houseSpendingAmountString = String.valueOf(getHouseSpending());
+        String houseSpendingString =
+                getString(R.string.total_house_spending)
+                        .concat(" ").concat(houseSpendingAmountString)
+                        .concat(getString(R.string.currency_sign));
+        houseBalanceTextView.setText(houseSpendingString);
+        double myBalance = getMyBalance();
+        String myBalanceAmountString = String.valueOf(Math.abs(myBalance));
+        String myBalancePrefixString;
+        int color;
+        if (myBalance < 0)
+        {
+            color = ContextCompat.getColor(getContext(), R.color.red);
+            myBalancePrefixString = getString(R.string.you_owe);
+        } else
+        {
+            color = ContextCompat.getColor(getContext(), R.color.green);
+            myBalancePrefixString = getString(R.string.you_are_owed);
+        }
+        String myBalanceString = myBalancePrefixString
+                .concat(" ")
+                .concat(myBalanceAmountString)
+                .concat(getString(R.string.currency_sign));
+        myBalanceTextView.setTextColor(color);
+        myBalanceTextView.setText(myBalanceString);
+        myBalanceTextView.setVisibility(View.VISIBLE);
     }
 
     @Override
@@ -115,12 +153,15 @@ public class houseExpensesFragment extends Fragment implements ExpenseAdapter.On
         //TODO: Implement
     }
 
-    public double getTotalHouseExpenses()
+    public double getHouseSpending()
     {
         double totalCost = 0;
         for (Expense expense : expenses)
         {
-            totalCost += expense.get_cost();
+            if (!expense.isSettled())
+            {
+                totalCost += expense.get_cost();
+            }
         }
         return totalCost;
     }
@@ -128,27 +169,21 @@ public class houseExpensesFragment extends Fragment implements ExpenseAdapter.On
     public double getMySpending()
     {
         String myID = auth.getUid();
-        AtomicReference<Double> mySpending = new AtomicReference<>((double) 0);
-        LiveData<allExpensesJob> job = viewModel.getExpenses(houseActivityViewModel.getHouse().getId());
-        job.observe(getViewLifecycleOwner(), allExpensesJob -> {
-            if (allExpensesJob.getJobStatus() == FirestoreJob.JobStatus.SUCCESS)
+        double mySpending = 0;
+        for (Expense expense : expenses)
+        {
+            if (myID.equals(expense.get_payerID()))
             {
-                expenses = (ArrayList<Expense>) allExpensesJob.getExpenses();
-                for (Expense expense : expenses)
-                {
-                    if (myID.equals(expense.get_payerID()))
-                    {
-                        mySpending.updateAndGet(v -> v + expense.get_cost());
-                    }
-                }
+                mySpending += expense.get_cost();
             }
-        });
-        return mySpending.get();
+        }
+        return mySpending;
     }
 
     public double getMyBalance()
     {
-        return getTotalHouseExpenses() / numberOfRoommates - getMySpending();
+        double balance = getMySpending() - getHouseSpending() / numberOfRoommates;
+        return Math.floor(balance * 100) / 100;
     }
 
     private void getRoomateNumber()
@@ -160,6 +195,7 @@ public class houseExpensesFragment extends Fragment implements ExpenseAdapter.On
             {
                 case SUCCESS:
                     numberOfRoommates = getHouseRoomiesJob.getRoomiesList().size();
+                    handleBalances();
                 case ERROR:
                     //TODO: implement
             }

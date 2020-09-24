@@ -10,11 +10,6 @@ public class Roommate
     {
     }
 
-    public Roommate(String name)
-    {
-        _name = name;
-    }
-
     public Roommate(String name, String ID)
     {
         _name = name;
@@ -26,4 +21,8 @@ public class Roommate
         return _name;
     }
 
+    public String get_userID()
+    {
+        return _userID;
+    }
 }

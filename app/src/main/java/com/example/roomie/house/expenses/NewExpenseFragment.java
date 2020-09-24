@@ -39,7 +39,8 @@ import me.abhinay.input.CurrencyEditText;
 
 /**
  * A simple {@link Fragment} subclass.
- * Use the {@link com.example.roomie.house.expenses.NewExpenseFragment#newInstance} factory method to
+ * Use the {@link com.example.roomie.house.expenses.NewExpenseFragment#newInstance} factory
+ * method to
  * create an instance of this fragment.
  */
 public class NewExpenseFragment extends Fragment
@@ -58,7 +59,8 @@ public class NewExpenseFragment extends Fragment
     private String title = null;
     private String payerName = null;
     private String payerID = null;
-    private HashMap<String,String> idByNameMap = new HashMap<>();
+    private HashMap<String, String> idByNameMap = new HashMap<>();
+
     public NewExpenseFragment()
     {
         // Required empty public constructor
@@ -100,13 +102,13 @@ public class NewExpenseFragment extends Fragment
         super.onViewCreated(view, savedInstanceState);
         initViews(view);
         //set up add button
+        loadRoommies(view);
         addExpenseButton.setOnClickListener(view1 -> {
             if (view1 != null)
             {
                 createExpense(view);
             }
         });
-        loadRoommies(view);
     }
 
     private void initViews(View view)
@@ -122,7 +124,6 @@ public class NewExpenseFragment extends Fragment
         setupTypeSpinner();
 
         payerSpinner = view.findViewById(R.id.expensePayerSpinner);
-        setupPayerSpinner();
 
         priceEditText = view.findViewById(R.id.expenseCostEditText);
         priceEditText.setDecimals(false);
@@ -136,7 +137,8 @@ public class NewExpenseFragment extends Fragment
     {
 
         payerSpinner.setItems(roommateNamesList);
-        payerSpinner.setOnSpinnerItemSelectedListener((OnSpinnerItemSelectedListener<String>) (i, s) -> payerName = s);
+        payerSpinner.setOnSpinnerItemSelectedListener((OnSpinnerItemSelectedListener<String>) (i,
+                                                                                               s) -> payerName = s);
         payerSpinner.setSpinnerOutsideTouchListener((view, motionEvent) -> payerSpinner.dismiss());
         payerSpinner.setLifecycleOwner(getViewLifecycleOwner());
     }
@@ -145,7 +147,8 @@ public class NewExpenseFragment extends Fragment
     {
         List<String> expenseTypes = Expense.getExpenseTypes();
         titleSpinner.setItems(expenseTypes);
-        titleSpinner.setOnSpinnerItemSelectedListener((OnSpinnerItemSelectedListener<String>) (i, s) -> {
+        titleSpinner.setOnSpinnerItemSelectedListener((OnSpinnerItemSelectedListener<String>) (i,
+                                                                                               s) -> {
             titleSpinner.setError(null);
             title = s;
             if (s.equals(getString(R.string.general)))
@@ -188,8 +191,9 @@ public class NewExpenseFragment extends Fragment
         double cost = priceEditText.getCleanDoubleValue();
 
 
-        LiveData<CreateNewExpenseJob> job = newExpenseViewModel.createNewExpense(house, title, description, cost,
-                new Roommate(payerName,payerID), type, date);
+        LiveData<CreateNewExpenseJob> job = newExpenseViewModel.createNewExpense(house, title,
+                description, cost,
+                new Roommate(payerName, payerID), type, date);
 
         job.observe(getViewLifecycleOwner(), CreateNewExpenseJob -> {
             switch (CreateNewExpenseJob.getJobStatus())
@@ -212,7 +216,8 @@ public class NewExpenseFragment extends Fragment
 
     private void loadRoommies(View view)
     {
-        LiveData<GetHouseRoomiesJob> job = HouseRepository.getInstance().getHouseRoomies(house.getId());
+        LiveData<GetHouseRoomiesJob> job =
+                HouseRepository.getInstance().getHouseRoomies(house.getId());
         job.observe(getViewLifecycleOwner(), getHouseRoomiesJob -> {
             switch (getHouseRoomiesJob.getJobStatus())
             {
@@ -221,10 +226,11 @@ public class NewExpenseFragment extends Fragment
                     {
                         //TODO: problem with two roommates with same exact name
                         String id = user.getUid();
-                        String name = user.getUid();
-                        roommateNamesList.add(user.getUsername());
-                        idByNameMap.put(name,id);
+                        String name = user.getUsername();
+                        roommateNamesList.add(name);
+                        idByNameMap.put(name, id);
                     }
+                    setupPayerSpinner();
                     //TODO: case FAILURE
             }
         });

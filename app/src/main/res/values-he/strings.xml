@@ -167,4 +167,9 @@
     <string name="firebase_auth_sign_in_facebook">התחבר באמצעות פייסבוק</string>
     <string name="house_edit_user_profie_fragment_invalid_username">שם משתמש לא תקין.</string>
     <string name="house_edit_user_profile_fragment_success">הפרופיל עודכן בהצלחה.</string>
+    <string name="expense_title">שם ההוצאה</string>
+    <string name="no_payer_set">לא הוגדר משלם</string>
+    <string name="total_house_spending">סך ההוצאות בבית:</string>
+    <string name="you_are_owed">חייבים לך</string>
+    <string name="you_owe">אתה חייב</string>
 </resources>
