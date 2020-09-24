@@ -14,6 +14,8 @@ import com.example.roomie.house.groceries.grocery.Grocery;
 
 import net.igenius.customcheckbox.CustomCheckBox;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.List;
 
 public class GroceryAdapter  extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
@@ -40,6 +42,9 @@ public class GroceryAdapter  extends RecyclerView.Adapter<RecyclerView.ViewHolde
         Grocery groceryItem = _groceryList.get(position);
         GroceryAdapter.ViewHolder viewHolder = (ViewHolder) holder;
         viewHolder.presetGroceryTextView.setText(groceryItem.get_name());
+        String pattern = "dd/MM/yyyy HH:mm";
+        DateFormat df = new SimpleDateFormat(pattern);
+        ((ViewHolder) holder).creationDateTextView.setText(df.format(groceryItem.get_creationDate()));
         viewHolder.pickGroceryCheckBox.setCheckedColor(R.color.colorAccent);
         viewHolder.pickGroceryCheckBox.setOnCheckedChangeListener((checkBox, isChecked) -> {
             if(isChecked){
@@ -65,12 +70,14 @@ public class GroceryAdapter  extends RecyclerView.Adapter<RecyclerView.ViewHolde
 
         public CustomCheckBox pickGroceryCheckBox;
         public TextView presetGroceryTextView;
+        public TextView creationDateTextView;
         OnGroceryListener onGroceryListener;
 
         public ViewHolder(View view, OnGroceryListener onGroceryListener){
             super(view);
             pickGroceryCheckBox = view.findViewById(R.id.pickGroceryCheckBox);
             presetGroceryTextView = view.findViewById(R.id.presentGroceryTextView);
+            creationDateTextView = view.findViewById(R.id.creationDateTextView);
             this.onGroceryListener = onGroceryListener;
             view.setOnLongClickListener(this);
         }
