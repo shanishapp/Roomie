@@ -82,7 +82,7 @@ public class houseExpensesFragment extends Fragment implements ExpenseAdapter.On
             {
                 expenses = (ArrayList<Expense>) allExpensesJob.getExpenses();
                 adapter = new ExpenseAdapter(expenses, houseExpensesFragment.this, houseExpensesFragment.this);
-                RecyclerView recyclerView = v.findViewById(R.id.expensesRecyclerView);
+                recyclerView = v.findViewById(R.id.expensesRecyclerView);
                 recyclerView.setAdapter(adapter);
                 recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
             }
