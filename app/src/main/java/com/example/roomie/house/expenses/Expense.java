@@ -16,7 +16,7 @@ public class Expense
     private static final String typeGeneralString = "General";
 
     private String _id;
-    private String _name;
+    private String _title;
     private boolean _isSettled;
     private String _description;
     private ExpenseType _type;
@@ -51,7 +51,8 @@ public class Expense
 
     public static List<String> getExpenseTypes()
     {
-        String[] arr = {typeBillString, typeGroceryShoppingString, typeProfessionalString, typeGeneralString};
+        String[] arr = {typeBillString, typeGroceryShoppingString, typeProfessionalString,
+                typeGeneralString};
         return Arrays.asList(arr);
     }
 
@@ -80,6 +81,11 @@ public class Expense
         _isSettled = true;
     }
 
+    public boolean isSettled()
+    {
+        return _isSettled;
+    }
+
 
     public enum ExpenseType
     {
@@ -90,15 +96,17 @@ public class Expense
     }
 
 
-    public Expense(String name, String description, double cost, Date purchaseDate, ExpenseType type, Roommate payer)
+    public Expense(String name, String description, double cost, Date purchaseDate,
+                   ExpenseType type, Roommate payer)
     {
-        _name = name;
+        _title = name;
         _description = description;
         _type = type;
         _cost = cost;
         _purchaseDate = purchaseDate;
         _creationDate = new Date();
         _payer = payer;
+        _payerID = payer.get_userID();
         _isSettled = false;
         boolean hasReceiptImage = false;
     }
@@ -143,9 +151,9 @@ public class Expense
         return _description;
     }
 
-    public String get_name()
+    public String get_title()
     {
-        return _name;
+        return _title;
     }
 
     public void set_cost(float _cost)
@@ -158,9 +166,9 @@ public class Expense
         this._description = _description;
     }
 
-    public void set_name(String _name)
+    public void set_title(String _title)
     {
-        this._name = _name;
+        this._title = _title;
     }
 
     public void set_payer(Roommate _payer)

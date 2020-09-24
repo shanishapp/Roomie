@@ -5,49 +5,41 @@
     android:layout_width="match_parent"
     android:layout_height="70dp"
     android:layout_marginBottom="10dp"
-    android:background="@drawable/spendings_bg">
+    android:background="@drawable/button_bg">
 
     <TextView
-        android:id="@+id/totalSpendingTextView"
+        android:id="@+id/houseBalanceTextView"
         android:layout_width="0dp"
-        android:layout_height="25dp"
+        android:layout_height="20dp"
         android:layout_marginStart="10dp"
         android:layout_marginTop="10dp"
-        android:gravity="start"
-        android:text="@string/total_house_spending"
+        android:gravity="center"
+        android:text="@string/no_expenses_made_yet"
         android:textColor="@color/white"
-        android:textSize="20sp"
+        android:textSize="15sp"
+        android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
-        android:id="@+id/yourBalancePrefixTextView"
+        android:id="@+id/myBalanceAmountTextView"
         android:layout_width="0dp"
-        android:layout_height="25dp"
+        android:layout_height="20dp"
         android:layout_marginStart="10dp"
-        android:layout_marginTop="15dp"
-        android:gravity="start"
-        android:text="@string/your_balance"
-        android:textColor="@color/white"
-        android:textSize="20sp"
-        app:layout_constraintEnd_toStartOf="@+id/yourBalanceAmountTextView"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/totalSpendingTextView" />
-
-    <TextView
-        android:id="@+id/yourBalanceAmountTextView"
-        android:layout_width="0dp"
-        android:layout_height="25dp"
-        android:layout_marginStart="10dp"
-        android:layout_marginTop="15dp"
-        android:gravity="start"
-        android:text="0$"
+        android:layout_marginTop="4dp"
+        android:gravity="center"
+        android:visibility="invisible"
+        android:text="@string/you_are_owed"
         android:textColor="@color/green"
-        android:textSize="20sp"
+        android:textSize="15sp"
+        android:textStyle="bold"
+        android:layout_marginBottom="10dp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/yourBalancePrefixTextView"
-        app:layout_constraintTop_toBottomOf="@+id/totalSpendingTextView" />
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/houseBalanceTextView" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

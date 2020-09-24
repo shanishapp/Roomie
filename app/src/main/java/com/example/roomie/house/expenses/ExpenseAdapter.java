@@ -1,9 +1,6 @@
 package com.example.roomie.house.expenses;
 
 import android.content.Context;
-import android.content.Intent;
-import android.content.pm.PackageManager;
-import android.provider.MediaStore;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -77,10 +74,16 @@ public class ExpenseAdapter extends RecyclerView.Adapter<ExpenseAdapter.ViewHold
 
         String costString = String.valueOf(expense.get_cost());
         String payerName = expense.get_payer().get_name();
-
-        titleView.setText(expense.get_description());
+        if (expense.get_type() == Expense.ExpenseType.GENERAL)
+        {
+            titleView.setText(expense.get_title());
+        } else
+        {
+            titleView.setText(expense.get_description());
+        }
         setExpenseIcon(holder.expenseTypeIcon, expense.get_type());
-        costView.setText(costString);
+        //TODO: use resource for currency symbol
+        costView.setText(costString.concat("$"));
         payerView.setText(payerName);
         receiptIcon.setOnClickListener(new View.OnClickListener()
         {
@@ -115,7 +118,8 @@ public class ExpenseAdapter extends RecyclerView.Adapter<ExpenseAdapter.ViewHold
         OnReceiptListener onReceiptListener;
 
 
-        public ViewHolder(View view, OnExpenseListener onExpenseListener, OnReceiptListener onReceiptListener)
+        public ViewHolder(View view, OnExpenseListener onExpenseListener,
+                          OnReceiptListener onReceiptListener)
         {
             super(view);
             receiptIcon = view.findViewById(R.id.ReceiptIcon);
