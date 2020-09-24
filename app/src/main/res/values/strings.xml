@@ -195,6 +195,10 @@
     <string name="youCanAddDescription">short description,\nup to 100 letters (optional)</string>
     <string name="description">Description (optional)</string>
     <string name="editChoreContent">edit description</string>
+    <string name="time_left">"time left"</string>
+    <string name="days">days</string>
+    <string name="hours">hours</string>
+    <string name="editAssigneeError">there was an error edit assignee, please try again</string>
 
     <string-array name="filter_by_sizes">
         <item>@string/big</item>
@@ -224,7 +228,7 @@
         <item>Undone</item>
         <item>From last week</item>
         <item>From last month</item>
-        <item>Size</item>
+        <item>@string/filterBySizeString</item>
     </string-array>
 
 </resources>

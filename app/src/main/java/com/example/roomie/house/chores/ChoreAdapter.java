@@ -27,8 +27,10 @@ import com.squareup.picasso.Picasso;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 public class ChoreAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
@@ -108,6 +110,21 @@ public class ChoreAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
                 holder1.locked.setVisibility(View.VISIBLE);
                 holder1.unlocked.setVisibility(View.INVISIBLE);
             }
+
+            long daysLeft = getDifferenceDays(new Date(),choreItem.get_dueDate());
+            holder1.daysLeft.setText(String.valueOf((int)daysLeft));
+            if(daysLeft > 99 || daysLeft< -9){
+                holder1.hoursLeft.setText("-");
+                holder1.daysLeft.setText("-");
+            } else {
+                if (daysLeft > 3 || daysLeft < 0) {
+                    holder1.hoursLeft.setText("-");
+                } else {
+                    long hoursLeft = getDifferenceHours(new Date(), choreItem.get_dueDate());
+                    holder1.hoursLeft.setText(String.valueOf((int) hoursLeft));
+                }
+            }
+
         } else {
             MenuViewHolder holder1 = (MenuViewHolder) holder;
             holder1.editLayout.setOnClickListener(view -> _mOnChoreListener.onEditClick(position));
@@ -125,6 +142,16 @@ public class ChoreAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
 
             holder1.markAsDoneLayout.setOnClickListener(view -> _mOnChoreListener.onMarkAsDoneClick(position));
         }
+    }
+
+    private static long getDifferenceDays(Date d1, Date d2) {
+        long diff = d2.getTime() - d1.getTime();
+        return TimeUnit.DAYS.convert(diff, TimeUnit.MILLISECONDS);
+    }
+
+    private static long getDifferenceHours(Date d1, Date d2) {
+        long diff = d2.getTime() - d1.getTime();
+        return TimeUnit.HOURS.convert(diff, TimeUnit.MILLISECONDS);
     }
 
     private void setAssigneeImage(ImageView profile, String assignee) {
@@ -148,6 +175,8 @@ public class ChoreAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
         public TextView title;
         public TextView dueDate;
         public TextView assignee;
+        public TextView daysLeft;
+        public TextView hoursLeft;
         OnChoreListener onChoreListener;
 
         public ViewHolder(View view, OnChoreListener onChoreListener){
@@ -158,6 +187,8 @@ public class ChoreAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
             dueDate = view.findViewById(R.id.choreDueDateHolderView);
             assignee = view.findViewById(R.id.choreAssigneeHolderView);
             profile = view.findViewById(R.id.assigneeImageView);
+            daysLeft = view.findViewById(R.id.daysLeftTextView);
+            hoursLeft = view.findViewById(R.id.hoursLeftTextView);
             this.onChoreListener = onChoreListener;
             view.setOnClickListener(this);
         }

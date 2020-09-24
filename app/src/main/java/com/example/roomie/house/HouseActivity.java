@@ -1,5 +1,6 @@
 package com.example.roomie.house;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.view.GravityCompat;
@@ -15,10 +16,13 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Toast;
 
 import com.example.roomie.House;
 import com.example.roomie.SignInActivity;
 import com.example.roomie.R;
+import com.example.roomie.house.chores.chore.ChoreFragment;
+import com.example.roomie.house.chores.chore.NewChoreFragment;
 import com.firebase.ui.auth.AuthUI;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationView;
@@ -69,8 +73,10 @@ public class HouseActivity extends AppCompatActivity {
     private void setNavigation() {
         navController = Navigation.findNavController(this, R.id.house_nav_host_fragment);
         setSupportActionBar(toolbar);
-
-        // Add ids of menu items which we want to be top-level
+        if (getSupportActionBar() != null){
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+            getSupportActionBar().setDisplayShowHomeEnabled(true);
+        }        // Add ids of menu items which we want to be top-level
         appBarConfiguration = new AppBarConfiguration.Builder(
                 R.id.house_feed_fragment_dest, R.id.house_feed_fragment_dest, R.id.house_user_profile_fragment_dest,
                 R.id.house_settings_fragment_dest, R.id.house_chores_fragment_dest, R.id.house_groceries_fragment_dest,
@@ -124,6 +130,20 @@ public class HouseActivity extends AppCompatActivity {
 
     }
 
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        Fragment fragment = getSupportFragmentManager().findFragmentById(R.id.house_nav_host_fragment);
+        Fragment f = fragment == null ? null : fragment.getChildFragmentManager().getFragments().get(0);
+        if (f.getClass().equals(NewChoreFragment.class)) {
+            ((NewChoreFragment) f).onBackPressed();
+            return true;
+        } else if (f.getClass().equals(ChoreFragment.class)){
+            if(((ChoreFragment) f).onBackPressed())
+                return true;
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
     public void signOut(MenuItem item) {
         AuthUI.getInstance()
                 .signOut(this)
@@ -141,6 +161,8 @@ public class HouseActivity extends AppCompatActivity {
          */
         boolean onBackPressed();
     }
+
+
 
 
 }

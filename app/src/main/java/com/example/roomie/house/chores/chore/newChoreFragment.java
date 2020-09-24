@@ -20,6 +20,7 @@ import androidx.navigation.Navigation;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
@@ -30,11 +31,13 @@ import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.Toast;
+import android.widget.Toolbar;
 
 import com.airbnb.lottie.LottieAnimationView;
 import com.example.roomie.House;
 import com.example.roomie.R;
 import com.example.roomie.User;
+import com.example.roomie.house.HouseActivity;
 import com.example.roomie.house.HouseActivityViewModel;
 import com.example.roomie.repositories.GetHouseRoomiesJob;
 import com.example.roomie.repositories.HouseRepository;
@@ -54,7 +57,7 @@ import java.util.Date;
  * Use the {@link NewChoreFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class NewChoreFragment extends Fragment {
+public class NewChoreFragment extends Fragment implements HouseActivity.IOnBackPressed {
 
     private NewChoreFragmentViewModel newChoreFragmentViewModel;
     private PowerSpinnerView titleSpinner;
@@ -255,7 +258,9 @@ public class NewChoreFragment extends Fragment {
                 case SUCCESS:
                     if(snoozeDate != null)
                         setSnooze(createNewChoreJob);
-                    navController.navigate(R.id.action_newChoreFragment_to_house_chores_fragment_dest);
+                    Bundle result = new Bundle();
+                    passFilterAndSortData(result);
+                    navController.navigate(R.id.action_newChoreFragment_to_house_chores_fragment_dest,result);
                     break;
                 case ERROR:
                     createChoreButton.setEnabled(true);
@@ -315,5 +320,27 @@ public class NewChoreFragment extends Fragment {
         } else {
             score = FirestoreUtil.SMALL_SCORE;
         }
+    }
+
+    @Override
+    public boolean onBackPressed() {
+        Bundle result = new Bundle();
+        passFilterAndSortData(result);
+        navController.navigate(R.id.action_newChoreFragment_to_house_chores_fragment_dest, result);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        Toast.makeText(getContext(),"back pressed",Toast.LENGTH_SHORT).show();
+        return true;
+    }
+
+    private void passFilterAndSortData(Bundle result) {
+        result.putBoolean("isFiltered", getArguments().getBoolean("isFiltered"));
+        result.putString("filterBy", getArguments().getString("filterBy"));
+        result.putString("filter", getArguments().getString("filter"));
+        result.putBoolean("isSorted", getArguments().getBoolean("isSorted"));
+        result.putString("sortBy",getArguments().getString("sortBy"));
     }
 }

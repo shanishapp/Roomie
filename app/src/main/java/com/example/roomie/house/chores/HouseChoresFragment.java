@@ -1,11 +1,13 @@
 package com.example.roomie.house.chores;
 
 import android.app.AlertDialog;
+import android.content.res.Resources;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 
+import androidx.activity.OnBackPressedCallback;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.content.ContextCompat;
@@ -28,6 +30,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.Toast;
+import android.widget.Toolbar;
 
 
 import com.example.roomie.FirestoreJob;
@@ -70,6 +73,9 @@ public class HouseChoresFragment extends Fragment implements ChoreAdapter.OnChor
     private boolean firstArrived = false;
     private ArrayList<String> roommatesNamesList;
     private ArrayList<String> rommatesMap;
+    //filter and sort data
+    private boolean isFiltered = false;
+    private boolean isSorted = false;
     private String filterByAssignee = "";
     private String filterByChosenString = "";
     private String filterBySize = "";
@@ -95,6 +101,10 @@ public class HouseChoresFragment extends Fragment implements ChoreAdapter.OnChor
         super.onCreate(savedInstanceState);
     }
 
+
+
+
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -104,10 +114,22 @@ public class HouseChoresFragment extends Fragment implements ChoreAdapter.OnChor
         setHasOptionsMenu(true);
         houseActivityViewModel = new ViewModelProvider(requireActivity()).get(HouseActivityViewModel.class);
         vm = new ViewModelProvider(this).get(HouseChoresFragmentViewModel.class);
-        LiveData<AllChoresJob> job  = vm.getFilteredChores(houseActivityViewModel.getHouse().getId(),FirestoreUtil.CHORE_DONE_FIELD_NAME,"false",null);
+        LiveData<AllChoresJob> job;
+        if(getArguments().getBoolean("isFiltered",false)) {
+            isFiltered = true;
+            filterByChosenString = getArguments().getString("filterBy","");
+            job = getFilterJob(filterByChosenString,getResources(),getArguments().getString("filter"));
+        } else {
+            job = vm.getFilteredChores(houseActivityViewModel.getHouse().getId(), FirestoreUtil.CHORE_DONE_FIELD_NAME, "false", null);
+        }
         job.observe(getViewLifecycleOwner(), allChoresJob -> {
             if(allChoresJob.getJobStatus() == FirestoreJob.JobStatus.SUCCESS) {
                 choreList = (ArrayList<Chore>) allChoresJob.getChoreList();
+                if(getArguments().getBoolean("isSorted")){
+                    sortBy = getArguments().getString("sortBy");
+                    isSorted = true;
+                    choreList.sort(this::choreComperator);
+                }
                 if(firstArrived) {
                     toggleLoadingOverlay(false);
                     setRecyclerView(v);
@@ -168,21 +190,24 @@ public class HouseChoresFragment extends Fragment implements ChoreAdapter.OnChor
         PowerSpinnerView spinner = customLayout.findViewById(R.id.sortBySpinner);
         spinner.setOnSpinnerItemSelectedListener((OnSpinnerItemSelectedListener<String>) (i, s) -> {
             sortBy = s;
-            choreList.sort((chore, t1) -> {
-                if(sortBy.equals(getString(R.string.assignee))){
-                    return chore.get_assignee().compareTo(t1.get_assignee());
-                } else if(sortBy.equals(getString(R.string.due_date))) {
-                    return chore.get_dueDate().compareTo(t1.get_dueDate());
-                } else if(sortBy.equals(getString(R.string.choreSize))){
-                    if(chore.get_score()>t1.get_score()){
-                        return 0;
-                    } return -1;
-                }
-                return 0;
-            });
+            isSorted = true;
+            choreList.sort(this::choreComperator);
             adapter.notifyDataSetChanged();
             dialog.cancel();
         });
+    }
+
+    private int choreComperator(Chore chore, Chore t1) {
+        if(sortBy.equals(getString(R.string.assignee))){
+            return chore.get_assignee().compareTo(t1.get_assignee());
+        } else if(sortBy.equals(getString(R.string.due_date))) {
+            return chore.get_dueDate().compareTo(t1.get_dueDate());
+        } else if(sortBy.equals(getString(R.string.choreSize))){
+            if(chore.get_score()>t1.get_score()){
+                return 0;
+            } return -1;
+        }
+        return 0;
     }
 
     private void showFilterDialog() {
@@ -200,30 +225,16 @@ public class HouseChoresFragment extends Fragment implements ChoreAdapter.OnChor
         customLayout.findViewById(R.id.doFilterButton).setOnClickListener(view -> {
             LiveData<AllChoresJob> job;
             if(filterByChosenString.equals(getString(R.string.assignee))) {
-                 job = vm.getFilteredChores(houseActivityViewModel.getHouse().getId(), FirestoreUtil.ASSIGNEE_FIELD_NAME, filterByAssignee,null);
-            } else if(filterByChosenString.equals(getString(R.string.filterByDoneString))){
-                //filter by done
-                job = vm.getFilteredChores(houseActivityViewModel.getHouse().getId(), FirestoreUtil.CHORE_DONE_FIELD_NAME, "true",null);
-            } else if (filterByChosenString.equals(getString(R.string.filterByUndoneString))) {
-                //filter by undone
-                job = vm.getFilteredChores(houseActivityViewModel.getHouse().getId(), FirestoreUtil.CHORE_DONE_FIELD_NAME, "false",null);
-            }
-            else if (filterByChosenString.equals(getString(R.string.filterByLastWeekString))) {
-                // filter by last week
-                job = vm.getFilteredChores(houseActivityViewModel.getHouse().getId(), FirestoreUtil.CREATION_DATE_FIELD_NAME, "week",null);
-            }
-            else if (filterByChosenString.equals(getString(R.string.filterByLastMonthString)))
-                job = vm.getFilteredChores(houseActivityViewModel.getHouse().getId(), FirestoreUtil.CREATION_DATE_FIELD_NAME, "month",null);
-
-            else if(filterByChosenString.equals(getString(R.string.filterBySizeString))) {
-                job = vm.getFilteredChores(houseActivityViewModel.getHouse().getId(), FirestoreUtil.SIZE_FIELD_NAME, filterBySize,customLayout);
-
+                job = getFilterJob(filterByChosenString,getResources(),filterByAssignee);
+            } else if (filterByChosenString.equals(getString(R.string.filterBySizeString))) {
+                job = getFilterJob(filterByChosenString,getResources(),filterBySize);
             } else {
-                job = vm.getAllChores(houseActivityViewModel.getHouse().getId());
+                job = getFilterJob(filterByChosenString,getResources(),"");
             }
 
             job.observe(getViewLifecycleOwner(), allChoresJob -> {
                 if(allChoresJob.getJobStatus() == FirestoreJob.JobStatus.SUCCESS) {
+                    isFiltered = true;
                     choreList = (ArrayList<Chore>) allChoresJob.getChoreList();
                     adapter = new ChoreAdapter(choreList,this,roommatesNamesList,rommatesMap);
                     recyclerView.swapAdapter(adapter,false);
@@ -231,6 +242,33 @@ public class HouseChoresFragment extends Fragment implements ChoreAdapter.OnChor
             });
             dialog.cancel();
         });
+    }
+
+    private LiveData<AllChoresJob> getFilterJob(String filterBy, Resources resources, String value){
+        if(filterBy.equals(getString(R.string.assignee))) {
+            filterByAssignee = value;
+            return vm.getFilteredChores(houseActivityViewModel.getHouse().getId(), FirestoreUtil.ASSIGNEE_FIELD_NAME, value,null);
+        } else if(filterBy.equals(getString(R.string.filterByDoneString))){
+            //filter by done
+            return vm.getFilteredChores(houseActivityViewModel.getHouse().getId(), FirestoreUtil.CHORE_DONE_FIELD_NAME, "true",null);
+        } else if (filterBy.equals(getString(R.string.filterByUndoneString))) {
+            //filter by undone
+            return vm.getFilteredChores(houseActivityViewModel.getHouse().getId(), FirestoreUtil.CHORE_DONE_FIELD_NAME, "false",null);
+        }
+        else if (filterBy.equals(getString(R.string.filterByLastWeekString)))
+            // filter by last week
+            return vm.getFilteredChores(houseActivityViewModel.getHouse().getId(), FirestoreUtil.CREATION_DATE_FIELD_NAME, "week",null);
+
+        else if (filterBy.equals(getString(R.string.filterByLastMonthString)))
+            return vm.getFilteredChores(houseActivityViewModel.getHouse().getId(), FirestoreUtil.CREATION_DATE_FIELD_NAME, "month",null);
+
+        else if(filterBy.equals(getString(R.string.filterBySizeString))) {
+            filterBySize = value;
+            return vm.getFilteredChores(houseActivityViewModel.getHouse().getId(), FirestoreUtil.SIZE_FIELD_NAME, value, resources);
+        }
+
+        return vm.getAllChores(houseActivityViewModel.getHouse().getId());
+
     }
 
     private void setFilterBySpinner(View customLayout) {
@@ -350,7 +388,9 @@ public class HouseChoresFragment extends Fragment implements ChoreAdapter.OnChor
         //set up add button
         button.setOnClickListener(view1 -> {
             if(view1 != null){
-                navController.navigate(R.id.action_house_chores_fragment_dest_to_newChoreFragment);
+                Bundle result = new Bundle();
+                passFilterAndSortData(result);
+                navController.navigate(R.id.action_house_chores_fragment_dest_to_newChoreFragment,result);
             }
         });
         rommatesMap = new ArrayList<>();
@@ -370,10 +410,9 @@ public class HouseChoresFragment extends Fragment implements ChoreAdapter.OnChor
     @Override
     public void onDeleteClick(int pos) {
         Chore chore = choreList.get(pos);
-        Toast.makeText(getContext(),chore.get_title()+" is deleted",Toast.LENGTH_LONG).show();
         adapter.closeMenu();
-        vm.deleteChoreForever(chore,houseActivityViewModel.getHouse().getId());
-        adapter.notifyDataSetChanged();
+        LiveData<newChoreJob> job = vm.deleteChoreForever(chore, houseActivityViewModel.getHouse().getId());
+        job.observe(getViewLifecycleOwner(), newChoreJob -> adapter.notifyDataSetChanged());
     }
 
     @Override
@@ -400,6 +439,8 @@ public class HouseChoresFragment extends Fragment implements ChoreAdapter.OnChor
         result.putString("choreId",chore.get_id());
         result.putString("choreAssignee",chore.get_assignee());
         result.putStringArrayList("roommiesNames",roommatesNamesList);
+        passFilterAndSortData(result);
+
         String pattern = "dd/MM/yyyy HH:mm";
         DateFormat df = new SimpleDateFormat(pattern);
         result.putString("choreDueDate", df.format(chore.get_dueDate()));
@@ -408,6 +449,20 @@ public class HouseChoresFragment extends Fragment implements ChoreAdapter.OnChor
         }else
             result.putString("choreContent",chore.get_description());
         navController.navigate(R.id.action_house_chores_fragment_dest_to_choreFragment, result);
+    }
+
+    private void passFilterAndSortData(Bundle result) {
+        result.putBoolean("isFiltered", isFiltered);
+        result.putString("filterBy", filterByChosenString);
+        if(filterByChosenString.equals(getString(R.string.assignee))) {
+            result.putString("filter", filterByAssignee);
+        } else if(filterByChosenString.equals(getString(R.string.filterBySizeString))) {
+            result.putString("filter", filterBySize);
+        } else {
+            result.putString("filter", "");
+        }
+        result.putBoolean("isSorted", isSorted);
+        result.putString("sortBy",sortBy);
     }
 
     @Override

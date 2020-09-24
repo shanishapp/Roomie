@@ -174,7 +174,11 @@
     <string name="you_owe">אתה חייב</string>
     <string name="no_expenses_made_yet">טרם נוספו הוצאות</string>
     <string name="markAsUnDone">סמנ/י כלא בוצע</string>
-    <string name="youCanAddDescription">short deciption, up to 100 letters (optional)</string>
-    <string name="description">Description (optional)</string>
-    <string name="editChoreContent">edit description</string>
+    <string name="youCanAddDescription">תיאור קצר, עד 100 תווים (אופציונלי)</string>
+    <string name="description">תיאור (אופציונלי)</string>
+    <string name="editChoreContent">ערוך תיאור</string>
+    <string name="time_left">"זמן נותר"</string>
+    <string name="days">days</string>
+    <string name="hours">hours</string>
+    <string name="editAssigneeError">there was an error edit assignee, please try again</string>
 </resources>
