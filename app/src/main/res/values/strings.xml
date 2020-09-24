@@ -172,6 +172,17 @@
     <string name="small">small</string>
     <string name="markAsDone">mark as done</string>
     <string name="choreSize">Chore Size</string>
+    <string name="general">General</string>
+    <string name="create_expense_error_msg">There was an error creating the expense. Try again
+        later</string>
+    <string name="description">Description</string>
+    <string name="paid_for_by">Paid For By</string>
+    <string name="currency_sign">$</string>
+    <string name="expense_title">Expense Title</string>
+    <string name="cost">Cost</string>
+    <string name="no_payer_set">No Payer Set</string>
+    <string name="total_house_spending">Total House Spending:</string>
+    <string name="your_balance">Your Balance:</string>
     <string name="filter">filter by</string>
     <string name="sortBy">sort by</string>
     <string name="doFilter">filter</string>

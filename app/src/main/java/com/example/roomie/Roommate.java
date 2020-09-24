@@ -1,22 +1,24 @@
 package com.example.roomie;
 
-import com.example.roomie.house.chores.chore.Chore;
-
-import java.util.ArrayList;
-import java.util.List;
-
 public class Roommate
 {
-    //TODO: profile pic, chores?
+    //TODO: profile pic
+    private String _userID;
     private String _name;
-    private int _housePoints;
-    private List<Chore> _chores;
+
+    public Roommate()
+    {
+    }
 
     public Roommate(String name)
     {
         _name = name;
-        _housePoints = 0;
-        _chores = new ArrayList<>();
+    }
+
+    public Roommate(String name, String ID)
+    {
+        _name = name;
+        _userID = ID;
     }
 
     public String get_name()
@@ -24,13 +26,4 @@ public class Roommate
         return _name;
     }
 
-    public int get_housePoints()
-    {
-        return _housePoints;
-    }
-
-    public List<Chore> get_chores()
-    {
-        return _chores;
-    }
 }

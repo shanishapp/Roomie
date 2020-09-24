@@ -1,21 +1,59 @@
 package com.example.roomie.house.expenses;
 
+import android.graphics.drawable.Drawable;
+
 import com.example.roomie.Roommate;
 
+import java.util.Arrays;
 import java.util.Date;
+import java.util.List;
 
 public class Expense
 {
+    private static final String typeProfessionalString = "Professional";
+    private static final String typeGroceryShoppingString = "Grocery Shopping";
+    private static final String typeBillString = "Bill";
+    private static final String typeGeneralString = "General";
+
     private String _id;
     private String _name;
+    private boolean _isSettled;
     private String _description;
     private ExpenseType _type;
-    private float _cost;
+    private double _cost;
+    //TODO: maybe only one date needed?
     private Date _creationDate;
     private Date _purchaseDate;
+    private Drawable receiptImage;
     private Roommate _payer;
+    private String _payerID;
     private boolean _hasReceipt;
-    //TODO: receipt photo
+
+    public static ExpenseType typeFromString(String title)
+    {
+        ExpenseType resultType = null;
+        switch (title)
+        {
+            case typeProfessionalString:
+                resultType = ExpenseType.PROFESSIONAL;
+                break;
+            case typeGroceryShoppingString:
+                resultType = ExpenseType.GROCERIES;
+                break;
+            case typeBillString:
+                resultType = ExpenseType.BILL;
+                break;
+            default:
+                resultType = ExpenseType.GENERAL;
+        }
+        return resultType;
+    }
+
+    public static List<String> getExpenseTypes()
+    {
+        String[] arr = {typeBillString, typeGroceryShoppingString, typeProfessionalString, typeGeneralString};
+        return Arrays.asList(arr);
+    }
 
     public boolean is_hasReceipt()
     {
@@ -37,6 +75,12 @@ public class Expense
         return _id;
     }
 
+    public void settle()
+    {
+        _isSettled = true;
+    }
+
+
     public enum ExpenseType
     {
         PROFESSIONAL,
@@ -46,10 +90,7 @@ public class Expense
     }
 
 
-
-
-
-    Expense(String name, String description, float cost, Date purchaseDate, ExpenseType type, Roommate payer)
+    public Expense(String name, String description, double cost, Date purchaseDate, ExpenseType type, Roommate payer)
     {
         _name = name;
         _description = description;
@@ -58,6 +99,12 @@ public class Expense
         _purchaseDate = purchaseDate;
         _creationDate = new Date();
         _payer = payer;
+        _isSettled = false;
+        boolean hasReceiptImage = false;
+    }
+
+    public Expense()
+    {
     }
 
 
@@ -76,7 +123,7 @@ public class Expense
         return _type;
     }
 
-    public float get_cost()
+    public double get_cost()
     {
         return _cost;
     }
@@ -84,6 +131,11 @@ public class Expense
     public Roommate get_payer()
     {
         return _payer;
+    }
+
+    public String get_payerID()
+    {
+        return _payerID;
     }
 
     public String get_description()
@@ -114,6 +166,11 @@ public class Expense
     public void set_payer(Roommate _payer)
     {
         this._payer = _payer;
+    }
+
+    public void set_payerID(String _payerID)
+    {
+        this._payerID = _payerID;
     }
 
     public void set_type(ExpenseType _type)

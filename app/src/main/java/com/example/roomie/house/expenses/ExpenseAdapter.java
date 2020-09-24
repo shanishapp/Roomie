@@ -1,6 +1,9 @@
 package com.example.roomie.house.expenses;
 
 import android.content.Context;
+import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.provider.MediaStore;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,13 +19,19 @@ import java.util.List;
 
 public class ExpenseAdapter extends RecyclerView.Adapter<ExpenseAdapter.ViewHolder>
 {
+
+    static final int REQUEST_IMAGE_CAPTURE = 1;
     List<Expense> _expenses;
     private OnExpenseListener _myExpenseListener;
+    private OnReceiptListener _myReceiptListener;
 
-    public ExpenseAdapter(List<Expense> expenses, OnExpenseListener onExpenseListener)
+    public ExpenseAdapter(List<Expense> expenses, OnExpenseListener onExpenseListener,
+                          OnReceiptListener onReceiptListener)
     {
         _expenses = expenses;
         _myExpenseListener = onExpenseListener;
+        _myReceiptListener = onReceiptListener;
+
     }
 
     @NonNull
@@ -32,12 +41,13 @@ public class ExpenseAdapter extends RecyclerView.Adapter<ExpenseAdapter.ViewHold
         Context context = parent.getContext();
         LayoutInflater inflater = LayoutInflater.from(context);
         View expenseView = inflater.inflate(R.layout.single_expense, parent, false);
-        return new ViewHolder(expenseView, _myExpenseListener);
+
+        return new ViewHolder(expenseView, _myExpenseListener, _myReceiptListener);
     }
 
     public void setExpenseIcon(ImageView image, Expense.ExpenseType expenseType)
     {
-        int iconCode = 0;
+        int iconCode;
         switch (expenseType)
         {
             case PROFESSIONAL:
@@ -63,58 +73,84 @@ public class ExpenseAdapter extends RecyclerView.Adapter<ExpenseAdapter.ViewHold
         TextView titleView = holder.title;
         TextView costView = holder.cost;
         TextView payerView = holder.payer;
+        ImageView receiptIcon = holder.receiptIcon;
 
         String costString = String.valueOf(expense.get_cost());
         String payerName = expense.get_payer().get_name();
 
-        titleView.setText(expense.get_name());
-        if (expense.is_hasReceipt())
-        {
-            holder.viewReceiptIcon.setVisibility(View.VISIBLE);
-        }
+        titleView.setText(expense.get_description());
         setExpenseIcon(holder.expenseTypeIcon, expense.get_type());
         costView.setText(costString);
         payerView.setText(payerName);
+        receiptIcon.setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View v)
+            {
+                if (expense.is_hasReceipt())
+                {
+                    //TODO: popup of receipt image + replace option
+                } else
+                {
 
+                }
+            }
+        });
     }
 
     @Override
     public int getItemCount()
     {
-        return 0;
+        return _expenses.size();
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener
     {
-
-        public ImageView viewReceiptIcon;
+        public ImageView receiptIcon;
         public ImageView expenseTypeIcon;
         public TextView title;
         public TextView cost;
         public TextView payer;
-        ExpenseAdapter.OnExpenseListener onExpenseListener;
+        OnExpenseListener onExpenseListener;
+        OnReceiptListener onReceiptListener;
 
-        public ViewHolder(View view, ExpenseAdapter.OnExpenseListener onExpenseListener)
+
+        public ViewHolder(View view, OnExpenseListener onExpenseListener, OnReceiptListener onReceiptListener)
         {
             super(view);
-            viewReceiptIcon = view.findViewById(R.id.viewReceiptIcon);
+            receiptIcon = view.findViewById(R.id.ReceiptIcon);
             expenseTypeIcon = view.findViewById(R.id.expenseTypeIcon);
-            title = view.findViewById(R.id.choreTitleHolderView);
+            title = view.findViewById(R.id.expenseTitleHolderView);
             cost = view.findViewById(R.id.expenseCostHolderView);
             payer = view.findViewById(R.id.expensePayerHolderView);
             this.onExpenseListener = onExpenseListener;
+            this.onReceiptListener = onReceiptListener;
             view.setOnClickListener(this);
         }
 
         @Override
         public void onClick(View view)
         {
-
+            onExpenseListener.onExpenseClick(getAdapterPosition());
         }
     }
+//
+//    private void dispatchTakePictureIntent()
+//    {
+//        Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+//        if (takePictureIntent.resolveActivity(getPackageManager()) != null)
+//        {
+//            startActivityForResult(takePictureIntent, REQUEST_IMAGE_CAPTURE);
+//        }
+//    }
 
     public interface OnExpenseListener
     {
         void onExpenseClick(int pos);
+    }
+
+    public interface OnReceiptListener
+    {
+        void onReceiptClick();
     }
 }

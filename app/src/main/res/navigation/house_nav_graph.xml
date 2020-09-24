@@ -76,7 +76,15 @@
         android:id="@+id/house_expenses_fragment_dest"
         android:name="com.example.roomie.house.expenses.houseExpensesFragment"
         android:label="@string/house_expenses_fragment_title"
-        tools:layout="@layout/fragment_house_expenses" />
+        tools:layout="@layout/fragment_house_expenses" >
+        <action
+            android:id="@+id/action_house_expenses_fragment_dest_to_newExpenseFragment"
+            app:destination="@id/newExpenseFragment"
+            app:popEnterAnim="@anim/slide_in_right"
+            app:popExitAnim="@anim/slide_out_left"
+            app:enterAnim="@anim/slide_in_left"
+            app:exitAnim="@anim/slide_out_right"/>
+    </fragment>
     <fragment
         android:id="@+id/house_invite_roomie_fragment_dest"
         android:name="com.example.roomie.house.invite.HouseInviteRoomieFragment"
@@ -172,5 +180,20 @@
         <action
             android:id="@+id/action_newGroceryFragment_to_house_groceries_fragment_dest"
             app:destination="@id/house_groceries_fragment_dest" />
+    </fragment>
+    <fragment
+        android:id="@+id/newExpenseFragment"
+        android:name="com.example.roomie.house.expenses.NewExpenseFragment"
+        android:label="Add Expense"
+        tools:layout="@layout/fragment_create_expense">
+        <action
+            android:id="@+id/action_newExpenseFragment_to_house_expenses_fragment_dest"
+            app:destination="@id/house_expenses_fragment_dest"
+            app:enterAnim="@anim/slide_in_left"
+            app:exitAnim="@anim/slide_out_right"
+            app:popEnterAnim="@anim/slide_in_right"
+            app:popExitAnim="@anim/slide_out_left"
+            app:popUpTo="@id/house_chores_fragment_dest"
+            app:popUpToInclusive="true" />
     </fragment>
 </navigation>
