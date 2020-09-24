@@ -18,7 +18,7 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 
-import com.example.roomie.House;
+import com.example.House;
 import com.example.roomie.R;
 import com.example.roomie.Roommate;
 import com.example.roomie.User;
@@ -32,6 +32,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
+
 
 import me.abhinay.input.CurrencyEditText;
 

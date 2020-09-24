@@ -10,6 +10,11 @@
     <!--  Sign in activity  -->
     <string name="sign_in_welcome_msg">Hey, roomie!</string>
     <string name="sign_in_sign_in">Sign In</string>
+    <string name="firebase_auth_sign_in_title">SIGN IN</string>
+    <string name="firebase_auth_sign_in_create_new_account">Create New Account</string>
+    <string name="firebase_auth_sign_in_or">or</string>
+    <string name="firebase_auth_sign_in_google">Sign in with Google</string>
+    <string name="firebase_auth_sign_in_facebook">Sign in with Facebook</string>
 
     <!--  Choose house activity  -->
     <!--  Choose house fragment  -->
@@ -115,6 +120,8 @@
     <string name="house_edit_user_profile_fragment_change_picture_desc">Change Profile Picture</string>
     <string name="house_edit_user_profile_fragment_username_text">Username</string>
     <string name="house_edit_user_profile_fragment_save_changes">Save Changes</string>
+    <string name="house_edit_user_profie_fragment_invalid_username">Invalid username.</string>
+    <string name="house_edit_user_profile_fragment_success">Profile updated successfully.</string>
 
     <!-- Join House Activity  -->
     <string name="join_house_activity_title">Join House</string>
@@ -176,6 +183,27 @@
     <string name="no_payer_set">No Payer Set</string>
     <string name="total_house_spending">Total House Spending:</string>
     <string name="your_balance">Your Balance:</string>
+    <string name="filter">filter by</string>
+    <string name="sortBy">sort by</string>
+    <string name="doFilter">filter</string>
+    <string name="filterByDoneString">Done</string>
+    <string name="filterByUndoneString">Undone</string>
+    <string name="filterByLastWeekString">from last week</string>
+    <string name="filterByLastMonthString">from last month</string>
+    <string name="filterBySizeString">size</string>
+
+    <string-array name="filter_by_sizes">
+        <item>@string/big</item>
+        <item>@string/medium</item>
+        <item>@string/small</item>
+    </string-array>
+
+    <string-array name="sort_by_options">
+        <item>@string/assignee</item>
+        <item>@string/due_date</item>
+        <item>@string/choreSize</item>
+    </string-array>
+
     <string-array name="default_titles">
         <item>washing dishes</item>
         <item>floor</item>
@@ -183,6 +211,16 @@
         <item>laundary</item>
         <item>trash</item>
         <item>other</item>
+    </string-array>
+
+    <string-array name="filter_by_options">
+        <item>Assignee</item>
+        <item>Done</item>
+        <item>Undone</item>
+        <item>from last week</item>
+        <item>from last month</item>
+        <item>size</item>
+        <item>get all</item>
     </string-array>
 
 </resources>

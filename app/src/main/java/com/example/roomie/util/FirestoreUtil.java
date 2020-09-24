@@ -24,5 +24,17 @@ public class FirestoreUtil
 
     public final static int LARGE_SCORE = 4;
 
+    public final static String ASSIGNEE_FIELD_NAME = "_assignee";
 
+    public final static String CHORE_DONE_FIELD_NAME = "_choreDone";
+
+    public final static String SCORE_FIELD_NAME = "_score";
+
+    public final static String DUE_DATE_FIELD_NAME = "_dueDate";
+
+
+    public static final String SIZE_FIELD_NAME = "_score";
+
+
+    public static final String CREATION_DATE_FIELD_NAME = "_creationDate";
 }

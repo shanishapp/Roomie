@@ -5,18 +5,18 @@ import com.example.roomie.house.chores.chore.Chore;
 
 import java.util.List;
 
-public class allChoresJob extends FirestoreJob {
+public class AllChoresJob extends FirestoreJob {
     private List<Chore> choreList;
 
-    public allChoresJob() {
+    public AllChoresJob() {
         super();
     }
 
-    public allChoresJob(FirestoreJob.JobStatus jobStatus) {
+    public AllChoresJob(FirestoreJob.JobStatus jobStatus) {
         super(jobStatus);
     }
 
-    public allChoresJob(FirestoreJob.JobStatus jobStatus, FirestoreJob.JobErrorCode jobErrorCode) {
+    public AllChoresJob(FirestoreJob.JobStatus jobStatus, FirestoreJob.JobErrorCode jobErrorCode) {
         super(jobStatus, jobErrorCode);
     }
 

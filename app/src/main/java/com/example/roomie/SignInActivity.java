@@ -14,11 +14,10 @@ import android.widget.Toast;
 import com.example.roomie.choose_house.ChooseHouseActivity;
 import com.example.roomie.house.HouseActivity;
 import com.example.roomie.join_house.JoinHouseActivity;
-import com.example.roomie.repositories.HouseRepository;
 import com.example.roomie.repositories.UserRepository;
 import com.example.roomie.splash.GetUserHouseJob;
 import com.example.roomie.splash.SplashScreenActivity;
-import com.example.roomie.splash.SplashScreenViewModel;
+import com.firebase.ui.auth.AuthMethodPickerLayout;
 import com.firebase.ui.auth.AuthUI;
 import com.firebase.ui.auth.IdpResponse;
 import com.google.firebase.auth.FirebaseAuth;
@@ -37,11 +36,7 @@ public class SignInActivity extends AppCompatActivity {
 
     private String invitationId;
 
-    // TODO currently we use splash screen view model function to get the user house to avoid
-    //      code duplication. Maybe create a unified view model for both of them (initViewModel)?
-    //      Or maybe later we will add more functionality to splash / sign in so we will need to
-    //      separate them anyway.
-    private SplashScreenViewModel splashScreenViewModel;
+    private SignInViewModel signInViewModel;
 
     private Button signInBtn;
 
@@ -50,7 +45,7 @@ public class SignInActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sign_in);
 
-        splashScreenViewModel = new ViewModelProvider(this).get(SplashScreenViewModel.class);
+        signInViewModel = new ViewModelProvider(this).get(SignInViewModel.class);
 
         // check if user is already logged in
         auth = FirebaseAuth.getInstance();
@@ -130,7 +125,7 @@ public class SignInActivity extends AppCompatActivity {
         }
 
         // check if user has house or not
-        LiveData<GetUserHouseJob> job = splashScreenViewModel.getUserHouse();
+        LiveData<GetUserHouseJob> job = signInViewModel.getUserHouse();
         job.observe(this, getUserHouseJob -> {
             switch (job.getValue().getJobStatus()) {
                 case IN_PROGRESS:
@@ -163,6 +158,12 @@ public class SignInActivity extends AppCompatActivity {
                 new AuthUI.IdpConfig.EmailBuilder().build(),
                 new AuthUI.IdpConfig.GoogleBuilder().build());
 
+        // add custom sign in layout
+        AuthMethodPickerLayout customLayout = new AuthMethodPickerLayout.Builder(R.layout.firebase_auth_sign_in)
+                .setEmailButtonId(R.id.firebase_auth_sign_in_create_account_button)
+                .setGoogleButtonId(R.id.firebase_auth_sign_in_google_button)
+                .build();
+
         // Create and launch sign-in intent
         startActivityForResult(
                 AuthUI.getInstance()
@@ -170,6 +171,7 @@ public class SignInActivity extends AppCompatActivity {
                         .setAvailableProviders(providers)
                         .setLogo(R.drawable.app_logo)
                         .setTheme(R.style.SignInTheme)
+                        .setAuthMethodPickerLayout(customLayout)
                         .build(),
                 RC_SIGN_IN);
     }

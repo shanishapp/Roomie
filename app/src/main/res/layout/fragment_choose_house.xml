@@ -60,22 +60,7 @@
             android:padding="5dp"
             android:text="@string/choose_house_create_new_house"
             android:textColor="@color/white"
-            app:layout_constraintBottom_toTopOf="@id/join_house_button"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintWidth_percent="0.5" />
-
-        <Button
-            android:id="@+id/join_house_button"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginHorizontal="16dp"
-            android:layout_marginBottom="8dp"
-            android:background="@drawable/button_bg"
-            android:padding="5dp"
-            android:text="@string/choose_house_join_existing_house"
-            android:textColor="@color/white"
-            app:layout_constraintBottom_toTopOf="@id/sign_out_btn"
+            app:layout_constraintBottom_toTopOf="@+id/sign_out_btn"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintWidth_percent="0.5" />

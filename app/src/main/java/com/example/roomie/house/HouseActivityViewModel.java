@@ -8,7 +8,6 @@ public class HouseActivityViewModel extends ViewModel {
 
     private House house;
 
-
     public House getHouse() {
         return house;
     }
