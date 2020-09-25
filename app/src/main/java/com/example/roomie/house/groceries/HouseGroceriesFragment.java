@@ -11,6 +11,7 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
+import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -21,6 +22,7 @@ import android.widget.FrameLayout;
 import android.widget.Toast;
 
 import com.example.roomie.FirestoreJob;
+import com.example.roomie.LinearLayoutManagerWithSmoothScroller;
 import com.example.roomie.MovableFloatingActionButton;
 import com.example.roomie.R;
 import com.example.roomie.house.HouseActivityViewModel;
@@ -36,6 +38,7 @@ import java.util.ArrayList;
 public class HouseGroceriesFragment extends Fragment implements GroceryAdapter.OnGroceryListener{
 
     private RecyclerView recyclerView;
+    LinearLayoutManager layoutManager;
     private GroceryAdapter adapter = null;
     private HouseActivityViewModel houseActivityViewModel;
     private HouseGroceriesFragmentViewModel vm;
@@ -85,10 +88,15 @@ public class HouseGroceriesFragment extends Fragment implements GroceryAdapter.O
     }
 
     private void setRecyclerView(View v) {
+        recyclerView = v.findViewById(R.id.groceriesRecyclerView);
+        layoutManager = new LinearLayoutManagerWithSmoothScroller(getContext());
+        recyclerView.setLayoutManager(layoutManager);
+        recyclerView.addItemDecoration(new DividerItemDecoration(getContext(),layoutManager.getOrientation()));
+
+        groceryList = vm.sortGroceries(groceryList);
+        groceryList = vm.addDates(groceryList);
         adapter = new GroceryAdapter(groceryList, HouseGroceriesFragment.this);
-        RecyclerView recyclerView = v.findViewById(R.id.groceriesRecyclerView);
         recyclerView.setAdapter(adapter);
-        recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
     }
 
     private void toggleLoadingOverlay(boolean isVisible) {

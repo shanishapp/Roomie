@@ -9,14 +9,16 @@ public class Grocery {
     private int _size;
     private Date _creationDate;
     private Date _lastUpdateDate;
+    private int _viewType;
 
-    Grocery(){
+    public Grocery(){
 
     }
 
-    Grocery(String name, int size) {
+    public Grocery(String name, int size, int viewType) {
         _name = name;
         _size = size;
+        _viewType = viewType;
         _creationDate = new Date();
         _lastUpdateDate = _creationDate;
     }
@@ -55,5 +57,13 @@ public class Grocery {
 
     public Date get_creationDate(){
         return _creationDate;
+    }
+
+    public int get_viewType() {
+        return _viewType;
+    }
+
+    public void set_viewType(int _viewType) {
+        this._viewType = _viewType;
     }
 }

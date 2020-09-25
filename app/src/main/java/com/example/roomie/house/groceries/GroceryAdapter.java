@@ -5,6 +5,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
@@ -20,6 +21,8 @@ import java.util.List;
 
 public class GroceryAdapter  extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
+    private static final int VIEWTYPE_GROUP = 0;
+    private static final int VIEWTYPE_GROCERY = 1;
     private List<Grocery> _groceryList;
     private OnGroceryListener _onGroceryListener;
 
@@ -33,26 +36,51 @@ public class GroceryAdapter  extends RecyclerView.Adapter<RecyclerView.ViewHolde
     public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         Context context = parent.getContext();
         LayoutInflater inflater = LayoutInflater.from(context);
-        View v = inflater.inflate(R.layout.one_grocery_item, parent, false);
-        return new GroceryAdapter.ViewHolder(v,_onGroceryListener);
+//        View v = inflater.inflate(R.layout.one_grocery_item, parent, false);
+        if(viewType == VIEWTYPE_GROUP){
+            ViewGroup group = (ViewGroup) inflater.inflate(R.layout.group_item,parent,false);
+            GroupViewHolder groupViewHolder = new GroupViewHolder(group);
+            return groupViewHolder;
+        } else if(viewType == VIEWTYPE_GROCERY) {
+            ViewGroup group = (ViewGroup) inflater.inflate(R.layout.one_grocery_item,parent,false);
+            GroceryViewHolder groceryViewHolder = new GroceryViewHolder(group,_onGroceryListener);
+            return groceryViewHolder;
+        }
+        ViewGroup group = (ViewGroup) inflater.inflate(R.layout.group_item,parent,false);
+        GroupViewHolder groupViewHolder = new GroupViewHolder(group);
+        return groupViewHolder;
+    }
+
+    @Override
+    public int getItemViewType(int position) {
+        return _groceryList.get(position).get_viewType();
     }
 
     @Override
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
-        Grocery groceryItem = _groceryList.get(position);
-        GroceryAdapter.ViewHolder viewHolder = (ViewHolder) holder;
-        viewHolder.presetGroceryTextView.setText(groceryItem.get_name());
-        String pattern = "dd/MM/yyyy HH:mm";
-        DateFormat df = new SimpleDateFormat(pattern);
-        ((ViewHolder) holder).creationDateTextView.setText(df.format(groceryItem.get_creationDate()));
-        viewHolder.pickGroceryCheckBox.setCheckedColor(R.color.colorAccent);
-        viewHolder.pickGroceryCheckBox.setOnCheckedChangeListener((checkBox, isChecked) -> {
-            if(isChecked){
-                _onGroceryListener.onGroceryPicked(groceryItem);
-            } else {
-                _onGroceryListener.onGroceryUnPicked(groceryItem);
-            }
-        });
+        if(holder instanceof GroupViewHolder){
+            GroupViewHolder groupViewHolder = (GroupViewHolder) holder;
+            groupViewHolder.groupTitleTextView.setText(_groceryList.get(position).get_name());
+            groupViewHolder.itemView.setOnClickListener(view -> {
+                //TODO
+            });
+        } else if(holder instanceof GroceryViewHolder){
+            Grocery groceryItem = _groceryList.get(position);
+            GroceryViewHolder groceryViewHolder = (GroceryViewHolder) holder;
+            groceryViewHolder.presetGroceryTextView.setText(groceryItem.get_name());
+            String pattern = "dd/MM/yyyy HH:mm";
+            DateFormat df = new SimpleDateFormat(pattern);
+            groceryViewHolder.pickGroceryCheckBox.setCheckedColor(R.color.colorAccent);
+            groceryViewHolder.pickGroceryCheckBox.setOnCheckedChangeListener((checkBox, isChecked) -> {
+                if(isChecked){
+                    _onGroceryListener.onGroceryPicked(groceryItem);
+                } else {
+                    _onGroceryListener.onGroceryUnPicked(groceryItem);
+                }
+            });
+        }
+
+
     }
 
     @Override
@@ -66,18 +94,16 @@ public class GroceryAdapter  extends RecyclerView.Adapter<RecyclerView.ViewHolde
         void onGroceryUnPicked(Grocery grocery);
     }
 
-    public class ViewHolder extends RecyclerView.ViewHolder implements View.OnLongClickListener {
+    public class GroceryViewHolder extends RecyclerView.ViewHolder implements View.OnLongClickListener {
 
         public CustomCheckBox pickGroceryCheckBox;
         public TextView presetGroceryTextView;
-        public TextView creationDateTextView;
         OnGroceryListener onGroceryListener;
 
-        public ViewHolder(View view, OnGroceryListener onGroceryListener){
+        public GroceryViewHolder(View view, OnGroceryListener onGroceryListener){
             super(view);
             pickGroceryCheckBox = view.findViewById(R.id.pickGroceryCheckBox);
             presetGroceryTextView = view.findViewById(R.id.presentGroceryTextView);
-            creationDateTextView = view.findViewById(R.id.creationDateTextView);
             this.onGroceryListener = onGroceryListener;
             view.setOnLongClickListener(this);
         }
@@ -89,4 +115,13 @@ public class GroceryAdapter  extends RecyclerView.Adapter<RecyclerView.ViewHolde
         }
     }
 
+    private class GroupViewHolder extends RecyclerView.ViewHolder{
+
+        TextView groupTitleTextView;
+
+        public GroupViewHolder(@NonNull View itemView) {
+            super(itemView);
+            groupTitleTextView = (TextView) itemView.findViewById(R.id.date_group_title);
+        }
+    }
 }

@@ -1,5 +1,6 @@
 package com.example.roomie.house.groceries;
 
+import androidx.collection.ArraySet;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
@@ -10,7 +11,10 @@ import com.example.roomie.house.groceries.grocery.NewGroceryJob;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 
 import static com.example.roomie.util.FirestoreUtil.GROCERIES_COLLECTION_NAME;
@@ -18,6 +22,9 @@ import static com.example.roomie.util.FirestoreUtil.HOUSES_COLLECTION_NAME;
 
 public class HouseGroceriesFragmentViewModel extends ViewModel {
 
+    private static final int VIEWTYPE_GROUP = 0;
+    private static final int VIEWTYPE_GROCERY = 1;
+    private static ArrayList<String> datesAvailable = new ArrayList<>();
     private FirebaseFirestore db;
     private MutableLiveData<List<Grocery>> groceries;
 
@@ -73,4 +80,43 @@ public class HouseGroceriesFragmentViewModel extends ViewModel {
                 });
         return job;
     }
+
+    public ArrayList<Grocery> sortGroceries(ArrayList<Grocery> groceries){
+        groceries.sort((grocery1, grocery2) -> grocery1.get_creationDate().compareTo(grocery2.get_creationDate()));
+        return groceries;
+    }
+
+    public static ArrayList<Grocery> addDates(ArrayList<Grocery> list) {
+        ArrayList<Grocery> customList = new ArrayList<>();
+        String pattern = "dd/MM/yyyy";
+        DateFormat df = new SimpleDateFormat(pattern);
+        String title = df.format(list.get(0).get_creationDate());
+        Grocery firstPosition = new Grocery(title,1,VIEWTYPE_GROUP);
+        datesAvailable.add(title);
+        customList.add(firstPosition);
+        for(int i=0; i<list.size()-1;i++){
+            Grocery grocery = new Grocery();
+
+            String date1 = df.format(list.get(i).get_creationDate());
+            String date2 = df.format(list.get(i+1).get_creationDate());
+            if (date1.equals(date2)) {
+                list.get(i).set_viewType(VIEWTYPE_GROCERY);
+                customList.add(list.get(i));
+            } else {
+                list.get(i).set_viewType(VIEWTYPE_GROCERY);
+                customList.add(list.get(i));
+                grocery.set_name(date2);
+                grocery.set_viewType(VIEWTYPE_GROUP);
+                datesAvailable.add(date2);
+                customList.add(grocery);
+            }
+        }
+        list.get(list.size()-1).set_viewType(VIEWTYPE_GROCERY);
+        customList.add(list.get(list.size()-1));
+        return customList;
+    }
+
+
+
+
 }

@@ -6,7 +6,6 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:padding="10dp"
-    android:background="@drawable/one_chore_bg"
     android:layout_marginBottom="5dp">
 
     <net.igenius.customcheckbox.CustomCheckBox
@@ -30,14 +29,5 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/pickGroceryCheckBox"
         app:layout_constraintTop_toTopOf="parent" />
-
-    <TextView
-        android:id="@+id/creationDateTextView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textSize="10sp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="@+id/presentGroceryTextView"
-        app:layout_constraintTop_toBottomOf="@+id/presentGroceryTextView" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
