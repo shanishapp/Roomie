@@ -20,7 +20,6 @@ import androidx.navigation.Navigation;
 
 import com.example.roomie.House;
 import com.example.roomie.R;
-import com.example.roomie.Roommate;
 import com.example.roomie.User;
 import com.example.roomie.house.HouseActivityViewModel;
 import com.example.roomie.repositories.GetHouseRoomiesJob;
@@ -128,7 +127,6 @@ public class NewExpenseFragment extends Fragment
         priceEditText = view.findViewById(R.id.expenseCostEditText);
         priceEditText.setDecimals(false);
 
-        //TODO: change/pick currency, maybe in house settings
         String currencySymbol = getString(R.string.currency_sign);
         priceEditText.setCurrency(currencySymbol);
     }
@@ -193,7 +191,7 @@ public class NewExpenseFragment extends Fragment
 
         LiveData<CreateNewExpenseJob> job = newExpenseViewModel.createNewExpense(house, title,
                 description, cost,
-                new Roommate(payerName, payerID), type, date);
+                payerID, payerName, type, date);
 
         job.observe(getViewLifecycleOwner(), CreateNewExpenseJob -> {
             switch (CreateNewExpenseJob.getJobStatus())
@@ -224,7 +222,6 @@ public class NewExpenseFragment extends Fragment
                 case SUCCESS:
                     for (User user : getHouseRoomiesJob.getRoomiesList())
                     {
-                        //TODO: problem with two roommates with same exact name
                         String id = user.getUid();
                         String name = user.getUsername();
                         roommateNamesList.add(name);

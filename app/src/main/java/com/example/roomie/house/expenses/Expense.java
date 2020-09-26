@@ -2,18 +2,16 @@ package com.example.roomie.house.expenses;
 
 import android.graphics.drawable.Drawable;
 
-import com.example.roomie.Roommate;
-
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
 public class Expense
 {
-    private static final String typeProfessionalString = "Professional";
-    private static final String typeGroceryShoppingString = "Grocery Shopping";
-    private static final String typeBillString = "Bill";
-    private static final String typeGeneralString = "General";
+    private static final String TYPE_PROFESSIONAL_STRING = "Professional";
+    private static final String TYPE_GROCERY_SHOPPING_STRING = "Grocery Shopping";
+    private static final String TYPE_BILL_STRING = "Bill";
+    private static final String TYPE_GENERAL_STRING = "General";
 
     private String _id;
     private String _title;
@@ -21,11 +19,11 @@ public class Expense
     private String _description;
     private ExpenseType _type;
     private double _cost;
-    //TODO: maybe only one date needed?
+    //TODO: maybe only one date needed? Maybe none? Maybe display?
     private Date _creationDate;
     private Date _purchaseDate;
     private Drawable receiptImage;
-    private Roommate _payer;
+    private String _payerName;
     private String _payerID;
     private boolean _hasReceipt;
 
@@ -34,13 +32,13 @@ public class Expense
         ExpenseType resultType = null;
         switch (title)
         {
-            case typeProfessionalString:
+            case TYPE_PROFESSIONAL_STRING:
                 resultType = ExpenseType.PROFESSIONAL;
                 break;
-            case typeGroceryShoppingString:
+            case TYPE_GROCERY_SHOPPING_STRING:
                 resultType = ExpenseType.GROCERIES;
                 break;
-            case typeBillString:
+            case TYPE_BILL_STRING:
                 resultType = ExpenseType.BILL;
                 break;
             default:
@@ -51,8 +49,8 @@ public class Expense
 
     public static List<String> getExpenseTypes()
     {
-        String[] arr = {typeBillString, typeGroceryShoppingString, typeProfessionalString,
-                typeGeneralString};
+        String[] arr = {TYPE_BILL_STRING, TYPE_GROCERY_SHOPPING_STRING, TYPE_PROFESSIONAL_STRING,
+                TYPE_GENERAL_STRING};
         return Arrays.asList(arr);
     }
 
@@ -81,7 +79,7 @@ public class Expense
         _isSettled = true;
     }
 
-    public boolean isSettled()
+    public boolean is_isSettled()
     {
         return _isSettled;
     }
@@ -95,9 +93,13 @@ public class Expense
         GENERAL
     }
 
+    public Expense()
+    {
+
+    }
 
     public Expense(String name, String description, double cost, Date purchaseDate,
-                   ExpenseType type, Roommate payer)
+                   ExpenseType type, String payerID, String payerName, boolean isSettled)
     {
         _title = name;
         _description = description;
@@ -105,14 +107,28 @@ public class Expense
         _cost = cost;
         _purchaseDate = purchaseDate;
         _creationDate = new Date();
-        _payer = payer;
-        _payerID = payer.get_userID();
+        _payerID = payerID;
+        _payerName = payerName;
         _isSettled = false;
         boolean hasReceiptImage = false;
+        _isSettled = isSettled;
+
     }
 
-    public Expense()
+
+    public Expense(String name, String description, double cost, Date purchaseDate,
+                   ExpenseType type, String payerID, String payerName)
     {
+        _title = name;
+        _description = description;
+        _type = type;
+        _cost = cost;
+        _purchaseDate = purchaseDate;
+        _creationDate = new Date();
+        _payerID = payerID;
+        _payerName = payerName;
+        _isSettled = false;
+        boolean hasReceiptImage = false;
     }
 
 
@@ -136,10 +152,6 @@ public class Expense
         return _cost;
     }
 
-    public Roommate get_payer()
-    {
-        return _payer;
-    }
 
     public String get_payerID()
     {
@@ -171,9 +183,15 @@ public class Expense
         this._title = _title;
     }
 
-    public void set_payer(Roommate _payer)
+
+    public void set_payerName(String _payerName)
     {
-        this._payer = _payer;
+        this._payerName = _payerName;
+    }
+
+    public String get_payerName()
+    {
+        return _payerName;
     }
 
     public void set_payerID(String _payerID)

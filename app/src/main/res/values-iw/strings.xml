@@ -169,4 +169,5 @@
     <string name="total_house_spending">סך ההוצאות בבית:</string>
     <string name="you_are_owed">חייבים לך</string>
     <string name="you_owe">אתה חייב</string>
+    <string name="no_expenses_made_yet">טרם נוספו הוצאות</string>
 </resources>

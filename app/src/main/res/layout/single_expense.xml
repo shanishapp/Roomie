@@ -31,22 +31,22 @@
     <TextView
         android:id="@+id/expenseTitleHolderView"
         android:layout_width="0dp"
-        android:textSize="15sp"
         android:layout_height="20dp"
         android:layout_marginStart="10dp"
         android:layout_marginTop="10dp"
         android:text="@string/expense_title"
+        android:textSize="15sp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
         android:id="@+id/expenseCostHolderView"
         android:layout_width="0dp"
-        android:textSize="15sp"
         android:layout_height="20dp"
         android:layout_marginStart="10dp"
         android:layout_marginTop="10dp"
         android:text="@string/cost"
+        android:textSize="15sp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/expenseTitleHolderView" />
 
@@ -54,10 +54,28 @@
         android:id="@+id/expensePayerHolderView"
         android:layout_width="0dp"
         android:layout_height="20dp"
-        android:textSize="15sp"
         android:layout_marginStart="10dp"
         android:layout_marginTop="10dp"
         android:text="@string/no_payer_set"
+        android:textSize="15sp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/expenseCostHolderView" />
+
+    <com.airbnb.lottie.LottieAnimationView
+        android:id="@+id/checkMarkAnimation"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="20dp"
+        android:layout_marginEnd="48dp"
+        android:background="@drawable/user_profile_picture_circle_border"
+        android:visibility="invisible"
+        app:layout_constraintEnd_toStartOf="@+id/expenseTypeIcon"
+        app:layout_constraintTop_toBottomOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:lottie_autoPlay="true"
+        app:lottie_fileName="782-check-mark-success.json"
+        app:lottie_loop="false" />
+
+
 </androidx.constraintlayout.widget.ConstraintLayout>
