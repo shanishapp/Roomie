@@ -79,7 +79,7 @@ public class Expense
         _isSettled = true;
     }
 
-    public boolean isSettled()
+    public boolean is_isSettled()
     {
         return _isSettled;
     }
@@ -95,7 +95,24 @@ public class Expense
 
     public Expense()
     {
-        
+
+    }
+
+    public Expense(String name, String description, double cost, Date purchaseDate,
+                   ExpenseType type, String payerID, String payerName, boolean isSettled)
+    {
+        _title = name;
+        _description = description;
+        _type = type;
+        _cost = cost;
+        _purchaseDate = purchaseDate;
+        _creationDate = new Date();
+        _payerID = payerID;
+        _payerName = payerName;
+        _isSettled = false;
+        boolean hasReceiptImage = false;
+        _isSettled = isSettled;
+
     }
 
 

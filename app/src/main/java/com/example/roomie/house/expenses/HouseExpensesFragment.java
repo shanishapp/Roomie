@@ -83,7 +83,6 @@ public class HouseExpensesFragment extends Fragment implements ExpenseAdapter.On
         getRoomateNumber();
         LiveData<AllExpensesJob> job =
                 viewModel.getExpenses(houseActivityViewModel.getHouse().getId());
-        viewModel.getExpenses(houseActivityViewModel.getHouse().getId());
         job.observe(getViewLifecycleOwner(), allExpensesJob -> {
             if (allExpensesJob.getJobStatus() == FirestoreJob.JobStatus.SUCCESS)
             {
@@ -148,30 +147,29 @@ public class HouseExpensesFragment extends Fragment implements ExpenseAdapter.On
         {
             if (view2 != null)
             {
-                viewModel.settleExpenses(houseActivityViewModel.getHouse().getId());
-                LiveData<AllExpensesJob> job =
-                        viewModel.settleExpenses(houseActivityViewModel.getHouse().getId());
-                viewModel.getExpenses(houseActivityViewModel.getHouse().getId());
-                job.observe(getViewLifecycleOwner(), allExpensesJob -> {
-                    if (allExpensesJob.getJobStatus() == FirestoreJob.JobStatus.SUCCESS)
-                    {
-                        expenses = (ArrayList<Expense>) allExpensesJob.getExpenses();
-                        adapter = new ExpenseAdapter(expenses, HouseExpensesFragment.this,
-                                HouseExpensesFragment.this);
-                        recyclerView = view.findViewById(R.id.expensesRecyclerView);
-                        recyclerView.setAdapter(adapter);
-                        recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-                        houseBalanceTextView = view.findViewById(R.id.houseBalanceTextView);
-                        myBalanceTextView = view.findViewById(R.id.myBalanceAmountTextView);
-
-                    }
-                });
                 for (Expense expense : expenses)
                 {
-                    expense.settle();
+                    LiveData<CreateNewExpenseJob> settleJob = viewModel.settleExpense(expense,
+                            houseActivityViewModel.getHouse().getId());
+                    settleJob.observe(getViewLifecycleOwner(), CreateNewExpenseJob -> {
+                        if (CreateNewExpenseJob.getJobStatus() == FirestoreJob.JobStatus.SUCCESS)
+                        {
+                            //TODO: check if this is surplus
+                            LiveData<AllExpensesJob> updateExpensesJob =
+                                    viewModel.getExpenses(houseActivityViewModel.getHouse().getId());
+                            viewModel.getExpenses(houseActivityViewModel.getHouse().getId());
+                            updateExpensesJob.observe(getViewLifecycleOwner(), allExpensesJob -> {
+                                if (allExpensesJob.getJobStatus() == FirestoreJob.JobStatus.SUCCESS)
+                                {
+                                    expenses = (ArrayList<Expense>) allExpensesJob.getExpenses();
+                                }
+                            });
+                        }
+                        adapter.notifyDataSetChanged();
+                        handleBalances();
+                    });
                 }
             }
-
         });
     }
 
@@ -196,7 +194,7 @@ public class HouseExpensesFragment extends Fragment implements ExpenseAdapter.On
         double totalCost = 0;
         for (Expense expense : expenses)
         {
-            if (!expense.isSettled())
+            if (!expense.is_isSettled())
             {
                 totalCost += expense.get_cost();
             }
@@ -210,7 +208,7 @@ public class HouseExpensesFragment extends Fragment implements ExpenseAdapter.On
         double mySpending = 0;
         for (Expense expense : expenses)
         {
-            if (myID.equals(expense.get_payerID()) && !expense.isSettled())
+            if (myID.equals(expense.get_payerID()) && !expense.is_isSettled())
             {
                 mySpending += expense.get_cost();
             }

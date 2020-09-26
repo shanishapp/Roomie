@@ -1,6 +1,7 @@
 package com.example.roomie.house.expenses;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -71,7 +72,7 @@ public class ExpenseAdapter extends RecyclerView.Adapter<ExpenseAdapter.ViewHold
         TextView payerView = holder.payer;
         ImageView receiptIcon = holder.receiptIcon;
         ImageView expenseTypeIcon = holder.expenseTypeIcon;
-        LottieAnimationView checkAnimation = holder.checkAnimation;
+        LottieAnimationView checkMarkAnimation = holder.checkMarkAnimation;
 
         String costString = String.valueOf(expense.get_cost());
         String payerName = expense.get_payerName();
@@ -86,12 +87,14 @@ public class ExpenseAdapter extends RecyclerView.Adapter<ExpenseAdapter.ViewHold
         //TODO: use resource for currency symbol
         costView.setText(costString.concat("₪"));
         payerView.setText(payerName);
-        if (expense.isSettled())
+        if (expense.is_isSettled())
         {
+            //TODO: animate only first time?
             blurUI(titleView, costView, payerView, receiptIcon, expenseTypeIcon);
-            checkAnimation.setVisibility(View.VISIBLE);
-            checkAnimation.animate();
+            checkMarkAnimation.setVisibility(View.VISIBLE);
+            checkMarkAnimation.animate();
         }
+
         receiptIcon.setOnClickListener(new View.OnClickListener()
         {
             @Override
@@ -133,7 +136,7 @@ public class ExpenseAdapter extends RecyclerView.Adapter<ExpenseAdapter.ViewHold
         public TextView payer;
         OnExpenseListener onExpenseListener;
         OnReceiptListener onReceiptListener;
-        public LottieAnimationView checkAnimation;
+        public LottieAnimationView checkMarkAnimation;
 
 
         public ViewHolder(View view, OnExpenseListener onExpenseListener,
@@ -145,7 +148,7 @@ public class ExpenseAdapter extends RecyclerView.Adapter<ExpenseAdapter.ViewHold
             title = view.findViewById(R.id.expenseTitleHolderView);
             cost = view.findViewById(R.id.expenseCostHolderView);
             payer = view.findViewById(R.id.expensePayerHolderView);
-            checkAnimation = view.findViewById(R.id.checkMarkAnimation);
+            checkMarkAnimation = view.findViewById(R.id.checkMarkAnimation);
             this.onExpenseListener = onExpenseListener;
             this.onReceiptListener = onReceiptListener;
 
