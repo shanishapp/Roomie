@@ -6,7 +6,6 @@ import androidx.lifecycle.ViewModel;
 
 import com.example.roomie.FirestoreJob;
 import com.example.roomie.House;
-import com.example.roomie.Roommate;
 import com.google.firebase.firestore.FieldPath;
 import com.google.firebase.firestore.FirebaseFirestore;
 
@@ -26,13 +25,14 @@ public class NewExpenseViewModel extends ViewModel
     }
 
     public LiveData<CreateNewExpenseJob> createNewExpense(House house, String title, String description, double cost,
-                                                          Roommate roommate, Expense.ExpenseType type,
+                                                          String payerID, String payerName,
+                                                          Expense.ExpenseType type,
                                                           Date purchaseDate)
     {
         CreateNewExpenseJob newExpenseJob = new CreateNewExpenseJob(FirestoreJob.JobStatus.IN_PROGRESS);
         MutableLiveData<com.example.roomie.house.expenses.CreateNewExpenseJob> job =
                 new MutableLiveData<>(newExpenseJob);
-        Expense expense = new Expense(title, description, cost, purchaseDate, type, roommate);
+        Expense expense = new Expense(title, description, cost, purchaseDate, type, payerID,payerName);
         db.collection(HOUSES_COLLECTION_NAME).
                 document(house.getId()).
 
@@ -50,7 +50,6 @@ public class NewExpenseViewModel extends ViewModel
                                 {
                                     newExpenseJob.setJobStatus(FirestoreJob.JobStatus.ERROR);
                                     newExpenseJob.setJobErrorCode(FirestoreJob.JobErrorCode.GENERAL);
-
                                     job.setValue(newExpenseJob);
                                     return;
                                 }

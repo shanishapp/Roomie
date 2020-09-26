@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -29,10 +30,10 @@ import java.util.ArrayList;
 
 /**
  * A simple {@link Fragment} subclass.
- * Use the {@link houseExpensesFragment#newInstance} factory method to
+ * Use the {@link HouseExpensesFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class houseExpensesFragment extends Fragment implements ExpenseAdapter.OnExpenseListener,
+public class HouseExpensesFragment extends Fragment implements ExpenseAdapter.OnExpenseListener,
         ExpenseAdapter.OnReceiptListener
 {
     private RecyclerView recyclerView;
@@ -40,14 +41,15 @@ public class houseExpensesFragment extends Fragment implements ExpenseAdapter.On
     private TextView houseBalanceTextView;
     private RecyclerView.Adapter<ExpenseAdapter.ViewHolder> adapter = null;
     private HouseActivityViewModel houseActivityViewModel;
-    private houseExpensesViewModel viewModel;
+    private HouseExpensesViewModel viewModel;
+    private MovableFloatingActionButton addExpenseButton;
+    private Button settleExpensesButton;
     private ArrayList<Expense> expenses;
     private int numberOfRoommates;
-    private MovableFloatingActionButton addExpenseButton;
     private NavController navController;
     private FirebaseAuth auth;
 
-    public houseExpensesFragment()
+    public HouseExpensesFragment()
     {
 
     }
@@ -58,9 +60,9 @@ public class houseExpensesFragment extends Fragment implements ExpenseAdapter.On
      *
      * @return A new instance of fragment houseExpensesFragment.
      */
-    public static houseExpensesFragment newInstance()
+    public static HouseExpensesFragment newInstance()
     {
-        return new houseExpensesFragment();
+        return new HouseExpensesFragment();
     }
 
     @Override
@@ -77,16 +79,17 @@ public class houseExpensesFragment extends Fragment implements ExpenseAdapter.On
         View v = inflater.inflate(R.layout.fragment_house_expenses, container, false);
         houseActivityViewModel =
                 new ViewModelProvider(requireActivity()).get(HouseActivityViewModel.class);
-        viewModel = new ViewModelProvider(this).get(houseExpensesViewModel.class);
+        viewModel = new ViewModelProvider(this).get(HouseExpensesViewModel.class);
         getRoomateNumber();
-        LiveData<allExpensesJob> job =
+        LiveData<AllExpensesJob> job =
                 viewModel.getExpenses(houseActivityViewModel.getHouse().getId());
+        viewModel.getExpenses(houseActivityViewModel.getHouse().getId());
         job.observe(getViewLifecycleOwner(), allExpensesJob -> {
             if (allExpensesJob.getJobStatus() == FirestoreJob.JobStatus.SUCCESS)
             {
                 expenses = (ArrayList<Expense>) allExpensesJob.getExpenses();
-                adapter = new ExpenseAdapter(expenses, houseExpensesFragment.this,
-                        houseExpensesFragment.this);
+                adapter = new ExpenseAdapter(expenses, HouseExpensesFragment.this,
+                        HouseExpensesFragment.this);
                 recyclerView = v.findViewById(R.id.expensesRecyclerView);
                 recyclerView.setAdapter(adapter);
                 recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
@@ -140,6 +143,41 @@ public class houseExpensesFragment extends Fragment implements ExpenseAdapter.On
                 navController.navigate(R.id.action_house_expenses_fragment_dest_to_newExpenseFragment);
             }
         });
+        settleExpensesButton = view.findViewById(R.id.settleUpButton);
+        settleExpensesButton.setOnClickListener(view2 ->
+        {
+            if (view2 != null)
+            {
+                viewModel.settleExpenses(houseActivityViewModel.getHouse().getId());
+                LiveData<AllExpensesJob> job =
+                        viewModel.settleExpenses(houseActivityViewModel.getHouse().getId());
+                viewModel.getExpenses(houseActivityViewModel.getHouse().getId());
+                job.observe(getViewLifecycleOwner(), allExpensesJob -> {
+                    if (allExpensesJob.getJobStatus() == FirestoreJob.JobStatus.SUCCESS)
+                    {
+                        expenses = (ArrayList<Expense>) allExpensesJob.getExpenses();
+                        adapter = new ExpenseAdapter(expenses, HouseExpensesFragment.this,
+                                HouseExpensesFragment.this);
+                        recyclerView = view.findViewById(R.id.expensesRecyclerView);
+                        recyclerView.setAdapter(adapter);
+                        recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+                        houseBalanceTextView = view.findViewById(R.id.houseBalanceTextView);
+                        myBalanceTextView = view.findViewById(R.id.myBalanceAmountTextView);
+
+                    }
+                });
+                for (Expense expense : expenses)
+                {
+                    expense.settle();
+                }
+            }
+
+        });
+    }
+
+    private void settleExpenses()
+    {
+
     }
 
     @Override
@@ -172,7 +210,7 @@ public class houseExpensesFragment extends Fragment implements ExpenseAdapter.On
         double mySpending = 0;
         for (Expense expense : expenses)
         {
-            if (myID.equals(expense.get_payerID()))
+            if (myID.equals(expense.get_payerID()) && !expense.isSettled())
             {
                 mySpending += expense.get_cost();
             }
@@ -201,6 +239,4 @@ public class houseExpensesFragment extends Fragment implements ExpenseAdapter.On
             }
         });
     }
-
-    //TODO: add a view for total debts
 }

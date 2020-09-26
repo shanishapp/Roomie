@@ -10,6 +10,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.airbnb.lottie.LottieAnimationView;
 import com.example.roomie.R;
 
 import java.util.List;
@@ -28,7 +29,6 @@ public class ExpenseAdapter extends RecyclerView.Adapter<ExpenseAdapter.ViewHold
         _expenses = expenses;
         _myExpenseListener = onExpenseListener;
         _myReceiptListener = onReceiptListener;
-
     }
 
     @NonNull
@@ -38,7 +38,6 @@ public class ExpenseAdapter extends RecyclerView.Adapter<ExpenseAdapter.ViewHold
         Context context = parent.getContext();
         LayoutInflater inflater = LayoutInflater.from(context);
         View expenseView = inflater.inflate(R.layout.single_expense, parent, false);
-
         return new ViewHolder(expenseView, _myExpenseListener, _myReceiptListener);
     }
 
@@ -71,9 +70,11 @@ public class ExpenseAdapter extends RecyclerView.Adapter<ExpenseAdapter.ViewHold
         TextView costView = holder.cost;
         TextView payerView = holder.payer;
         ImageView receiptIcon = holder.receiptIcon;
+        ImageView expenseTypeIcon = holder.expenseTypeIcon;
+        LottieAnimationView checkAnimation = holder.checkAnimation;
 
         String costString = String.valueOf(expense.get_cost());
-        String payerName = expense.get_payer().get_name();
+        String payerName = expense.get_payerName();
         if (expense.get_type() == Expense.ExpenseType.GENERAL)
         {
             titleView.setText(expense.get_title());
@@ -81,10 +82,16 @@ public class ExpenseAdapter extends RecyclerView.Adapter<ExpenseAdapter.ViewHold
         {
             titleView.setText(expense.get_description());
         }
-        setExpenseIcon(holder.expenseTypeIcon, expense.get_type());
+        setExpenseIcon(expenseTypeIcon, expense.get_type());
         //TODO: use resource for currency symbol
-        costView.setText(costString.concat("$"));
+        costView.setText(costString.concat("₪"));
         payerView.setText(payerName);
+        if (expense.isSettled())
+        {
+            blurUI(titleView, costView, payerView, receiptIcon, expenseTypeIcon);
+            checkAnimation.setVisibility(View.VISIBLE);
+            checkAnimation.animate();
+        }
         receiptIcon.setOnClickListener(new View.OnClickListener()
         {
             @Override
@@ -99,6 +106,16 @@ public class ExpenseAdapter extends RecyclerView.Adapter<ExpenseAdapter.ViewHold
                 }
             }
         });
+    }
+
+    private void blurUI(TextView titleView, TextView costView, TextView payerView,
+                        ImageView receiptIcon, ImageView expenseTypeIcon)
+    {
+        titleView.setAlpha((float) 0.5);
+        costView.setAlpha((float) 0.5);
+        payerView.setAlpha((float) 0.5);
+        receiptIcon.setAlpha((float) 0.5);
+        expenseTypeIcon.setAlpha((float) 0.5);
     }
 
     @Override
@@ -116,6 +133,7 @@ public class ExpenseAdapter extends RecyclerView.Adapter<ExpenseAdapter.ViewHold
         public TextView payer;
         OnExpenseListener onExpenseListener;
         OnReceiptListener onReceiptListener;
+        public LottieAnimationView checkAnimation;
 
 
         public ViewHolder(View view, OnExpenseListener onExpenseListener,
@@ -127,8 +145,10 @@ public class ExpenseAdapter extends RecyclerView.Adapter<ExpenseAdapter.ViewHold
             title = view.findViewById(R.id.expenseTitleHolderView);
             cost = view.findViewById(R.id.expenseCostHolderView);
             payer = view.findViewById(R.id.expensePayerHolderView);
+            checkAnimation = view.findViewById(R.id.checkMarkAnimation);
             this.onExpenseListener = onExpenseListener;
             this.onReceiptListener = onReceiptListener;
+
             view.setOnClickListener(this);
         }
 

@@ -10,6 +10,7 @@
     <color name="buttonColorDark">#007695</color>
     <color name="black">#000000</color>
     <color name="dark_transpart">#51000000</color>
+    <color name="settle_button_color">#FF4D4D</color>
     <color name="red">#E92B1D</color>
     <color name="green">#03FF56</color>
     <color name="spending_bg_color">#1C8B9A</color>

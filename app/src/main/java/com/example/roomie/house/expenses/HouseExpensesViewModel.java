@@ -3,34 +3,29 @@ package com.example.roomie.house.expenses;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
-
 import com.example.roomie.FirestoreJob;
-import com.example.roomie.Roommate;
-import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
-
 import static com.example.roomie.util.FirestoreUtil.EXPENSES_COLLECTION_NAME;
 import static com.example.roomie.util.FirestoreUtil.HOUSES_COLLECTION_NAME;
 
-public class houseExpensesViewModel extends ViewModel implements ExpenseAdapter.OnExpenseListener,
+public class HouseExpensesViewModel extends ViewModel implements ExpenseAdapter.OnExpenseListener,
         ExpenseAdapter.OnReceiptListener
 {
     private FirebaseFirestore db;
     private MutableLiveData<List<Expense>> expenses;
 //    public ExpenseAdapter expenseAdapter = null;
 
-    public houseExpensesViewModel()
+    public HouseExpensesViewModel()
     {
         db = FirebaseFirestore.getInstance();
         expenses = new MutableLiveData<>(new ArrayList<>());
     }
 
-    public LiveData<CreateNewExpenseJob> setPayer(String expenseId, Roommate payer, String houseId)
+    public LiveData<CreateNewExpenseJob> setPayer(String expenseId, String payerID, String payerName, String houseId)
     {
         CreateNewExpenseJob expensesJob = new CreateNewExpenseJob(FirestoreJob.JobStatus.IN_PROGRESS);
         MutableLiveData<CreateNewExpenseJob> job = new MutableLiveData<>(expensesJob);
@@ -48,12 +43,16 @@ public class houseExpensesViewModel extends ViewModel implements ExpenseAdapter.
                             List<Expense> expenseList = expenses.getValue();
                             assert expenseList != null;
                             expenseList.remove(expense);
-                            expense.set_payer(payer);
+                            expense.set_payerID(payerID);
+                            expense.set_payerName(payerName);
                             expenseList.add(expense);
                             expenses.setValue(expenseList);
                             db.collection(HOUSES_COLLECTION_NAME)
                                     .document(houseId).collection(EXPENSES_COLLECTION_NAME)
-                                    .document(expenseId).update("payer", payer);
+                                    .document(expenseId).update("_payerID", payerID);
+                            db.collection(HOUSES_COLLECTION_NAME)
+                                    .document(houseId).collection(EXPENSES_COLLECTION_NAME)
+                                    .document(expenseId).update("_payerName", payerID);
 
                             expensesJob.setExpense(task.getResult().toObject(Expense.class));
                             expensesJob.setJobStatus(FirestoreJob.JobStatus.SUCCESS);
@@ -95,10 +94,10 @@ public class houseExpensesViewModel extends ViewModel implements ExpenseAdapter.
         return job;
     }
 
-    public LiveData<allExpensesJob> settleExpenses(String houseId)
+    public LiveData<AllExpensesJob> settleExpenses(String houseId)
     {
-        allExpensesJob expensesJob = new allExpensesJob(FirestoreJob.JobStatus.IN_PROGRESS);
-        MutableLiveData<allExpensesJob> job = new MutableLiveData<>(expensesJob);
+        AllExpensesJob expensesJob = new AllExpensesJob(FirestoreJob.JobStatus.IN_PROGRESS);
+        MutableLiveData<AllExpensesJob> job = new MutableLiveData<>(expensesJob);
 
         db.collection(HOUSES_COLLECTION_NAME)
                 .document(houseId).collection(EXPENSES_COLLECTION_NAME)
@@ -118,7 +117,7 @@ public class houseExpensesViewModel extends ViewModel implements ExpenseAdapter.
                     db.collection(HOUSES_COLLECTION_NAME)
                             .document(houseId)
                             .collection(EXPENSES_COLLECTION_NAME)
-                            .document(expensID).update("settled", true);
+                            .document(expensID).update("_isSettled", true);
                 }
                 expenses.setValue(expenseList);
                 expensesJob.setExpenses(expenseList);
@@ -134,10 +133,10 @@ public class houseExpensesViewModel extends ViewModel implements ExpenseAdapter.
         return job;
     }
 
-    public LiveData<allExpensesJob> getExpenses(String houseId)
+    public LiveData<AllExpensesJob> getExpenses(String houseId)
     {
-        allExpensesJob expensesJob = new allExpensesJob(FirestoreJob.JobStatus.IN_PROGRESS);
-        MutableLiveData<allExpensesJob> job = new MutableLiveData<>(expensesJob);
+        AllExpensesJob expensesJob = new AllExpensesJob(FirestoreJob.JobStatus.IN_PROGRESS);
+        MutableLiveData<AllExpensesJob> job = new MutableLiveData<>(expensesJob);
 
         db.collection(HOUSES_COLLECTION_NAME)
                 .document(houseId).collection(EXPENSES_COLLECTION_NAME)

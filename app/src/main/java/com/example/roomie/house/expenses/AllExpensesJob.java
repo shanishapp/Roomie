@@ -4,20 +4,20 @@ import com.example.roomie.FirestoreJob;
 
 import java.util.List;
 
-public class allExpensesJob extends FirestoreJob
+public class AllExpensesJob extends FirestoreJob
 {
     private List<Expense> expenses;
 
-    public allExpensesJob()
+    public AllExpensesJob()
     {
         super();
     }
 
-    public allExpensesJob(FirestoreJob.JobStatus jobStatus)
+    public AllExpensesJob(FirestoreJob.JobStatus jobStatus)
     {
         super(jobStatus);
     }
-    public allExpensesJob(FirestoreJob.JobStatus jobStatus,FirestoreJob.JobErrorCode errorCode)
+    public AllExpensesJob(FirestoreJob.JobStatus jobStatus, FirestoreJob.JobErrorCode errorCode)
     {
         super(jobStatus,errorCode);
     }

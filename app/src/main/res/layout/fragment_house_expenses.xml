@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".house.expenses.houseExpensesFragment">
+    tools:context=".house.expenses.HouseExpensesFragment">
 
     <!--    TODO fix fragment being overridden by bottom bar-->
 
@@ -19,21 +19,38 @@
         android:id="@+id/expensesFab"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_alignBottom="@id/settleUpButton"
         android:layout_alignParentEnd="true"
         android:layout_alignParentBottom="true"
         android:layout_marginEnd="16dp"
-        android:layout_marginBottom="20dp"
+        android:layout_marginBottom="23dp"
         android:src="@drawable/ic_action_add"
         app:backgroundTint="@color/buttonColor" />
 
     <include
+        android:id="@+id/balanceBubble"
         layout="@layout/balance_bubble"
-        android:layout_width="match_parent"
-        android:layout_height="70dp"
-        android:layout_marginStart="15dp"
-        android:layout_alignBottom="@id/expensesFab"
+        android:layout_width="203dp"
+        android:layout_height="76dp"
+        android:layout_centerVertical="true"
         android:layout_alignParentBottom="true"
-        android:layout_marginEnd="15dp"
-        android:layout_marginBottom="12dp"
+        android:layout_marginStart="15dp"
+        android:layout_marginEnd="27dp"
+        android:layout_marginBottom="13dp"
         android:layout_toStartOf="@+id/expensesFab" />
+
+    <Button
+        android:id="@+id/settleUpButton"
+        android:layout_width="75dp"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@id/balanceBubble"
+        android:layout_marginStart="10dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginBottom="11dp"
+        android:layout_toStartOf="@+id/balanceBubble"
+        android:background="@drawable/button_bg_settle"
+        android:text="Settle \n Up!"
+        android:textColor="@color/white" />
+
+
 </RelativeLayout>

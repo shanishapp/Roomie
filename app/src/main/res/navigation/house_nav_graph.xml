@@ -74,7 +74,7 @@
     </fragment>
     <fragment
         android:id="@+id/house_expenses_fragment_dest"
-        android:name="com.example.roomie.house.expenses.houseExpensesFragment"
+        android:name="com.example.roomie.house.expenses.HouseExpensesFragment"
         android:label="@string/house_expenses_fragment_title"
         tools:layout="@layout/fragment_house_expenses" >
         <action
