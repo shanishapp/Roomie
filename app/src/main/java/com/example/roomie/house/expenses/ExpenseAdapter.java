@@ -90,7 +90,7 @@ public class ExpenseAdapter extends RecyclerView.Adapter<ExpenseAdapter.ViewHold
         payerView.setText(payerName);
         if (expense.is_isSettled())
         {
-            //TODO: animate only first time?
+            //TODO: animate only first time
             blurUI(titleView, costView, payerView, receiptIcon, expenseTypeIcon);
             checkMarkAnimation.setVisibility(View.VISIBLE);
             checkMarkAnimation.animate();
