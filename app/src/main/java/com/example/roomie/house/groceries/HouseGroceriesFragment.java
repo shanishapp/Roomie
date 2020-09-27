@@ -24,13 +24,13 @@ import com.example.roomie.FirestoreJob;
 import com.example.roomie.LinearLayoutManagerWithSmoothScroller;
 import com.example.roomie.MovableFloatingActionButton;
 import com.example.roomie.R;
-import com.example.roomie.Roommate;
 import com.example.roomie.house.HouseActivityViewModel;
 import com.example.roomie.house.expenses.Expense;
 import com.example.roomie.house.expenses.NewExpenseViewModel;
 import com.example.roomie.house.groceries.grocery.Grocery;
 import com.example.roomie.house.groceries.grocery.NewGroceryJob;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 import net.igenius.customcheckbox.CustomCheckBox;
@@ -58,7 +58,7 @@ public class HouseGroceriesFragment extends Fragment implements GroceryAdapter.O
     private NavController navController;
     private FrameLayout loadingOverlay;
     private ArrayList<Grocery> pickedGroceries;
-    private Roommate currentRoommate;
+    private FirebaseUser user;
 
     public HouseGroceriesFragment() {
         // Required empty public constructor
@@ -77,8 +77,7 @@ public class HouseGroceriesFragment extends Fragment implements GroceryAdapter.O
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-
+        user = FirebaseAuth.getInstance().getCurrentUser();
     }
 
     @Override
@@ -194,12 +193,14 @@ public class HouseGroceriesFragment extends Fragment implements GroceryAdapter.O
                             }
                             NewExpenseViewModel expenseViewModel =  new ViewModelProvider(requireActivity()).get(NewExpenseViewModel.class);
                             expenseViewModel.createNewExpense(houseActivityViewModel.getHouse(),
-                                    "groceries",
-                                    description.toString(),
-                                    0,new Roommate("Shani Shapp","BOUN3j9kEOOY394DQfvyu6zO8iy1"),
-                                    Expense.ExpenseType.GROCERIES,new Date());
+                                    getString(R.string.house_bottom_menu_groceries),description.toString(),
+                                    0,user.getUid(),"Shani Shapp", Expense.ExpenseType.GROCERIES,new Date());
+                            for(Grocery grocery: pickedGroceries){
+                                vm.deleteGroceryForever(grocery,houseActivityViewModel.getHouse().getId());
+                                groceryList.remove(grocery);
+                            }
                             pickedGroceries.clear();
-
+                            adapter.notifyDataSetChanged();
                         })
 
                         // A null listener allows the button to dismiss the dialog and take no further action.
