@@ -18,7 +18,8 @@ import static com.example.roomie.util.FirestoreUtil.HOUSES_COLLECTION_NAME;
 
 public class NewGroceryFragmentViewModel extends ViewModel {
 
-        FirebaseFirestore db;
+    private static final int VIEWTYPE_GROCERY = 1;
+    FirebaseFirestore db;
 
         public NewGroceryFragmentViewModel(){
             db = FirebaseFirestore.getInstance();
@@ -28,7 +29,7 @@ public class NewGroceryFragmentViewModel extends ViewModel {
             NewGroceryJob newGroceryJob = new NewGroceryJob(FirestoreJob.JobStatus.IN_PROGRESS);
             MutableLiveData<NewGroceryJob> job = new MutableLiveData<>(newGroceryJob);
 
-            Grocery grocery = new Grocery(name,size);
+            Grocery grocery = new Grocery(name,size,VIEWTYPE_GROCERY);
 
             db.collection(HOUSES_COLLECTION_NAME)
                     .document(house.getId())

@@ -2,6 +2,7 @@ package com.example.roomie.house.chores;
 
 import android.content.Context;
 import android.graphics.Paint;
+import android.net.Uri;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,6 +15,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 
+import com.airbnb.lottie.LottieAnimationView;
 import com.example.roomie.R;
 import com.example.roomie.house.chores.chore.Chore;
 import com.example.roomie.repositories.HouseRepository;
@@ -25,8 +27,10 @@ import com.squareup.picasso.Picasso;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 public class ChoreAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
@@ -85,7 +89,6 @@ public class ChoreAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
             String pattern = "dd/MM/yyyy HH:mm";
             DateFormat df = new SimpleDateFormat(pattern);
             dueDateView.setText(df.format(choreItem.get_dueDate()));
-            assigneeView.setText(choreItem.get_assignee());
             if(choreItem.is_choreDone()){
                 titleView.setPaintFlags(titleView.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
                 dueDateView.setPaintFlags(dueDateView.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
@@ -96,26 +99,66 @@ public class ChoreAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
                 assigneeView.setPaintFlags(assigneeView.getPaintFlags() & ~Paint.STRIKE_THRU_TEXT_FLAG);
             }
 
-
-            if (choreItem.get_assignee() == null) {
+            String assignee = choreItem.get_assignee();
+            if (assignee == null || assignee.equals("")) {
+                assigneeView.setText(R.string.currently_no_assignee);
                 holder1.locked.setVisibility(View.INVISIBLE);
                 holder1.unlocked.setVisibility(View.VISIBLE);
             } else {
+                assigneeView.setText(assignee);
                 setAssigneeImage(holder1.profile,choreItem.get_assignee());
                 holder1.locked.setVisibility(View.VISIBLE);
                 holder1.unlocked.setVisibility(View.INVISIBLE);
             }
+
+            long daysLeft = getDifferenceDays(new Date(),choreItem.get_dueDate());
+            holder1.daysLeft.setText(String.valueOf((int)daysLeft));
+            if(daysLeft > 99 || daysLeft< -9){
+                holder1.hoursLeft.setText("-");
+                holder1.daysLeft.setText("-");
+            } else {
+                if (daysLeft > 3 || daysLeft < 0) {
+                    holder1.hoursLeft.setText("-");
+                } else {
+                    long hoursLeft = getDifferenceHours(new Date(), choreItem.get_dueDate());
+                    holder1.hoursLeft.setText(String.valueOf((int) hoursLeft));
+                }
+            }
+
         } else {
             MenuViewHolder holder1 = (MenuViewHolder) holder;
             holder1.editLayout.setOnClickListener(view -> _mOnChoreListener.onEditClick(position));
             holder1.deleteLayout.setOnClickListener(view -> _mOnChoreListener.onDeleteClick(position));
+            TextView textView = holder1.markAsDoneLayout.findViewById(R.id.markAsDoneTextView);
+            LottieAnimationView animationView = holder1.markAsDoneLayout.findViewById(R.id.lottieDoneAnimation);
+            if(choreItem.is_choreDone()) {
+                textView.setText(R.string.markAsUnDone);
+                animationView.setAnimation("28045-dislike.json");
+
+            } else {
+                textView.setText(R.string.markAsDone);
+                animationView.setAnimation("28044-like.json");
+            }
+
             holder1.markAsDoneLayout.setOnClickListener(view -> _mOnChoreListener.onMarkAsDoneClick(position));
         }
     }
 
+    private static long getDifferenceDays(Date d1, Date d2) {
+        long diff = d2.getTime() - d1.getTime();
+        return TimeUnit.DAYS.convert(diff, TimeUnit.MILLISECONDS);
+    }
+
+    private static long getDifferenceHours(Date d1, Date d2) {
+        long diff = d2.getTime() - d1.getTime();
+        return TimeUnit.HOURS.convert(diff, TimeUnit.MILLISECONDS);
+    }
+
     private void setAssigneeImage(ImageView profile, String assignee) {
         if(_rommiesNameToImages.containsKey(assignee) && _rommiesNameToImages.get(assignee) != null && !_rommiesNameToImages.get(assignee).equals("")) {
-            Picasso.get().load(_rommiesNameToImages.get(assignee)).into(profile);
+            Picasso.get().setLoggingEnabled(true);
+            Uri profilePictureUri = Uri.parse(_rommiesNameToImages.get(assignee));
+            Picasso.get().load(profilePictureUri).resize(60, 60).centerCrop().into(profile);
         }
     }
 
@@ -132,6 +175,8 @@ public class ChoreAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
         public TextView title;
         public TextView dueDate;
         public TextView assignee;
+        public TextView daysLeft;
+        public TextView hoursLeft;
         OnChoreListener onChoreListener;
 
         public ViewHolder(View view, OnChoreListener onChoreListener){
@@ -142,6 +187,8 @@ public class ChoreAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
             dueDate = view.findViewById(R.id.choreDueDateHolderView);
             assignee = view.findViewById(R.id.choreAssigneeHolderView);
             profile = view.findViewById(R.id.assigneeImageView);
+            daysLeft = view.findViewById(R.id.daysLeftTextView);
+            hoursLeft = view.findViewById(R.id.hoursLeftTextView);
             this.onChoreListener = onChoreListener;
             view.setOnClickListener(this);
         }
@@ -178,7 +225,7 @@ public class ChoreAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
             _choreList.get(i).setShowMenu(false);
         }
         _choreList.get(position).setShowMenu(true);
-        notifyDataSetChanged();// TODO is this working ?
+        notifyDataSetChanged();
     }
 
     public boolean isMenuShown() {

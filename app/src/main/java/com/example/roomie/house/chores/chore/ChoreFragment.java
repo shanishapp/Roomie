@@ -10,10 +10,13 @@ import androidx.annotation.Nullable;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.LiveData;
+import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -24,9 +27,11 @@ import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.roomie.FirestoreJob;
 import com.example.roomie.House;
 import com.example.roomie.R;
 import com.example.roomie.User;
+import com.example.roomie.house.HouseActivity;
 import com.example.roomie.house.HouseActivityViewModel;
 import com.example.roomie.house.chores.HouseChoresFragmentViewModel;
 import com.example.roomie.repositories.GetHouseRoomiesJob;
@@ -45,12 +50,13 @@ import java.util.ArrayList;
  * Use the {@link ChoreFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class ChoreFragment extends Fragment {
+public class ChoreFragment extends Fragment implements HouseActivity.IOnBackPressed {
 
     private HouseChoresFragmentViewModel choreFragmentViewModel;
     private TextView presentDateTextView;
     private TextView presentAssigneeTextView;
     private TextView presentTitleTextView;
+    private TextView presetContentTextView;
     private HouseActivityViewModel houseActivityViewModel;
     private House house;
     private ImageButton editTitleBtn;
@@ -63,8 +69,10 @@ public class ChoreFragment extends Fragment {
     private String title;
     private String dueDate;
     private String assignee;
+    private String content;
     private FrameLayout loadingOverlay;
     private PowerSpinnerView assigneeSpinner;
+    private ImageButton editContentBtn;
 
 
     public ChoreFragment() {
@@ -104,84 +112,74 @@ public class ChoreFragment extends Fragment {
         loadRoommies(view);
     }
 
-    private void setButtons() {
-        editTitleBtn.setOnClickListener(view -> {
-            AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
-            AlertDialog alertDialog = builder.create();
-            final View customLayout = getLayoutInflater().inflate(R.layout.dialog_change_title,null);
-            Button changeBtn = customLayout.findViewById(R.id.changeTitleBtn);
-            PowerSpinnerView titleSpinner = customLayout.findViewById(R.id.newTitleSpinner);
-            EditText editText = customLayout.findViewById(R.id.differentNewTitleEditText);
-            setTitleSpinner(titleSpinner,editText);
-            alertDialog.setView(customLayout);
-            changeBtn.setOnClickListener((v) -> {
-                if (title == null){
-                    TextView errorText = (TextView)titleSpinner;
-                    errorText.setError("");
-                    errorText.setText(R.string.no_title_error_msg);//changes the selected item text to this
-                    return; //TODO error massage
-                } else if (title != null && title.equals(getString(R.string.other))) {
-                    String diffT = editText.getText().toString();
-                    if(! diffT.equals("")) {
-                        title = diffT;
+
+    // content initialization
+    private void toggleLoadingOverlay(boolean isVisible) {
+        if (isVisible) {
+            loadingOverlay.setVisibility(View.VISIBLE);
+            editAssigneeBtn.setEnabled(false);
+        } else {
+            loadingOverlay.setVisibility(View.GONE);
+            editAssigneeBtn.setEnabled(true);
+        }
+    }
+
+    private void initViews(View view) {
+        houseActivityViewModel = new ViewModelProvider(requireActivity()).get(HouseActivityViewModel.class);
+        house = houseActivityViewModel.getHouse();
+        navController = Navigation.findNavController(view);
+        choreId = getArguments().getString("choreId","");
+        title = getArguments().getString("choreTitle","");
+        dueDate = getArguments().getString("choreDueDate","1111");
+        assignee = getArguments().getString("choreAssignee","");
+        content = getArguments().getString("choreContent","");
+
+        editTitleBtn = view.findViewById(R.id.editTitleBtn);
+        editAssigneeBtn = view.findViewById(R.id.editAssigneeBtn);
+        editDueDateBtn= view.findViewById(R.id.editDueDateBtn);
+        editContentBtn = view.findViewById(R.id.editContentBtn);
+
+        presentDateTextView = view.findViewById(R.id.presentDateTextView);
+        presentAssigneeTextView = view.findViewById(R.id.presentAssigneeTextView);
+        presentTitleTextView = view.findViewById(R.id.presentTitleTextView);
+        presetContentTextView = view.findViewById(R.id.presentContentTextView);
+        presentDateTextView.setText(dueDate);
+        presentAssigneeTextView.setText(assignee);
+        presentTitleTextView.setText(title);
+        presetContentTextView.setText(content);
+        roommatesList = new ArrayList<>();
+        loadingOverlay = view.findViewById(R.id.chore_loading_overlay);
+
+    }
+
+    private void loadRoommies(View view) {
+        LiveData<GetHouseRoomiesJob> job = HouseRepository.getInstance().getHouseRoomies(house.getId());
+        job.observe(getViewLifecycleOwner(), getHouseRoomiesJob -> {
+            switch (getHouseRoomiesJob.getJobStatus()){
+                case SUCCESS:
+                    for (User user: getHouseRoomiesJob.getRoomiesList()){
+                        roommatesList.add(user.getUsername());
                     }
-                }
-
-                LiveData<newChoreJob> job = choreFragmentViewModel.setTitle(choreId, title, house.getId()); //TODO livedata
-
-                job.observe(getViewLifecycleOwner(), createNewChoreJob -> {
-                    switch (createNewChoreJob.getJobStatus()) {
-                        case IN_PROGRESS:
-                            //createChoreButton.setEnabled(false);
-                            break;
-                        case SUCCESS:
-                            //navController.navigate(R.id.action_newChoreFragment_to_house_chores_fragment_dest);
-                            presentTitleTextView.setText(ChoreFragment.this.title);
-                            break;
-                        case ERROR:
-                            //createChoreButton.setEnabled(true);
-                            Toast.makeText(getContext(), getString(R.string.create_new_item_err_msg),
-                                    Toast.LENGTH_LONG).show();
-                            break;
-                        default:
-                    }
-                });
-                alertDialog.cancel();
-            });
-            alertDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-
-            alertDialog.show();
+                    editAssigneeBtn.setEnabled(true);
+                    toggleLoadingOverlay(false);
+            }
         });
-        editAssigneeBtn.setOnClickListener(view -> {
-            AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
-            AlertDialog alertDialog = builder.create();
-            final View customLayout = getLayoutInflater().inflate(R.layout.dialog_change_assignee,null);
-            Button changeBtn = customLayout.findViewById(R.id.changeAssigneeBtn);
-            assigneeSpinner = customLayout.findViewById(R.id.newAssigneeSpinner);
-            setAssigneeSpinner(assigneeSpinner);
-            alertDialog.setView(customLayout);
-            changeBtn.setOnClickListener((v) -> {
-                choreFragmentViewModel.setAssignee(choreId,ChoreFragment.this.assignee,house.getId());
-                presentAssigneeTextView.setText(ChoreFragment.this.assignee);
-                alertDialog.cancel();
+    }
 
-            });
-            alertDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+    private void setDescriptionEditText(TextView textView, EditText editText) {
+        TextWatcher mTextEditorWatcher = new TextWatcher() {
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            }
 
-            alertDialog.show();
-        });
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                //This sets a textview to the current length
+                textView.setText(s.length() +"/100");
+            }
 
-        editDueDateBtn.setOnClickListener(view -> new SingleDateAndTimePickerDialog.Builder(getContext())
-                .curved()
-                .title("Pick a Date")
-                .mainColor(ContextCompat.getColor(getContext(), R.color.buttonColor))
-                .listener(date -> {
-                    String pattern = "dd/MM/yyyy HH:mm";
-                    DateFormat df = new SimpleDateFormat(pattern);
-                    ChoreFragment.this.dueDate = df.format(date);
-                    choreFragmentViewModel.setDueDate(choreId,ChoreFragment.this.dueDate,house.getId());
-                    presentDateTextView.setText(ChoreFragment.this.dueDate);
-                }).display());
+            public void afterTextChanged(Editable s) {
+            }
+        };
+        editText.addTextChangedListener(mTextEditorWatcher);
     }
 
     private void setAssigneeSpinner(PowerSpinnerView assigneeSpinner) {
@@ -199,7 +197,7 @@ public class ChoreFragment extends Fragment {
             titleSpinner.setError(null);
             title = s;
             if (s.equals(getString(R.string.other))) {
-                 differentTitleEditText.setVisibility(View.VISIBLE);
+                differentTitleEditText.setVisibility(View.VISIBLE);
             } else {
                 differentTitleEditText.setVisibility(View.GONE);
             }
@@ -210,51 +208,135 @@ public class ChoreFragment extends Fragment {
 
     }
 
-    private void initViews(View view) {
-        houseActivityViewModel = new ViewModelProvider(requireActivity()).get(HouseActivityViewModel.class);
-        house = houseActivityViewModel.getHouse();
-        navController = Navigation.findNavController(view);
-        choreId = getArguments().getString("choreId","");
-        title = getArguments().getString("choreTitle","");
-        dueDate = getArguments().getString("choreDueDate","1111");
-        assignee = getArguments().getString("choreAssignee","");
-
-        editTitleBtn = view.findViewById(R.id.editTitleBtn);
-        editAssigneeBtn = view.findViewById(R.id.editAssigneeBtn);
-        editDueDateBtn= view.findViewById(R.id.editDueDateBtn);
-
-        presentDateTextView = view.findViewById(R.id.presentDateTextView);
-        presentAssigneeTextView = view.findViewById(R.id.presentAssigneeTextView);
-        presentTitleTextView = view.findViewById(R.id.presentTitleTextView);
-        presentDateTextView.setText(dueDate);
-        presentAssigneeTextView.setText(assignee);
-        presentTitleTextView.setText(title);
-        roommatesList = new ArrayList<>();
-        loadingOverlay = view.findViewById(R.id.chore_loading_overlay);
-
+    //buttons initialization
+    private void setButtons() {
+        editTitleBtn.setOnClickListener(view -> editTitleButtonListener());
+        editAssigneeBtn.setOnClickListener(view -> editAssigneeButtonListener());
+        editDueDateBtn.setOnClickListener(view -> editDueDateButtonListener());
+        editContentBtn.setOnClickListener(view -> editContentButtonListener());
     }
 
-    private void toggleLoadingOverlay(boolean isVisible) {
-        if (isVisible) {
-            loadingOverlay.setVisibility(View.VISIBLE);
-            editAssigneeBtn.setEnabled(false);
-        } else {
-            loadingOverlay.setVisibility(View.GONE);
-            editAssigneeBtn.setEnabled(true);
-        }
-    }
+    private void editContentButtonListener() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+        AlertDialog alertDialog = builder.create();
+        View customLayout = getLayoutInflater().inflate(R.layout.dialog_change_content,null);
+        Button changeBtn = customLayout.findViewById(R.id.editChoreContentBtn);
+        EditText contentEditText = customLayout.findViewById(R.id.editTextChoreDescription);
+        TextView contentLeftTextView = customLayout.findViewById(R.id.textViewChoreDescriptionLettersLeft);
+        setDescriptionEditText(contentLeftTextView,contentEditText);
+        contentEditText.setText(content);
+        alertDialog.setView(customLayout);
+        changeBtn.setOnClickListener((v) -> {
+            content = contentEditText.getText().toString();
+            choreFragmentViewModel.setContent(choreId, content, house.getId());
+            presetContentTextView.setText(content);
+            alertDialog.cancel();
 
-    private void loadRoommies(View view) {
-        LiveData<GetHouseRoomiesJob> job = HouseRepository.getInstance().getHouseRoomies(house.getId());
-        job.observe(getViewLifecycleOwner(), getHouseRoomiesJob -> {
-            switch (getHouseRoomiesJob.getJobStatus()){
-                case SUCCESS:
-                    for (User user: getHouseRoomiesJob.getRoomiesList()){
-                        roommatesList.add(user.getUsername());
-                    }
-                    editAssigneeBtn.setEnabled(true);
-                    toggleLoadingOverlay(false);
-            }
         });
+        alertDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        alertDialog.show();
+    }
+
+    private void editDueDateButtonListener() {
+        new SingleDateAndTimePickerDialog.Builder(getContext())
+                .curved()
+                .title("Pick a Date")
+                .mainColor(ContextCompat.getColor(getContext(), R.color.buttonColor))
+                .listener(date -> {
+                    String pattern = "dd/MM/yyyy HH:mm";
+                    DateFormat df = new SimpleDateFormat(pattern);
+                    ChoreFragment.this.dueDate = df.format(date);
+                    choreFragmentViewModel.setDueDate(choreId,ChoreFragment.this.dueDate,house.getId());
+                    presentDateTextView.setText(ChoreFragment.this.dueDate);
+                }).display();
+    }
+
+    private void editAssigneeButtonListener() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+        AlertDialog alertDialog = builder.create();
+        final View customLayout = getLayoutInflater().inflate(R.layout.dialog_change_assignee,null);
+        Button changeBtn = customLayout.findViewById(R.id.changeAssigneeBtn);
+        assigneeSpinner = customLayout.findViewById(R.id.newAssigneeSpinner);
+        setAssigneeSpinner(assigneeSpinner);
+        alertDialog.setView(customLayout);
+        changeBtn.setOnClickListener((v) -> {
+            LiveData<newChoreJob> job = choreFragmentViewModel.setAssignee(choreId, ChoreFragment.this.assignee, house.getId());
+            job.observe(getViewLifecycleOwner(), newChoreJob -> {
+                if(newChoreJob.getJobStatus() == FirestoreJob.JobStatus.SUCCESS){
+                    presentAssigneeTextView.setText(ChoreFragment.this.assignee);
+                    alertDialog.cancel();
+                } else if (newChoreJob.getJobStatus() == FirestoreJob.JobStatus.ERROR){
+                    Toast.makeText(getContext(), getString(R.string.editAssigneeError), Toast.LENGTH_SHORT).show();
+                }
+            });
+
+
+        });
+        alertDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+
+        alertDialog.show();
+    }
+
+    private void editTitleButtonListener() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+        AlertDialog alertDialog = builder.create();
+        final View customLayout = getLayoutInflater().inflate(R.layout.dialog_change_title,null);
+        Button changeBtn = customLayout.findViewById(R.id.changeTitleBtn);
+        PowerSpinnerView titleSpinner = customLayout.findViewById(R.id.newTitleSpinner);
+        EditText editText = customLayout.findViewById(R.id.differentNewTitleEditText);
+        setTitleSpinner(titleSpinner,editText);
+        alertDialog.setView(customLayout);
+        changeBtn.setOnClickListener((v) -> {
+            if (title == null){
+                TextView errorText = (TextView)titleSpinner;
+                errorText.setError("");
+                errorText.setText(R.string.no_title_error_msg);//changes the selected item text to this
+                return; //TODO error massage
+            } else if (title != null && title.equals(getString(R.string.other))) {
+                String diffT = editText.getText().toString();
+                if(! diffT.equals("")) {
+                    title = diffT;
+                }
+            }
+
+            LiveData<newChoreJob> job = choreFragmentViewModel.setTitle(choreId, title, house.getId()); //TODO livedata
+
+            job.observe(getViewLifecycleOwner(), createNewChoreJob -> {
+                switch (createNewChoreJob.getJobStatus()) {
+                    case IN_PROGRESS:
+                        //createChoreButton.setEnabled(false);
+                        break;
+                    case SUCCESS:
+                        //navController.navigate(R.id.action_newChoreFragment_to_house_chores_fragment_dest);
+                        presentTitleTextView.setText(ChoreFragment.this.title);
+                        break;
+                    case ERROR:
+                        //createChoreButton.setEnabled(true);
+                        Toast.makeText(getContext(), getString(R.string.create_new_item_err_msg),
+                                Toast.LENGTH_LONG).show();
+                        break;
+                    default:
+                }
+            });
+            alertDialog.cancel();
+        });
+        alertDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+
+        alertDialog.show();
+    }
+
+    @Override
+    public boolean onBackPressed() {
+        Bundle result = new Bundle();
+        passFilterAndSortData(result);
+        navController.navigate(R.id.action_choreFragment_to_house_chores_fragment_dest, result);
+        return true;
+    }
+    private void passFilterAndSortData(Bundle result) {
+        result.putBoolean("isFiltered", getArguments().getBoolean("isFiltered"));
+        result.putString("filterBy", getArguments().getString("filterBy"));
+        result.putString("filter", getArguments().getString("filter"));
+        result.putBoolean("isSorted", getArguments().getBoolean("isSorted"));
+        result.putString("sortBy",getArguments().getString("sortBy"));
     }
 }

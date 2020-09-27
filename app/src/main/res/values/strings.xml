@@ -171,11 +171,11 @@
     <string name="medium">medium</string>
     <string name="small">small</string>
     <string name="markAsDone">mark as done</string>
+    <string name="markAsUnDone">mark as undone</string>
     <string name="choreSize">Chore Size</string>
     <string name="general">General</string>
     <string name="create_expense_error_msg">There was an error creating the expense. Try again
         later</string>
-    <string name="description">Description</string>
     <string name="paid_for_by">Paid For By</string>
     <string name="currency_sign">₪</string>
     <string name="expense_title">Expense Title</string>
@@ -192,6 +192,15 @@
     <string name="you_are_owed">You are owed</string>
     <string name="you_owe">You owe</string>
     <string name="no_expenses_made_yet">No expenses made yet</string>
+    <string name="youCanAddDescription">short description,\nup to 100 letters (optional)</string>
+    <string name="description">Description (optional)</string>
+    <string name="editChoreContent">edit description</string>
+    <string name="time_left">"time left"</string>
+    <string name="days">days</string>
+    <string name="hours">hours</string>
+    <string name="editAssigneeError">there was an error edit assignee, please try again</string>
+    <string name="created_at">"created in: "</string>
+    <string name="check">check</string>
 
     <string-array name="filter_by_sizes">
         <item>@string/big</item>
@@ -215,13 +224,13 @@
     </string-array>
 
     <string-array name="filter_by_options">
+        <item>Get all</item>
         <item>Assignee</item>
         <item>Done</item>
         <item>Undone</item>
-        <item>from last week</item>
-        <item>from last month</item>
-        <item>size</item>
-        <item>get all</item>
+        <item>From last week</item>
+        <item>From last month</item>
+        <item>@string/filterBySizeString</item>
     </string-array>
 
 </resources>

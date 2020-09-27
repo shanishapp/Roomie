@@ -18,7 +18,7 @@
         app:layout_constraintVertical_bias="1.0">
 
         <com.airbnb.lottie.LottieAnimationView
-            android:id="@+id/imageButton3"
+            android:id="@+id/lottieDoneAnimation"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentStart="true"
@@ -30,12 +30,11 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:lottie_autoPlay="true"
-            android:paddingBottom="15dp"
             app:lottie_fileName="24828-thumb-up-animation.json"
             app:lottie_loop="true" />
 
         <TextView
-            android:id="@+id/textView3"
+            android:id="@+id/markAsDoneTextView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentStart="true"

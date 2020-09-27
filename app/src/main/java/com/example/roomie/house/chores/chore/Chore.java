@@ -14,6 +14,7 @@ public class  Chore {
     private Date _lastUpdatedDate;
     private Date _snoozeDate;//TODO need to be changed dynamically through the running
     private String _title;
+    private String _description;
     private int _score;
     private String _assignee; //TODO change to residence class
     private boolean _showMenu;
@@ -21,8 +22,9 @@ public class  Chore {
 
     Chore(){}
 
-    Chore(String title, String assignee, Date dueDate, boolean showMenu,Date snoozeDate, int score) {
+    Chore(String title, String description, String assignee, Date dueDate, boolean showMenu, Date snoozeDate, int score) {
         _title = title;
+        _description = description;
         _assignee = assignee;
         _dueDate = dueDate;
         _creationDate = new Date();
@@ -31,6 +33,14 @@ public class  Chore {
         _showMenu = showMenu;
         _score = score;
         _choreDone = false;
+    }
+
+    public String get_description() {
+        return _description;
+    }
+
+    public void set_description(String _description) {
+        this._description = _description;
     }
 
     public Date get_dueDate() {

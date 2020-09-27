@@ -131,11 +131,10 @@
     <string name="big">גדול</string>
     <string name="medium">בינוני</string>
     <string name="small">קטן</string>
-    <string name="markAsDone">סמן כבוצע</string>
+    <string name="markAsDone">סמנ/י כבוצע</string>
     <string name="choreSize">גודל מטלה</string>
     <string name="general">כללי</string>
     <string name="create_expense_error_msg">אירעה שגיאה ביצירת ההוצאה. נסה שנית</string>
-    <string name="description">תיאור</string>
     <string name="paid_for_by">שולם ע\"י</string>
     <string name="currency_sign">₪</string>
     <string name="filter">סנן לפי</string>
@@ -170,4 +169,14 @@
     <string name="you_are_owed">חייבים לך</string>
     <string name="you_owe">אתה חייב</string>
     <string name="no_expenses_made_yet">טרם נוספו הוצאות</string>
+    <string name="markAsUnDone">סמנ/י כלא בוצע</string>
+    <string name="youCanAddDescription">תיאור קצר, עד 100 תווים (אופציונלי)</string>
+    <string name="description">תיאור (אופציונלי)</string>
+    <string name="editChoreContent">ערוך תיאור</string>
+    <string name="time_left">"זמן נותר"</string>
+    <string name="days">days</string>
+    <string name="hours">hours</string>
+    <string name="editAssigneeError">there was an error edit assignee, please try again</string>
+    <string name="created_at">"created in: "</string>
+    <string name="check">check</string>
 </resources>

@@ -1,5 +1,7 @@
 package com.example.roomie.house.chores;
 
+import android.content.res.Resources;
+import android.text.Editable;
 import android.view.View;
 
 import androidx.lifecycle.LiveData;
@@ -34,7 +36,6 @@ public class HouseChoresFragmentViewModel extends ViewModel {
 
     private FirebaseFirestore db;
     private MutableLiveData<List<Chore>> chores;
-    public ChoreAdapter adapter = null;
 
     public HouseChoresFragmentViewModel() {
         db = FirebaseFirestore.getInstance();
@@ -231,7 +232,7 @@ public class HouseChoresFragmentViewModel extends ViewModel {
         return job;
     }
 
-    public LiveData<AllChoresJob> getFilteredChores(String houseId, String field, String value, View view) {
+    public LiveData<AllChoresJob> getFilteredChores(String houseId, String field, String value, Resources resources) {
         AllChoresJob choresJob = new AllChoresJob(FirestoreJob.JobStatus.IN_PROGRESS);
         MutableLiveData<AllChoresJob> job = new MutableLiveData<>(choresJob);
 
@@ -273,9 +274,9 @@ public class HouseChoresFragmentViewModel extends ViewModel {
         else if(field.equals(SIZE_FIELD_NAME)){
             int size = FirestoreUtil.SMALL_SCORE;
 
-            if(value.equals(view.getResources().getString(R.string.medium))){
+            if(value.equals(resources.getString(R.string.medium))){
                 size = FirestoreUtil.MEDIUM_SCORE;
-            }else if(value.equals(view.getResources().getString(R.string.big))){
+            }else if(value.equals(resources.getString(R.string.big))){
                 size = FirestoreUtil.LARGE_SCORE;
             }
 
@@ -304,6 +305,41 @@ public class HouseChoresFragmentViewModel extends ViewModel {
                 job.setValue(choresJob);
             }
         });
+        return job;
+    }
+
+    public LiveData<newChoreJob> setContent(String choreId, String content, String houseId) {
+        newChoreJob choresJob = new newChoreJob(FirestoreJob.JobStatus.IN_PROGRESS);
+        MutableLiveData<newChoreJob> job = new MutableLiveData<>(choresJob);
+
+        db.collection(HOUSES_COLLECTION_NAME)
+                .document(houseId).collection(CHORES_COLLECTION_NAME)
+                .document(choreId)
+                .get()
+                .addOnCompleteListener(task ->  {
+                    if(task.isSuccessful()) {
+                        Chore chore = task.getResult().toObject(Chore.class);
+                        if(chore !=null) {
+                            List<Chore> choreList = chores.getValue();
+                            choreList.remove(chore);
+                            chore.set_description(content);
+                            choreList.add(chore);
+                            chores.setValue(choreList);
+                            db.collection(HOUSES_COLLECTION_NAME)
+                                    .document(houseId).collection(CHORES_COLLECTION_NAME)
+                                    .document(choreId).update("_description",content);
+
+                            choresJob.setChore(task.getResult().toObject(Chore.class));
+                            choresJob.setJobStatus(FirestoreJob.JobStatus.SUCCESS);
+                            job.setValue(choresJob);
+                        }
+                    } else {
+                        choresJob.setJobStatus(FirestoreJob.JobStatus.ERROR);
+                        choresJob.setJobErrorCode(FirestoreJob.JobErrorCode.GENERAL);
+                        job.setValue(choresJob);
+                    }
+                });
+
         return job;
     }
 }
