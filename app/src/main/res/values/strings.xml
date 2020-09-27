@@ -47,6 +47,7 @@
     <string name="house_bottom_menu_chores">Chores</string>
     <string name="house_bottom_menu_groceries">Groceries</string>
     <string name="house_bottom_menu_expenses">Expenses</string>
+    <string name="house_bottom_menu_chat">Chat</string>
 
     <!--  House Feed Fragment  -->
     <string name="house_feed_fragment_title">House Feed</string>
@@ -60,6 +61,11 @@
 
     <!--  House Expenses Fragment  -->
     <string name="house_expenses_fragment_title">Expenses</string>
+
+    <!--  House Chat Fragment  -->
+    <string name="house_chat_fragment_title">House Chat</string>
+    <string name="house_chat_header_today">Today</string>
+    <string name="house_chat_header_yesterday">Yesterday</string>
 
     <!--  House Invite Roomie Fragment  -->
     <string name="house_invite_roomie_fragment_title">Invite Roomie</string>

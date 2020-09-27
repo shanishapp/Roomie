@@ -16,4 +16,8 @@
         android:id="@+id/house_expenses_fragment_dest"
         android:icon="@drawable/ic_baseline_attach_money_24"
         android:title="@string/house_bottom_menu_expenses" />
+    <item
+        android:id="@+id/house_chat_fragment_dest"
+        android:icon="@drawable/ic_baseline_chat_24"
+        android:title="@string/house_bottom_menu_chat" />
 </menu>
