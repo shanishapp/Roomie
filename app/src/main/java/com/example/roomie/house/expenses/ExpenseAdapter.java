@@ -76,13 +76,14 @@ public class ExpenseAdapter extends RecyclerView.Adapter<ExpenseAdapter.ViewHold
 
         String costString = String.valueOf(expense.get_cost());
         String payerName = expense.get_payerName();
-        if (expense.get_type() == Expense.ExpenseType.GENERAL)
-        {
+//        if (expense.get_type() == Expense.ExpenseType.GENERAL)
+//        {
             titleView.setText(expense.get_title());
-        } else
-        {
-            titleView.setText(expense.get_description());
-        }
+//        }
+//        else
+//        {
+//            titleView.setText(expense.get_description());
+//        }
         setExpenseIcon(expenseTypeIcon, expense.get_type());
         //TODO: use resource for currency symbol
         costView.setText(costString.concat("₪"));
