@@ -199,6 +199,8 @@
     <string name="days">days</string>
     <string name="hours">hours</string>
     <string name="editAssigneeError">there was an error edit assignee, please try again</string>
+    <string name="created_at">"created in: "</string>
+    <string name="check">check</string>
 
     <string-array name="filter_by_sizes">
         <item>@string/big</item>

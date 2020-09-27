@@ -135,7 +135,6 @@
     <string name="choreSize">גודל מטלה</string>
     <string name="general">כללי</string>
     <string name="create_expense_error_msg">אירעה שגיאה ביצירת ההוצאה. נסה שנית</string>
-    <string name="description">תיאור</string>
     <string name="paid_for_by">שולם ע\"י</string>
     <string name="currency_sign">₪</string>
     <string name="filter">סנן לפי</string>
@@ -178,4 +177,6 @@
     <string name="days">days</string>
     <string name="hours">hours</string>
     <string name="editAssigneeError">there was an error edit assignee, please try again</string>
+    <string name="created_at">"created in: "</string>
+    <string name="check">check</string>
 </resources>
