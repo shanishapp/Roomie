@@ -6,6 +6,7 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.LiveData;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
@@ -23,6 +24,7 @@ import com.example.roomie.SignInActivity;
 import com.example.roomie.R;
 import com.example.roomie.house.chores.chore.ChoreFragment;
 import com.example.roomie.house.chores.chore.NewChoreFragment;
+import com.example.roomie.repositories.GetHouseRoomiesJob;
 import com.firebase.ui.auth.AuthUI;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationView;
@@ -61,6 +63,23 @@ public class HouseActivity extends AppCompatActivity {
 
         setUIElements();
         setNavigation();
+        loadContent();
+    }
+
+    private void loadContent() {
+        LiveData<GetHouseRoomiesJob> job = houseActivityViewModel.loadHouseRoomies();
+        job.observe(this, getHouseRoomiesJob -> {
+            switch (getHouseRoomiesJob.getJobStatus()) {
+                case SUCCESS:
+                    houseActivityViewModel.setRoomiesList(getHouseRoomiesJob.getRoomiesList());
+                    break;
+                case ERROR:
+                    Toast.makeText(this, "Error loading roomies.", Toast.LENGTH_LONG).show();
+                    break;
+                default:
+                    break;
+            }
+        });
     }
 
     private void setUIElements() {
@@ -80,7 +99,7 @@ public class HouseActivity extends AppCompatActivity {
         appBarConfiguration = new AppBarConfiguration.Builder(
                 R.id.house_feed_fragment_dest, R.id.house_feed_fragment_dest, R.id.house_user_profile_fragment_dest,
                 R.id.house_settings_fragment_dest, R.id.house_chores_fragment_dest, R.id.house_groceries_fragment_dest,
-                R.id.house_expenses_fragment_dest, R.id.house_invite_roomie_fragment_dest)
+                R.id.house_expenses_fragment_dest, R.id.house_invite_roomie_fragment_dest, R.id.house_chat_fragment_dest)
                 .setOpenableLayout(drawerLayout)
                 .build();
         NavigationUI.setupActionBarWithNavController(this, navController, appBarConfiguration);
@@ -94,6 +113,7 @@ public class HouseActivity extends AppCompatActivity {
                 case R.id.house_chores_fragment_dest:
                 case R.id.house_groceries_fragment_dest:
                 case R.id.house_expenses_fragment_dest:
+                case R.id.house_chat_fragment_dest:
                     bottomNavigationView.setVisibility(View.VISIBLE);
                     break;
                 default:

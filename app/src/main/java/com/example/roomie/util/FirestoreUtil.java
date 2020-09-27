@@ -18,6 +18,8 @@ public class FirestoreUtil
 
     public final static String GROCERIES_COLLECTION_NAME = "groceries";
 
+    public final static String CHAT_COLLECTION_NAME = "chat";
+
     public final static int SMALL_SCORE = 1;
 
     public final static int MEDIUM_SCORE = 2;

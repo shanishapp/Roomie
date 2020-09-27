@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingBottom="8dp"
+    tools:context=".house.chat.HouseChatFragment">
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/house_chat_recycler_view"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginBottom="8dp"
+        android:background="@drawable/house_chat_bg"
+        app:layout_constraintBottom_toTopOf="@id/house_chat_message_input"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <EditText
+        android:id="@+id/house_chat_message_input"
+        style="@style/input"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginEnd="8dp"
+        android:gravity="start|top"
+        android:hint="Type your message here..."
+        android:importantForAutofill="no"
+        android:inputType="textMultiLine"
+        android:paddingVertical="8dp"
+        android:textSize="16sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/house_chat_send_button"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <ImageButton
+        android:id="@+id/house_chat_send_button"
+        android:layout_width="42dp"
+        android:layout_height="42dp"
+        android:layout_marginEnd="8dp"
+        android:background="@drawable/house_chat_send_button_bg"
+        android:contentDescription="Send"
+        android:foregroundGravity="center"
+        android:src="@drawable/ic_baseline_send_24"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/house_chat_message_input" />
+</androidx.constraintlayout.widget.ConstraintLayout>
