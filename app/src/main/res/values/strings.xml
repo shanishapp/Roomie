@@ -201,6 +201,7 @@
     <string name="editAssigneeError">there was an error edit assignee, please try again</string>
     <string name="created_at">"created in: "</string>
     <string name="check">check</string>
+    <string name="description_1">Description</string>
 
     <string-array name="filter_by_sizes">
         <item>@string/big</item>

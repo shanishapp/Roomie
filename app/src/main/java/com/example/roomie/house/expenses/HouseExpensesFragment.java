@@ -27,6 +27,7 @@ import com.example.roomie.repositories.HouseRepository;
 import com.google.firebase.auth.FirebaseAuth;
 
 import java.util.ArrayList;
+import java.util.Collections;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -43,6 +44,7 @@ public class HouseExpensesFragment extends Fragment implements ExpenseAdapter.On
     private HouseActivityViewModel houseActivityViewModel;
     private HouseExpensesViewModel viewModel;
     private MovableFloatingActionButton addExpenseButton;
+    private View balanceBubble;
     private Button settleExpensesButton;
     private ArrayList<Expense> expenses;
     private int numberOfRoommates;
@@ -87,14 +89,16 @@ public class HouseExpensesFragment extends Fragment implements ExpenseAdapter.On
             if (allExpensesJob.getJobStatus() == FirestoreJob.JobStatus.SUCCESS)
             {
                 expenses = (ArrayList<Expense>) allExpensesJob.getExpenses();
+                ExpenseByNewComparator s = new ExpenseByNewComparator();
+                Collections.sort(expenses, s);
                 adapter = new ExpenseAdapter(expenses, HouseExpensesFragment.this,
-                        HouseExpensesFragment.this);
+                        HouseExpensesFragment.this, this.getContext());
                 recyclerView = v.findViewById(R.id.expensesRecyclerView);
                 recyclerView.setAdapter(adapter);
                 recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
                 houseBalanceTextView = v.findViewById(R.id.houseBalanceTextView);
                 myBalanceTextView = v.findViewById(R.id.myBalanceAmountTextView);
-
+                balanceBubble = v.findViewById(R.id.balanceBubble);
             }
         });
         return v;
@@ -135,13 +139,12 @@ public class HouseExpensesFragment extends Fragment implements ExpenseAdapter.On
     {
         super.onViewCreated(view, savedInstanceState);
         navController = Navigation.findNavController(view);
-        addExpenseButton = view.findViewById(R.id.expensesFab);
-        addExpenseButton.setOnClickListener(view1 -> {
-            if (view1 != null)
-            {
-                navController.navigate(R.id.action_house_expenses_fragment_dest_to_newExpenseFragment);
-            }
-        });
+        setUpAddExpenseButton(view);
+        setUpSettleExpensesButton(view);
+    }
+
+    private void setUpSettleExpensesButton(View view)
+    {
         settleExpensesButton = view.findViewById(R.id.settleUpButton);
         settleExpensesButton.setOnClickListener(view2 ->
         {
@@ -169,6 +172,17 @@ public class HouseExpensesFragment extends Fragment implements ExpenseAdapter.On
                         handleBalances();
                     });
                 }
+            }
+        });
+    }
+
+    private void setUpAddExpenseButton(View view)
+    {
+        addExpenseButton = view.findViewById(R.id.expensesFab);
+        addExpenseButton.setOnClickListener(view1 -> {
+            if (view1 != null)
+            {
+                navController.navigate(R.id.action_house_expenses_fragment_dest_to_newExpenseFragment);
             }
         });
     }
@@ -236,5 +250,17 @@ public class HouseExpensesFragment extends Fragment implements ExpenseAdapter.On
                     //TODO: implement
             }
         });
+    }
+
+    private void showFilterDialog()
+    {
+//        AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+//        AlertDialog alertDialog = builder.create();
+//        final View customLayout = getLayoutInflater().inflate(R.layout.dialog_filter_by, null);
+////        setFilterBySpinner(customLayout);
+////        setDoFilterButton(customLayout, alertDialog);
+//        alertDialog.setView(customLayout);
+//        alertDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+//        alertDialog.show();
     }
 }

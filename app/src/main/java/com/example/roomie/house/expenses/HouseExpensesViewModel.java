@@ -22,7 +22,6 @@ public class HouseExpensesViewModel extends ViewModel implements ExpenseAdapter.
 {
     private FirebaseFirestore db;
     private MutableLiveData<List<Expense>> expenses;
-//    public ExpenseAdapter expenseAdapter = null;
 
     public HouseExpensesViewModel()
     {
