@@ -1,14 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_marginStart="15dp"
     android:layout_marginEnd="15dp"
-    tools:context=".house.chores.HouseChoresFragment"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:background="@drawable/dialog_bg">
-
+    android:background="@drawable/dialog_bg"
+    tools:context=".house.chores.HouseChoresFragment">
+    <!-->TODO: Lottie-->
     <TextView
         android:id="@+id/RoommateBalancesTextView"
         android:layout_width="wrap_content"
@@ -22,9 +22,21 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/roommateBalanceRecyclerView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toStartOf="@id/roommateBalanceAnimation"
         app:layout_constraintTop_toBottomOf="@id/RoommateBalancesTextView" />
+
+    <com.airbnb.lottie.LottieAnimationView
+        android:id="@+id/roommateBalanceAnimation"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@id/RoommateBalancesTextView"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:lottie_fileName="13398-money-stack.json"
+        app:layout_constraintStart_toEndOf="@id/roommateBalanceRecyclerView" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
