@@ -7,19 +7,26 @@ import androidx.lifecycle.ViewModelProvider;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.Toast;
 
+import com.example.roomie.FirestoreJob;
+import com.example.roomie.RoomieFirebaseInstanceService;
 import com.example.roomie.join_house.JoinHouseActivity;
 import com.example.roomie.SignInActivity;
 import com.example.roomie.choose_house.ChooseHouseActivity;
 import com.example.roomie.house.HouseActivity;
 import com.example.roomie.house.invite.Invite;
+import com.example.roomie.repositories.TokenRepository;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.iid.FirebaseInstanceId;
 
 import java.util.List;
 
 public class SplashScreenActivity extends AppCompatActivity {
+
+    private final static String TAG = "SPLASH_SCREEN_ACTIVITY";
 
     public final static String INVITATION_ID_EXTRA = "invitation_id";
 
@@ -66,6 +73,15 @@ public class SplashScreenActivity extends AppCompatActivity {
             finish();
         } else {
             // user is logged in
+            FirebaseInstanceId.getInstance().getInstanceId()
+                    .addOnSuccessListener(task -> {
+                        // update user token
+                        String token = task.getToken();
+                        TokenRepository.getInstance().updateUserToken(token);
+                    })
+                    .addOnFailureListener(task -> {
+                        Log.d(TAG, "Error getting user token.");
+                    });
 
             if (invitationId != null) {
                 Intent intent = new Intent(SplashScreenActivity.this, JoinHouseActivity.class);
