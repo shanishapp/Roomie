@@ -20,6 +20,8 @@ public class FirestoreUtil
 
     public final static String CHAT_COLLECTION_NAME = "chat";
 
+    public final static String TOKENS_COLLECTION_NAME = "tokens";
+
     public final static int SMALL_SCORE = 1;
 
     public final static int MEDIUM_SCORE = 2;

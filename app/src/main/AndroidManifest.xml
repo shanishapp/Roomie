@@ -48,6 +48,17 @@
             android:theme="@style/Base.Theme.AppCompat" />
 
         <receiver android:name=".house.chores.chore.SnoozerBroadcast"/>
+
+        <service
+            android:name=".RoomieFirebaseInstanceService"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="com.google.firebase.MESSAGING_EVENT" />
+            </intent-filter>
+        </service>
+        <meta-data
+            android:name="com.google.firebase.messaging.default_notification_icon"
+            android:resource="@drawable/ic_baseline_home_24" />
     </application>
 
 </manifest>

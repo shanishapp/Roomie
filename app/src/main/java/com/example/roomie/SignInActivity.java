@@ -14,6 +14,7 @@ import android.widget.Toast;
 import com.example.roomie.choose_house.ChooseHouseActivity;
 import com.example.roomie.house.HouseActivity;
 import com.example.roomie.join_house.JoinHouseActivity;
+import com.example.roomie.repositories.TokenRepository;
 import com.example.roomie.repositories.UserRepository;
 import com.example.roomie.splash.GetUserHouseJob;
 import com.example.roomie.splash.SplashScreenActivity;
@@ -22,6 +23,7 @@ import com.firebase.ui.auth.AuthUI;
 import com.firebase.ui.auth.IdpResponse;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.iid.FirebaseInstanceId;
 
 import java.util.Arrays;
 import java.util.List;
@@ -115,6 +117,16 @@ public class SignInActivity extends AppCompatActivity {
     }
 
     private void proceedSignIn() {
+        FirebaseInstanceId.getInstance().getInstanceId()
+                .addOnSuccessListener(task -> {
+                    // update user token
+                    String token = task.getToken();
+                    TokenRepository.getInstance().updateUserToken(token);
+                })
+                .addOnFailureListener(task -> {
+                    Log.d(TAG, "Error getting user token.");
+                });
+
         if (invitationId != null) {
             // we have an invitation id - redirect to join house
             Intent intent = new Intent(SignInActivity.this, JoinHouseActivity.class);
