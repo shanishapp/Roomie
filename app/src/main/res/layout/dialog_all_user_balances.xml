@@ -2,41 +2,30 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
+    android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    android:layout_marginStart="15dp"
-    android:layout_marginEnd="15dp"
+    android:layout_gravity="center"
     android:background="@drawable/dialog_bg"
     tools:context=".house.chores.HouseChoresFragment">
     <!-->TODO: Lottie-->
-    <TextView
-        android:id="@+id/RoommateBalancesTextView"
-        android:layout_width="wrap_content"
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/balances_recycler_view"
+        android:layout_width="match_parent"
+        android:paddingBottom="20dp"
+        android:padding="20dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="15dp"
-        android:text="@string/sortBy"
-        android:textColor="@color/white"
-        android:textSize="30sp"
-        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/roommateBalanceRecyclerView"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toStartOf="@id/roommateBalanceAnimation"
-        app:layout_constraintTop_toBottomOf="@id/RoommateBalancesTextView" />
-
-    <com.airbnb.lottie.LottieAnimationView
-        android:id="@+id/roommateBalanceAnimation"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        app:layout_constraintTop_toBottomOf="@id/RoommateBalancesTextView"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:lottie_fileName="13398-money-stack.json"
-        app:layout_constraintStart_toEndOf="@id/roommateBalanceRecyclerView" />
+    <!--    <com.airbnb.lottie.LottieAnimationView-->
+    <!--        android:id="@+id/roommateBalanceAnimation"-->
+    <!--        android:layout_width="wrap_content"-->
+    <!--        android:layout_height="wrap_content"-->
+    <!--        app:layout_constraintTop_toTopOf="parent"-->
+    <!--        app:layout_constraintEnd_toEndOf="parent"-->
+    <!--        app:lottie_fileName="13398-money-stack.json"-->
+    <!--        app:layout_constraintStart_toEndOf="@id/balances_recycler_view" />-->
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

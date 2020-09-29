@@ -18,7 +18,11 @@ import java.util.List;
 
 public class BalanceAdapter extends RecyclerView.Adapter<BalanceAdapter.ViewHolder>
 {
-    private ArrayList<Pair<String, Double>> _namesAndBalances;
+    private List<Pair<String, Double>> _namesAndBalances;
+    public BalanceAdapter()
+    {
+        _namesAndBalances = new ArrayList<>();
+    }
 
     public BalanceAdapter(ArrayList<Pair<String, Double>> namesAndBalances)
     {

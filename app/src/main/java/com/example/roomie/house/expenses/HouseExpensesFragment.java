@@ -1,6 +1,6 @@
 package com.example.roomie.house.expenses;
 
-import android.app.AlertDialog;
+import android.app.Dialog;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
@@ -14,7 +14,9 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.content.ContextCompat;
+import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.NavController;
@@ -48,6 +50,7 @@ public class HouseExpensesFragment extends Fragment implements ExpenseAdapter.On
     private MovableFloatingActionButton addExpenseButton;
     private View balanceBubble;
     private Button settleExpensesButton;
+    private BalanceDialogFragment balanceDialogFragment;
 
 
     private HouseActivityViewModel houseActivityViewModel;
@@ -97,6 +100,7 @@ public class HouseExpensesFragment extends Fragment implements ExpenseAdapter.On
                 setUpUI(allExpensesJob, v);
             }
         });
+        balanceDialogFragment = BalanceDialogFragment.newInstance(this);
         return v;
     }
 
@@ -113,6 +117,17 @@ public class HouseExpensesFragment extends Fragment implements ExpenseAdapter.On
         houseBalanceTextView = view.findViewById(R.id.houseBalanceTextView);
         myBalanceTextView = view.findViewById(R.id.myBalanceAmountTextView);
         balanceBubble = view.findViewById(R.id.balanceBubble);
+
+
+        HouseExpensesFragment houseExpensesFragment = this;
+        balanceBubble.setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View v)
+            {
+                balanceDialogFragment.showDialog();
+            }
+        });
     }
 
     private void handleBalances()
@@ -264,44 +279,129 @@ public class HouseExpensesFragment extends Fragment implements ExpenseAdapter.On
         });
     }
 
-    private void showSortDialog(View view)
+//    private void showSortDialog()
+//    {
+//        ArrayList<Pair<String, Double>> namesAndBalances = new ArrayList<>();
+////        RecyclerView.Adapter<BalanceAdapter.ViewHolder> adapter = null;
+//        final View customLayout = getLayoutInflater().inflate(R.layout.dialog_all_user_balances, null);
+//        LiveData<GetHouseRoomiesJob> job =
+//                HouseRepository.getInstance().getHouseRoomies(houseActivityViewModel.getHouse().getId());
+//        job.observe(getViewLifecycleOwner(), getHouseRoomiesJob -> {
+//            switch (getHouseRoomiesJob.getJobStatus())
+//            {
+//                case SUCCESS:
+//                    for (User user : getHouseRoomiesJob.getRoomiesList())
+//                    {
+//                        String username = user.getUsername();
+//                        double userBalance = getBalanceByUid(user.getUid());
+//                        Pair<String, Double> usernameAndBalance = new Pair<>(username, userBalance);
+//                        namesAndBalances.add(usernameAndBalance);
+//                    }
+//                    BalanceAdapter balanceAdapter = new BalanceAdapter(namesAndBalances);
+//                    balancesRecyclerView = customLayout.findViewById(R.id.balances_recycler_view);
+//                    balancesRecyclerView.setAdapter(balanceAdapter);
+//                    balancesRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+//
+//
+//                    AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+//                    AlertDialog alertDialog = builder.create();
+//                    alertDialog.setView(customLayout);
+//                    alertDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+//                    alertDialog.show();
+//                case ERROR:
+//                    //TODO: implement
+//            }
+//        });
+//
+//    }
+//
+//    private void getNamesAndBalancesPairs(ArrayList<Pair<String, Double>> namesAndBalances)
+//    {
+//        LiveData<GetHouseRoomiesJob> job =
+//                HouseRepository.getInstance().getHouseRoomies(houseActivityViewModel.getHouse().getId());
+//        job.observe(getViewLifecycleOwner(), getHouseRoomiesJob -> {
+//            switch (getHouseRoomiesJob.getJobStatus())
+//            {
+//                case SUCCESS:
+//                    for (User user : getHouseRoomiesJob.getRoomiesList())
+//                    {
+//                        String username = user.getUsername();
+//                        double userBalance = getBalanceByUid(user.getUid());
+//                        Pair<String, Double> usernameAndBalance = new Pair<>(username, userBalance);
+//                        namesAndBalances.add(usernameAndBalance);
+//                    }
+//                case ERROR:
+//                    //TODO: implement
+//            }
+//        });
+//    }
+
+    public static class BalanceDialogFragment extends DialogFragment
     {
-        ArrayList<Pair<String, Double>> namesAndBalances = new ArrayList<>();
-        getNamesAndBalancesPairs(namesAndBalances);
-        BalanceAdapter balanceAdapter = new BalanceAdapter(namesAndBalances);
-        balancesRecyclerView = view.findViewById(R.id.roommateBalanceRecyclerView);
-        balancesRecyclerView.setAdapter(balanceAdapter);
-        balancesRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+        private RecyclerView mRecyclerView;
+        private BalanceAdapter adapter;
+        private HouseExpensesFragment parent;
 
-        final View customLayout = getLayoutInflater().inflate(R.layout.dialog_all_user_balances, null);
-//        RecyclerView.Adapter<BalanceAdapter.ViewHolder> adapter = null;
+        public static BalanceDialogFragment newInstance(HouseExpensesFragment parent)
+        {
+            BalanceDialogFragment f = new BalanceDialogFragment();
+            f.setParent(parent);
+            return f;
+        }
 
-        AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
-        AlertDialog alertDialog = builder.create();
-        alertDialog.setView(customLayout);
-        alertDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-        alertDialog.show();
-    }
+        private void setParent(HouseExpensesFragment parent)
+        {
+            this.parent = parent;
+        }
 
-    private void getNamesAndBalancesPairs(ArrayList<Pair<String, Double>> namesAndBalances)
-    {
-        LiveData<GetHouseRoomiesJob> job =
-                HouseRepository.getInstance().getHouseRoomies(houseActivityViewModel.getHouse().getId());
-        job.observe(getViewLifecycleOwner(), getHouseRoomiesJob -> {
-            switch (getHouseRoomiesJob.getJobStatus())
-            {
-                case SUCCESS:
-                    for (User user : getHouseRoomiesJob.getRoomiesList())
-                    {
-                        String username = user.getUsername();
-                        double userBalance = getBalanceByUid(user.getUid());
-                        Pair<String, Double> usernameAndBalance = new Pair<>(username, userBalance);
-                        namesAndBalances.add(usernameAndBalance);
-                    }
-                case ERROR:
-                    //TODO: implement
-            }
-        });
+        @Override
+        public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
+        {
+            View v = inflater.inflate(R.layout.dialog_all_user_balances, container, false);
+            mRecyclerView = v.findViewById(R.id.balances_recycler_view);
+            mRecyclerView.setLayoutManager(new LinearLayoutManager(this.getContext()));
+            setUpDialog();
+            return v;
+        }
+
+        private void setUpDialog()
+        {
+            ArrayList<Pair<String, Double>> namesAndBalances = new ArrayList<>();
+            LiveData<GetHouseRoomiesJob> job =
+                    HouseRepository.getInstance().getHouseRoomies(parent.houseActivityViewModel.getHouse().getId());
+            job.observe(getViewLifecycleOwner(), getHouseRoomiesJob -> {
+                switch (getHouseRoomiesJob.getJobStatus())
+                {
+                    case SUCCESS:
+                        for (User user : getHouseRoomiesJob.getRoomiesList())
+                        {
+                            String username = user.getUsername();
+                            double userBalance = parent.getBalanceByUid(user.getUid());
+                            Pair<String, Double> usernameAndBalance = new Pair<>(username, userBalance);
+                            namesAndBalances.add(usernameAndBalance);
+                        }
+                        adapter = new BalanceAdapter(namesAndBalances);
+                        mRecyclerView.setAdapter(adapter);
+                    case ERROR:
+                        //TODO: implement
+                }
+            });
+        }
+
+        void showDialog()
+        {
+            FragmentManager fm = parent.getParentFragmentManager();
+            this.show(fm, "dialog");
+        }
+
+        @NonNull
+        @Override
+        public Dialog onCreateDialog(@Nullable Bundle savedInstanceState)
+        {
+            Dialog dialog = super.onCreateDialog(savedInstanceState);
+            dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+            return dialog;
+        }
     }
 
 
