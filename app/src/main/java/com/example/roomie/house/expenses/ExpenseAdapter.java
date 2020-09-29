@@ -2,7 +2,6 @@ package com.example.roomie.house.expenses;
 
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.support.v4.app.INotificationSideChannel;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,14 +9,11 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
-import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.airbnb.lottie.LottieAnimationView;
 import com.example.roomie.R;
 
-import java.util.Collection;
-import java.util.Collections;
 import java.util.List;
 
 public class ExpenseAdapter extends RecyclerView.Adapter<ExpenseAdapter.ViewHolder>
@@ -46,7 +42,7 @@ public class ExpenseAdapter extends RecyclerView.Adapter<ExpenseAdapter.ViewHold
     {
         Context context = parent.getContext();
         LayoutInflater inflater = LayoutInflater.from(context);
-        View expenseView = inflater.inflate(R.layout.single_expense, parent, false);
+        View expenseView = inflater.inflate(R.layout.adapter_expense, parent, false);
         return new ViewHolder(expenseView, _myExpenseListener, _myReceiptListener);
     }
 
@@ -81,12 +77,13 @@ public class ExpenseAdapter extends RecyclerView.Adapter<ExpenseAdapter.ViewHold
         ImageView receiptIcon = holder.receiptIcon;
         ImageView expenseTypeIcon = holder.expenseTypeIcon;
         LottieAnimationView checkMarkAnimation = holder.checkMarkAnimation;
+        LottieAnimationView checkMarkFinalState = holder.checkMarkFinalState;
 
         String costString = String.valueOf(expense.get_cost());
         String payerName = expense.get_payerName();
         if (expense.get_type() == Expense.ExpenseType.GENERAL)
         {
-        titleView.setText(expense.get_title());
+            titleView.setText(expense.get_title());
         } else
         {
             titleView.setText(expense.get_description());
@@ -100,12 +97,14 @@ public class ExpenseAdapter extends RecyclerView.Adapter<ExpenseAdapter.ViewHold
             String expenseID = expense.get_id();
             boolean wasAnimated = sp.getBoolean(expenseID, false);
             blurUI(titleView, costView, payerView, receiptIcon, expenseTypeIcon);
-            checkMarkAnimation.setVisibility(View.VISIBLE);
             if (wasAnimated)
             {
-                checkMarkAnimation.setProgress((float) 1.0);
+                checkMarkAnimation.setVisibility(View.INVISIBLE);
+                checkMarkFinalState.setVisibility(View.VISIBLE);
+                checkMarkFinalState.animate();
             } else
             {
+                checkMarkAnimation.setVisibility(View.VISIBLE);
                 sp.edit().putBoolean(expenseID, true).apply();
                 checkMarkAnimation.animate();
             }
@@ -153,6 +152,7 @@ public class ExpenseAdapter extends RecyclerView.Adapter<ExpenseAdapter.ViewHold
         OnExpenseListener onExpenseListener;
         OnReceiptListener onReceiptListener;
         public LottieAnimationView checkMarkAnimation;
+        public LottieAnimationView checkMarkFinalState;
 
 
         public ViewHolder(View view, OnExpenseListener onExpenseListener,
@@ -165,6 +165,7 @@ public class ExpenseAdapter extends RecyclerView.Adapter<ExpenseAdapter.ViewHold
             cost = view.findViewById(R.id.expenseCostHolderView);
             payer = view.findViewById(R.id.expensePayerHolderView);
             checkMarkAnimation = view.findViewById(R.id.checkMarkAnimation);
+            checkMarkFinalState = view.findViewById(R.id.checkMarkAnimationFinalState);
             this.onExpenseListener = onExpenseListener;
             this.onReceiptListener = onReceiptListener;
 

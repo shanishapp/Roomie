@@ -11,7 +11,6 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.roomie.R;
-import com.example.roomie.house.HouseActivityViewModel;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -35,7 +34,7 @@ public class BalanceAdapter extends RecyclerView.Adapter<BalanceAdapter.ViewHold
     {
         Context context = parent.getContext();
         LayoutInflater inflater = LayoutInflater.from(context);
-        View roommateView = inflater.inflate(R.layout.single_roommate_balance, parent, false);
+        View roommateView = inflater.inflate(R.layout.adapter_roommate_balance, parent, false);
         return new ViewHolder(roommateView, context);
     }
 

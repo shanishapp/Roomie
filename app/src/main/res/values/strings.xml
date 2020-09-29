@@ -210,6 +210,7 @@
     <string name="description_1">Description</string>
     <string name="owes">owes</string>
     <string name="is_owed">is owed</string>
+    <string name="settle_up">Settle \n Up!</string>
 
     <string-array name="filter_by_sizes">
         <item>@string/big</item>
