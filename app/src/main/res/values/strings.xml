@@ -211,6 +211,11 @@
     <string name="owes">owes</string>
     <string name="is_owed">is owed</string>
     <string name="settle_up">Settle \n Up!</string>
+    <string name="are_you_sure_you_want_to_settle_all_house_expenses">Are you sure you want to settle all house expenses?</string>
+    <string name="yes">YES</string>
+    <string name="no">NO</string>
+    <string name="expense_type_hint">Enter expense type here</string>
+    <string name="describe_your_expense">Describe your expense</string>
 
     <string-array name="filter_by_sizes">
         <item>@string/big</item>

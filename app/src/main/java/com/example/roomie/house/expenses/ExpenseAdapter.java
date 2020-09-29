@@ -159,13 +159,13 @@ public class ExpenseAdapter extends RecyclerView.Adapter<ExpenseAdapter.ViewHold
                           OnReceiptListener onReceiptListener)
         {
             super(view);
-            receiptIcon = view.findViewById(R.id.ReceiptIcon);
-            expenseTypeIcon = view.findViewById(R.id.expenseTypeIcon);
-            title = view.findViewById(R.id.expenseTitleHolderView);
-            cost = view.findViewById(R.id.expenseCostHolderView);
-            payer = view.findViewById(R.id.expensePayerHolderView);
-            checkMarkAnimation = view.findViewById(R.id.checkMarkAnimation);
-            checkMarkFinalState = view.findViewById(R.id.checkMarkAnimationFinalState);
+            receiptIcon = view.findViewById(R.id.receipt_icon);
+            expenseTypeIcon = view.findViewById(R.id.expense_type_icon);
+            title = view.findViewById(R.id.expense_title_text);
+            cost = view.findViewById(R.id.expense_cost_text);
+            payer = view.findViewById(R.id.expense_payer_text);
+            checkMarkAnimation = view.findViewById(R.id.check_mark_animation);
+            checkMarkFinalState = view.findViewById(R.id.check_mark_animation_final_state);
             this.onExpenseListener = onExpenseListener;
             this.onReceiptListener = onReceiptListener;
 

@@ -117,14 +117,14 @@ public class NewExpenseFragment extends Fragment
         house = houseActivityViewModel.getHouse();
         addExpenseButton = view.findViewById(R.id.createExpenseBtn);
         navController = Navigation.findNavController(view);
-        customTitleEditText = view.findViewById(R.id.customExpenseTypeEditText);
+        customTitleEditText = view.findViewById(R.id.custom_expense_type_edit_text);
         expenseDescription = view.findViewById(R.id.expenseDescriptionEditText);
-        titleSpinner = view.findViewById(R.id.expenseTypeSpinner);
+        titleSpinner = view.findViewById(R.id.expense_type_spinner);
         setupTypeSpinner();
 
-        payerSpinner = view.findViewById(R.id.expensePayerSpinner);
+        payerSpinner = view.findViewById(R.id.expense_payer_spinner);
 
-        priceEditText = view.findViewById(R.id.expenseCostEditText);
+        priceEditText = view.findViewById(R.id.expense_cost_edit_text);
         priceEditText.setDecimals(false);
 
         String currencySymbol = getString(R.string.currency_sign);

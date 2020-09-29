@@ -8,13 +8,16 @@ import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
+/**
+ * A class representing an expense made by a roommate.
+ */
+
 public class Expense
 {
     private static final String TYPE_PROFESSIONAL_STRING = "Professional";
     private static final String TYPE_GROCERY_SHOPPING_STRING = "Grocery Shopping";
     private static final String TYPE_BILL_STRING = "Bill";
     private static final String TYPE_GENERAL_STRING = "General";
-
     private String _id;
     private String _title;
     private boolean _isSettled;
@@ -27,6 +30,12 @@ public class Expense
     private String _payerID;
     private boolean _hasReceipt;
 
+
+    /**
+     * A helper method which converts a string to an {@link ExpenseType} enum.
+     * @param title - a string of an expense title.
+     * @return The corresponding {@link ExpenseType}, or GENERAL if non matches.
+     */
     public static ExpenseType typeFromString(String title)
     {
         ExpenseType resultType = null;
@@ -46,6 +55,10 @@ public class Expense
         }
         return resultType;
     }
+
+    /**
+     * @return all possible strings matching expense types.
+     */
 
     public static List<String> getExpenseTypes()
     {

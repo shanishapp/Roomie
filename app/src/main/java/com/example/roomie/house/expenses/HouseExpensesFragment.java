@@ -31,6 +31,7 @@ import com.example.roomie.User;
 import com.example.roomie.house.HouseActivityViewModel;
 import com.example.roomie.repositories.GetHouseRoomiesJob;
 import com.example.roomie.repositories.HouseRepository;
+import com.google.android.material.button.MaterialButton;
 import com.google.firebase.auth.FirebaseAuth;
 
 import java.util.ArrayList;
@@ -111,12 +112,12 @@ public class HouseExpensesFragment extends Fragment implements ExpenseAdapter.On
         Collections.sort(expenses, s);
         expenseAdapter = new ExpenseAdapter(expenses, HouseExpensesFragment.this,
                 HouseExpensesFragment.this, this.getContext());
-        expensesERecyclerView = view.findViewById(R.id.expensesRecyclerView);
+        expensesERecyclerView = view.findViewById(R.id.expenses_recycler_view);
         expensesERecyclerView.setAdapter(expenseAdapter);
         expensesERecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-        houseBalanceTextView = view.findViewById(R.id.houseBalanceTextView);
-        myBalanceTextView = view.findViewById(R.id.myBalanceAmountTextView);
-        balanceBubble = view.findViewById(R.id.balanceBubble);
+        houseBalanceTextView = view.findViewById(R.id.house_balance_text);
+        myBalanceTextView = view.findViewById(R.id.my_balance_amount_text);
+        balanceBubble = view.findViewById(R.id.balance_bubble);
 
 
         HouseExpensesFragment houseExpensesFragment = this;
@@ -171,7 +172,7 @@ public class HouseExpensesFragment extends Fragment implements ExpenseAdapter.On
 
     private void setUpSettleExpensesButton(View view)
     {
-        settleExpensesButton = view.findViewById(R.id.settleUpButton);
+        settleExpensesButton = view.findViewById(R.id.settle_up_button);
         settleExpensesButton.setOnClickListener(view2 ->
         {
             if (view2 != null)
@@ -204,7 +205,7 @@ public class HouseExpensesFragment extends Fragment implements ExpenseAdapter.On
 
     private void setUpAddExpenseButton(View view)
     {
-        addExpenseButton = view.findViewById(R.id.expensesFab);
+        addExpenseButton = view.findViewById(R.id.expenses_fab);
         addExpenseButton.setOnClickListener(view1 -> {
             if (view1 != null)
             {
@@ -279,62 +280,29 @@ public class HouseExpensesFragment extends Fragment implements ExpenseAdapter.On
         });
     }
 
-//    private void showSortDialog()
-//    {
-//        ArrayList<Pair<String, Double>> namesAndBalances = new ArrayList<>();
-////        RecyclerView.Adapter<BalanceAdapter.ViewHolder> adapter = null;
-//        final View customLayout = getLayoutInflater().inflate(R.layout.dialog_all_user_balances, null);
-//        LiveData<GetHouseRoomiesJob> job =
-//                HouseRepository.getInstance().getHouseRoomies(houseActivityViewModel.getHouse().getId());
-//        job.observe(getViewLifecycleOwner(), getHouseRoomiesJob -> {
-//            switch (getHouseRoomiesJob.getJobStatus())
-//            {
-//                case SUCCESS:
-//                    for (User user : getHouseRoomiesJob.getRoomiesList())
-//                    {
-//                        String username = user.getUsername();
-//                        double userBalance = getBalanceByUid(user.getUid());
-//                        Pair<String, Double> usernameAndBalance = new Pair<>(username, userBalance);
-//                        namesAndBalances.add(usernameAndBalance);
-//                    }
-//                    BalanceAdapter balanceAdapter = new BalanceAdapter(namesAndBalances);
-//                    balancesRecyclerView = customLayout.findViewById(R.id.balances_recycler_view);
-//                    balancesRecyclerView.setAdapter(balanceAdapter);
-//                    balancesRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-//
-//
-//                    AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
-//                    AlertDialog alertDialog = builder.create();
-//                    alertDialog.setView(customLayout);
-//                    alertDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-//                    alertDialog.show();
-//                case ERROR:
-//                    //TODO: implement
-//            }
-//        });
-//
-//    }
-//
-//    private void getNamesAndBalancesPairs(ArrayList<Pair<String, Double>> namesAndBalances)
-//    {
-//        LiveData<GetHouseRoomiesJob> job =
-//                HouseRepository.getInstance().getHouseRoomies(houseActivityViewModel.getHouse().getId());
-//        job.observe(getViewLifecycleOwner(), getHouseRoomiesJob -> {
-//            switch (getHouseRoomiesJob.getJobStatus())
-//            {
-//                case SUCCESS:
-//                    for (User user : getHouseRoomiesJob.getRoomiesList())
-//                    {
-//                        String username = user.getUsername();
-//                        double userBalance = getBalanceByUid(user.getUid());
-//                        Pair<String, Double> usernameAndBalance = new Pair<>(username, userBalance);
-//                        namesAndBalances.add(usernameAndBalance);
-//                    }
-//                case ERROR:
-//                    //TODO: implement
-//            }
-//        });
-//    }
+    public static class SettleExpensesDialogFragment extends DialogFragment
+    {
+        private MaterialButton noButton, yesButton;
+        private TextView settleDialogTextView;
+
+        public static SettleExpensesDialogFragment newInstance()
+        {
+            return new SettleExpensesDialogFragment();
+        }
+
+        @Nullable
+        @Override
+        public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
+                                 @Nullable Bundle savedInstanceState)
+        {
+            View v = inflater.inflate(R.layout.dialog_settle_expenses, container, false);
+            noButton = v.findViewById(R.id.button_no);
+            yesButton = v.findViewById(R.id.button_yes);
+            settleDialogTextView = v.findViewById(R.id.settle_expense_dialog_text);
+            return super.onCreateView(inflater, container, savedInstanceState);
+        }
+    }
+
 
     public static class BalanceDialogFragment extends DialogFragment
     {

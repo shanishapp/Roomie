@@ -79,8 +79,8 @@ public class BalanceAdapter extends RecyclerView.Adapter<BalanceAdapter.ViewHold
         public ViewHolder(View view, Context context)
         {
             super(view);
-            usernameTextView = view.findViewById(R.id.singleUsernameTextView);
-            balanceTextView = view.findViewById(R.id.singleUserBalanceTextView);
+            usernameTextView = view.findViewById(R.id.single_username_text);
+            balanceTextView = view.findViewById(R.id.single_user_balance_text);
             this.context = context;
         }
     }

@@ -8,7 +8,7 @@
     android:background="@drawable/button_bg">
 
     <TextView
-        android:id="@+id/houseBalanceTextView"
+        android:id="@+id/house_balance_text"
         android:layout_width="0dp"
         android:layout_height="20dp"
         android:layout_marginStart="10dp"
@@ -24,7 +24,7 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
-        android:id="@+id/myBalanceAmountTextView"
+        android:id="@+id/my_balance_amount_text"
         android:layout_width="0dp"
         android:layout_height="20dp"
         android:layout_marginStart="10dp"
@@ -39,7 +39,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/houseBalanceTextView" />
+        app:layout_constraintTop_toBottomOf="@+id/house_balance_text" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
