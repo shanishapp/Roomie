@@ -2,6 +2,8 @@ package com.example.roomie.house.expenses;
 
 import android.graphics.drawable.Drawable;
 
+import java.sql.Time;
+import java.sql.Timestamp;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
@@ -19,9 +21,7 @@ public class Expense
     private String _description;
     private ExpenseType _type;
     private double _cost;
-    //TODO: maybe only one date needed? Maybe none? Maybe display?
     private Date _creationDate;
-    private Date _purchaseDate;
     private Drawable receiptImage;
     private String _payerName;
     private String _payerID;
@@ -98,32 +98,57 @@ public class Expense
 
     }
 
-    public Expense(String name, String description, double cost, Date purchaseDate,
+    public Expense(String name, String description, double cost,
+                   ExpenseType type, String payerID, String payerName, Date creationDate)
+    {
+        _title = name;
+        _description = description;
+        _type = type;
+        _cost = cost;
+        _creationDate = creationDate;
+        _payerID = payerID;
+        _payerName = payerName;
+        _isSettled = false;
+        boolean hasReceiptImage = false;
+    }
+
+    public Expense(String name, String description, double cost,
+                   ExpenseType type, String payerID, String payerName, Timestamp creationTimeStamp)
+    {
+        _title = name;
+        _description = description;
+        _type = type;
+        _cost = cost;
+        _creationDate = creationTimeStamp;
+        _payerID = payerID;
+        _payerName = payerName;
+        _isSettled = false;
+        boolean hasReceiptImage = false;
+    }
+
+    public Expense(String name, String description, double cost,
                    ExpenseType type, String payerID, String payerName, boolean isSettled)
     {
         _title = name;
         _description = description;
         _type = type;
         _cost = cost;
-        _purchaseDate = purchaseDate;
         _creationDate = new Date();
         _payerID = payerID;
         _payerName = payerName;
         _isSettled = false;
         boolean hasReceiptImage = false;
         _isSettled = isSettled;
-
     }
 
 
-    public Expense(String name, String description, double cost, Date purchaseDate,
+    public Expense(String name, String description, double cost,
                    ExpenseType type, String payerID, String payerName)
     {
         _title = name;
         _description = description;
         _type = type;
         _cost = cost;
-        _purchaseDate = purchaseDate;
         _creationDate = new Date();
         _payerID = payerID;
         _payerName = payerName;
@@ -132,14 +157,14 @@ public class Expense
     }
 
 
-    public Date getCreationDate()
+    public Date get_creationDate()
     {
         return _creationDate;
     }
 
-    public Date getPurchaseDate()
+    public void set_creationDate(Date _creationDate)
     {
-        return _purchaseDate;
+        this._creationDate = _creationDate;
     }
 
     public ExpenseType get_type()

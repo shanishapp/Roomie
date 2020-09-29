@@ -7,8 +7,6 @@
     android:background="@color/lightButtonColor"
     tools:context=".house.expenses.HouseExpensesFragment">
 
-    <!--    TODO fix fragment being overridden by bottom bar-->
-
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/expensesRecyclerView"
         android:layout_width="match_parent"

@@ -32,7 +32,7 @@ public class NewExpenseViewModel extends ViewModel
         CreateNewExpenseJob newExpenseJob = new CreateNewExpenseJob(FirestoreJob.JobStatus.IN_PROGRESS);
         MutableLiveData<com.example.roomie.house.expenses.CreateNewExpenseJob> job =
                 new MutableLiveData<>(newExpenseJob);
-        Expense expense = new Expense(title, description, cost, purchaseDate, type, payerID,payerName);
+        Expense expense = new Expense(title, description, cost, type, payerID,payerName);
         db.collection(HOUSES_COLLECTION_NAME).
                 document(house.getId()).
 
