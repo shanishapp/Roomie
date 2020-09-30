@@ -183,4 +183,7 @@
     <string name="house_chat_fragment_title">צ\'אט</string>
     <string name="house_chat_header_today">היום</string>
     <string name="house_chat_header_yesterday">אתמול</string>
+    <string name="groceriesPrice">"groceries price: "</string>
+    <string name="add_to_expense">add to expenses</string>
+    <string name="cancel">cancel</string>
 </resources>

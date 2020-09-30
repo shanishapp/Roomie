@@ -207,9 +207,14 @@
     <string name="editAssigneeError">there was an error edit assignee, please try again</string>
     <string name="created_at">"created in: "</string>
     <string name="check">check</string>
+
     <string name="description_1">Description</string>
     <string name="owes">owes</string>
     <string name="is_owed">is owed</string>
+
+    <string name="groceriesPrice">"groceries price: "</string>
+    <string name="add_to_expense">add to expenses</string>
+    <string name="cancel">cancel</string>
 
     <string-array name="filter_by_sizes">
         <item>@string/big</item>
