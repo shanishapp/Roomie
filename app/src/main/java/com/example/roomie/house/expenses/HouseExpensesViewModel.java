@@ -1,5 +1,8 @@
 package com.example.roomie.house.expenses;
 
+import android.content.Intent;
+import android.net.Uri;
+
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
@@ -207,5 +210,11 @@ public class HouseExpensesViewModel extends ViewModel implements ExpenseAdapter.
     public void onReceiptClick()
     {
         //TODO:implement
+    }
+
+    public void uploadReceiptImage(Intent data)
+    {
+
+        Uri uri
     }
 }

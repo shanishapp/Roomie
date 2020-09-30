@@ -2,6 +2,7 @@ package com.example.roomie.house.expenses;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.support.v4.app.INotificationSideChannel;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,7 +20,6 @@ import java.util.List;
 public class ExpenseAdapter extends RecyclerView.Adapter<ExpenseAdapter.ViewHolder>
 {
 
-    static final int REQUEST_IMAGE_CAPTURE = 1;
     List<Expense> _expenses;
     private OnExpenseListener _myExpenseListener;
     private OnReceiptListener _myReceiptListener;
@@ -77,7 +77,8 @@ public class ExpenseAdapter extends RecyclerView.Adapter<ExpenseAdapter.ViewHold
         ImageView receiptIcon = holder.receiptIcon;
         ImageView expenseTypeIcon = holder.expenseTypeIcon;
         LottieAnimationView checkMarkAnimation = holder.checkMarkAnimation;
-        LottieAnimationView checkMarkFinalState = holder.checkMarkFinalState;
+        checkMarkAnimation.setMaxProgress(1);
+//        LottieAnimationView checkMarkFinalState = holder.checkMarkFinalState;
 
         String costString = String.valueOf(expense.get_cost());
         String payerName = expense.get_payerName();
@@ -93,20 +94,23 @@ public class ExpenseAdapter extends RecyclerView.Adapter<ExpenseAdapter.ViewHold
         payerView.setText(payerName);
         if (expense.is_isSettled())
         {
-            //TODO: animate only first time
             String expenseID = expense.get_id();
             boolean wasAnimated = sp.getBoolean(expenseID, false);
             blurUI(titleView, costView, payerView, receiptIcon, expenseTypeIcon);
             if (wasAnimated)
             {
-                checkMarkAnimation.setVisibility(View.INVISIBLE);
-                checkMarkFinalState.setVisibility(View.VISIBLE);
-                checkMarkFinalState.animate();
+//                checkMarkAnimation.setVisibility(View.INVISIBLE);
+//                checkMarkFinalState.setProgress(1);
+//                checkMarkFinalState.setVisibility(View.VISIBLE);
+                checkMarkAnimation.setProgress(1);
+                checkMarkAnimation.setVisibility(View.VISIBLE);
             } else
             {
+//                checkMarkFinalState.setVisibility(View.INVISIBLE);
                 checkMarkAnimation.setVisibility(View.VISIBLE);
+                checkMarkAnimation.playAnimation();
                 sp.edit().putBoolean(expenseID, true).apply();
-                checkMarkAnimation.animate();
+//                checkMarkAnimation.animate();
             }
         }
 
@@ -152,7 +156,7 @@ public class ExpenseAdapter extends RecyclerView.Adapter<ExpenseAdapter.ViewHold
         OnExpenseListener onExpenseListener;
         OnReceiptListener onReceiptListener;
         public LottieAnimationView checkMarkAnimation;
-        public LottieAnimationView checkMarkFinalState;
+//        public LottieAnimationView checkMarkFinalState;
 
 
         public ViewHolder(View view, OnExpenseListener onExpenseListener,
@@ -165,7 +169,7 @@ public class ExpenseAdapter extends RecyclerView.Adapter<ExpenseAdapter.ViewHold
             cost = view.findViewById(R.id.expense_cost_text);
             payer = view.findViewById(R.id.expense_payer_text);
             checkMarkAnimation = view.findViewById(R.id.check_mark_animation);
-            checkMarkFinalState = view.findViewById(R.id.check_mark_animation_final_state);
+//            checkMarkFinalState = view.findViewById(R.id.check_mark_animation_final_state);
             this.onExpenseListener = onExpenseListener;
             this.onReceiptListener = onReceiptListener;
 

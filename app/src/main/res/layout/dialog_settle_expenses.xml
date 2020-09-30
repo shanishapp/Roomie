@@ -4,9 +4,11 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_marginStart="15dp"
-    android:layout_marginEnd="15dp"
+    android:layout_marginStart="40dp"
+    android:layout_marginEnd="40dp"
     android:background="@drawable/dialog_bg"
+    android:paddingTop="20dp"
+    android:paddingBottom="20dp"
     tools:context=".house.chores.HouseChoresFragment">
 
 
@@ -25,7 +27,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <com.google.android.material.button.MaterialButton
+    <Button
         android:id="@+id/button_no"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -40,7 +42,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/settle_expense_dialog_text" />
 
-    <com.google.android.material.button.MaterialButton
+    <Button
         android:id="@+id/button_yes"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

@@ -39,7 +39,7 @@
         android:layout_marginBottom="13dp"
         android:layout_toStartOf="@+id/expenses_fab" />
 
-    <com.google.android.material.button.MaterialButton
+    <Button
         android:id="@+id/settle_up_button"
         android:layout_width="75dp"
         android:layout_height="wrap_content"

@@ -1,14 +1,21 @@
 package com.example.roomie.house.expenses;
 
 import android.app.Dialog;
+import android.content.ActivityNotFoundException;
+import android.content.Intent;
+import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
+import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
+import android.provider.MediaStore;
 import android.util.Pair;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -31,11 +38,17 @@ import com.example.roomie.User;
 import com.example.roomie.house.HouseActivityViewModel;
 import com.example.roomie.repositories.GetHouseRoomiesJob;
 import com.example.roomie.repositories.HouseRepository;
-import com.google.android.material.button.MaterialButton;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.storage.StorageReference;
 
+import java.io.File;
+import java.io.IOException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Date;
+
+import static android.app.Activity.RESULT_OK;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -45,6 +58,9 @@ import java.util.Collections;
 public class HouseExpensesFragment extends Fragment implements ExpenseAdapter.OnExpenseListener,
         ExpenseAdapter.OnReceiptListener
 {
+
+    static final int REQUEST_IMAGE_CAPTURE = 1;
+
     private RecyclerView expensesERecyclerView, balancesRecyclerView;
     private TextView myBalanceTextView, houseBalanceTextView;
     private RecyclerView.Adapter<ExpenseAdapter.ViewHolder> expenseAdapter = null;
@@ -52,6 +68,10 @@ public class HouseExpensesFragment extends Fragment implements ExpenseAdapter.On
     private View balanceBubble;
     private Button settleExpensesButton;
     private BalanceDialogFragment balanceDialogFragment;
+    private SettleExpensesDialogFragment settleExpensesDialogFragment;
+    private ImageView currentThumbnail;
+    private String currentPhotoPath;
+    private StorageReference mStorage;
 
 
     private HouseActivityViewModel houseActivityViewModel;
@@ -102,6 +122,7 @@ public class HouseExpensesFragment extends Fragment implements ExpenseAdapter.On
             }
         });
         balanceDialogFragment = BalanceDialogFragment.newInstance(this);
+        settleExpensesDialogFragment = SettleExpensesDialogFragment.newInstance(this);
         return v;
     }
 
@@ -135,7 +156,7 @@ public class HouseExpensesFragment extends Fragment implements ExpenseAdapter.On
     {
         String houseSpendingAmountString = String.valueOf(getHouseSpending());
         String houseSpendingString =
-                getString(R.string.total_house_spending)
+                getString(R.string.house_spending)
                         .concat(" ").concat(houseSpendingAmountString)
                         .concat(getString(R.string.currency_sign));
         houseBalanceTextView.setText(houseSpendingString);
@@ -161,6 +182,7 @@ public class HouseExpensesFragment extends Fragment implements ExpenseAdapter.On
         myBalanceTextView.setVisibility(View.VISIBLE);
     }
 
+
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState)
     {
@@ -177,28 +199,7 @@ public class HouseExpensesFragment extends Fragment implements ExpenseAdapter.On
         {
             if (view2 != null)
             {
-                for (Expense expense : expenses)
-                {
-                    LiveData<CreateNewExpenseJob> settleJob = viewModel.settleExpense(expense,
-                            houseActivityViewModel.getHouse().getId());
-                    settleJob.observe(getViewLifecycleOwner(), CreateNewExpenseJob -> {
-                        if (CreateNewExpenseJob.getJobStatus() == FirestoreJob.JobStatus.SUCCESS)
-                        {
-                            //TODO: check if this is unnecessary
-                            LiveData<AllExpensesJob> updateExpensesJob =
-                                    viewModel.getExpenses(houseActivityViewModel.getHouse().getId());
-                            viewModel.getExpenses(houseActivityViewModel.getHouse().getId());
-                            updateExpensesJob.observe(getViewLifecycleOwner(), allExpensesJob -> {
-                                if (allExpensesJob.getJobStatus() == FirestoreJob.JobStatus.SUCCESS)
-                                {
-                                    expenses = (ArrayList<Expense>) allExpensesJob.getExpenses();
-                                }
-                            });
-                        }
-                        expenseAdapter.notifyDataSetChanged();
-                        handleBalances();
-                    });
-                }
+                settleExpensesDialogFragment.showDialog();
             }
         });
     }
@@ -216,7 +217,28 @@ public class HouseExpensesFragment extends Fragment implements ExpenseAdapter.On
 
     private void settleExpenses()
     {
-
+        for (Expense expense : expenses)
+        {
+            LiveData<CreateNewExpenseJob> settleJob = viewModel.settleExpense(expense,
+                    houseActivityViewModel.getHouse().getId());
+            settleJob.observe(getViewLifecycleOwner(), CreateNewExpenseJob -> {
+                if (CreateNewExpenseJob.getJobStatus() == FirestoreJob.JobStatus.SUCCESS)
+                {
+                    //TODO: check if this is unnecessary
+                    LiveData<AllExpensesJob> updateExpensesJob =
+                            viewModel.getExpenses(houseActivityViewModel.getHouse().getId());
+                    viewModel.getExpenses(houseActivityViewModel.getHouse().getId());
+                    updateExpensesJob.observe(getViewLifecycleOwner(), allExpensesJob -> {
+                        if (allExpensesJob.getJobStatus() == FirestoreJob.JobStatus.SUCCESS)
+                        {
+                            expenses = (ArrayList<Expense>) allExpensesJob.getExpenses();
+                        }
+                    });
+                }
+                expenseAdapter.notifyDataSetChanged();
+                handleBalances();
+            });
+        }
     }
 
     @Override
@@ -282,12 +304,21 @@ public class HouseExpensesFragment extends Fragment implements ExpenseAdapter.On
 
     public static class SettleExpensesDialogFragment extends DialogFragment
     {
-        private MaterialButton noButton, yesButton;
+        private Button noButton, yesButton;
         private TextView settleDialogTextView;
+        private HouseExpensesFragment houseExpensesFragment;
+        Dialog dialog;
 
-        public static SettleExpensesDialogFragment newInstance()
+        public static SettleExpensesDialogFragment newInstance(HouseExpensesFragment houseExpensesFragment)
         {
-            return new SettleExpensesDialogFragment();
+            SettleExpensesDialogFragment f = new SettleExpensesDialogFragment();
+            f.setHouseExpensesFragment(houseExpensesFragment);
+            return f;
+        }
+
+        public void setHouseExpensesFragment(HouseExpensesFragment houseExpensesFragment)
+        {
+            this.houseExpensesFragment = houseExpensesFragment;
         }
 
         @Nullable
@@ -297,10 +328,45 @@ public class HouseExpensesFragment extends Fragment implements ExpenseAdapter.On
         {
             View v = inflater.inflate(R.layout.dialog_settle_expenses, container, false);
             noButton = v.findViewById(R.id.button_no);
+            noButton.setOnClickListener(new View.OnClickListener()
+            {
+                @Override
+                public void onClick(View v)
+                {
+                    dialog.dismiss();
+                }
+            });
             yesButton = v.findViewById(R.id.button_yes);
+            yesButton.setOnClickListener(new View.OnClickListener()
+            {
+                @Override
+                public void onClick(View v)
+                {
+                    houseExpensesFragment.settleExpenses();
+                    dialog.dismiss();
+                }
+            });
             settleDialogTextView = v.findViewById(R.id.settle_expense_dialog_text);
-            return super.onCreateView(inflater, container, savedInstanceState);
+            settleDialogTextView.setVisibility(View.VISIBLE);
+            return v;
         }
+
+
+        public void showDialog()
+        {
+            FragmentManager fm = houseExpensesFragment.getParentFragmentManager();
+            this.show(fm, "dialog");
+        }
+
+        @NonNull
+        @Override
+        public Dialog onCreateDialog(@Nullable Bundle savedInstanceState)
+        {
+            dialog = super.onCreateDialog(savedInstanceState);
+            dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+            return dialog;
+        }
+
     }
 
 
@@ -308,18 +374,18 @@ public class HouseExpensesFragment extends Fragment implements ExpenseAdapter.On
     {
         private RecyclerView mRecyclerView;
         private BalanceAdapter adapter;
-        private HouseExpensesFragment parent;
+        private HouseExpensesFragment houseExpensesFragment;
 
-        public static BalanceDialogFragment newInstance(HouseExpensesFragment parent)
+        public static BalanceDialogFragment newInstance(HouseExpensesFragment houseExpensesFragment)
         {
             BalanceDialogFragment f = new BalanceDialogFragment();
-            f.setParent(parent);
+            f.setHouseExpensesFragment(houseExpensesFragment);
             return f;
         }
 
-        private void setParent(HouseExpensesFragment parent)
+        private void setHouseExpensesFragment(HouseExpensesFragment houseExpensesFragment)
         {
-            this.parent = parent;
+            this.houseExpensesFragment = houseExpensesFragment;
         }
 
         @Override
@@ -336,7 +402,7 @@ public class HouseExpensesFragment extends Fragment implements ExpenseAdapter.On
         {
             ArrayList<Pair<String, Double>> namesAndBalances = new ArrayList<>();
             LiveData<GetHouseRoomiesJob> job =
-                    HouseRepository.getInstance().getHouseRoomies(parent.houseActivityViewModel.getHouse().getId());
+                    HouseRepository.getInstance().getHouseRoomies(houseExpensesFragment.houseActivityViewModel.getHouse().getId());
             job.observe(getViewLifecycleOwner(), getHouseRoomiesJob -> {
                 switch (getHouseRoomiesJob.getJobStatus())
                 {
@@ -344,7 +410,7 @@ public class HouseExpensesFragment extends Fragment implements ExpenseAdapter.On
                         for (User user : getHouseRoomiesJob.getRoomiesList())
                         {
                             String username = user.getUsername();
-                            double userBalance = parent.getBalanceByUid(user.getUid());
+                            double userBalance = houseExpensesFragment.getBalanceByUid(user.getUid());
                             Pair<String, Double> usernameAndBalance = new Pair<>(username, userBalance);
                             namesAndBalances.add(usernameAndBalance);
                         }
@@ -356,9 +422,9 @@ public class HouseExpensesFragment extends Fragment implements ExpenseAdapter.On
             });
         }
 
-        void showDialog()
+        public void showDialog()
         {
-            FragmentManager fm = parent.getParentFragmentManager();
+            FragmentManager fm = houseExpensesFragment.getParentFragmentManager();
             this.show(fm, "dialog");
         }
 
@@ -372,5 +438,45 @@ public class HouseExpensesFragment extends Fragment implements ExpenseAdapter.On
         }
     }
 
+    private void dispatchTakePictureIntent()
+    {
+        Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        try
+        {
+            startActivityForResult(takePictureIntent, REQUEST_IMAGE_CAPTURE);
+        } catch (ActivityNotFoundException e)
+        {
+            // TODO: display error state to the user
+        }
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data)
+    {
+        if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK)
+        {
+            Bundle extras = data.getExtras();
+            Bitmap imageBitmap = (Bitmap) extras.get("data");
+            currentThumbnail.setImageBitmap(imageBitmap);
+            Uri uri = data.getData();
+        }
+    }
+
+
+    private File createImageFile() throws IOException {
+        // Create an image file name
+        String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
+        String imageFileName = "JPEG_" + timeStamp + "_";
+        File storageDir = getActivity().getExternalFilesDir(Environment.DIRECTORY_PICTURES);
+        File image = File.createTempFile(
+                imageFileName,  /* prefix */
+                ".jpg",         /* suffix */
+                storageDir      /* directory */
+        );
+
+        // Save a file: path for use with ACTION_VIEW intents
+        currentPhotoPath = image.getAbsolutePath();
+        return image;
+    }
 
 }

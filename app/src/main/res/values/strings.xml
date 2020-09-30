@@ -186,7 +186,7 @@
     <string name="currency_sign">₪</string>
     <string name="expense_title">Expense Title</string>
     <string name="no_payer_set">No Payer Set</string>
-    <string name="total_house_spending">Total House Spending:</string>
+    <string name="house_spending">House Spending:</string>
     <string name="filter">filter by</string>
     <string name="sortBy">sort by</string>
     <string name="doFilter">filter</string>
