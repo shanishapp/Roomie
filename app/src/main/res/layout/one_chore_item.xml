@@ -4,7 +4,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="100dp"
+    android:layout_height="wrap_content"
     android:background="@drawable/one_chore_bg"
     android:layout_marginBottom="10dp">
 
@@ -38,12 +38,13 @@
     <TextView
         android:id="@+id/choreTitleHolderView"
         android:layout_width="0dp"
-        android:layout_height="20dp"
+        android:layout_height="wrap_content"
         android:layout_marginStart="2dp"
         android:layout_marginTop="10dp"
         android:layout_marginRight="2dp"
         android:gravity="center"
         android:text="@string/chore_title"
+        android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="@+id/choreDueDateHolderView"
         app:layout_constraintStart_toEndOf="@+id/timerLayout"
         app:layout_constraintTop_toTopOf="parent" />
@@ -52,12 +53,13 @@
         android:id="@+id/choreDueDateHolderView"
         android:layout_width="0dp"
         android:layout_height="20dp"
+        android:textSize="10sp"
         android:layout_marginStart="2dp"
-        android:layout_marginTop="10dp"
+        android:layout_marginTop="5dp"
         android:layout_marginRight="2dp"
         android:gravity="center"
         android:text="@string/due_date"
-        app:layout_constraintEnd_toStartOf="@+id/assigneeImageCard"
+        app:layout_constraintEnd_toStartOf="@+id/feedImageCard"
         app:layout_constraintStart_toEndOf="@+id/timerLayout"
         app:layout_constraintTop_toBottomOf="@+id/choreTitleHolderView" />
 
@@ -66,17 +68,19 @@
         android:layout_width="0dp"
         android:layout_height="20dp"
         android:layout_marginStart="2dp"
-        android:layout_marginTop="10dp"
         android:layout_marginRight="2dp"
+        android:layout_marginBottom="10dp"
         android:gravity="center"
         android:text="@string/currently_no_assignee"
-        app:layout_constraintEnd_toStartOf="@+id/assigneeImageCard"
+        android:textSize="10sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/feedImageCard"
         app:layout_constraintStart_toStartOf="@+id/choreDueDateHolderView"
         app:layout_constraintTop_toBottomOf="@+id/choreDueDateHolderView" />
 
 
     <androidx.cardview.widget.CardView
-        android:id="@+id/assigneeImageCard"
+        android:id="@+id/feedImageCard"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerInParent="true"
