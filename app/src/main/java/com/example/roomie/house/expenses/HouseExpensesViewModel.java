@@ -9,11 +9,14 @@ import com.example.roomie.house.chores.chore.newChoreJob;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 import java.util.Objects;
 import java.util.concurrent.Executor;
 
 import static com.example.roomie.util.FirestoreUtil.CHORES_COLLECTION_NAME;
+import static com.example.roomie.util.FirestoreUtil.CREATION_DATE_FIELD_NAME;
 import static com.example.roomie.util.FirestoreUtil.EXPENSES_COLLECTION_NAME;
 import static com.example.roomie.util.FirestoreUtil.HOUSES_COLLECTION_NAME;
 
@@ -196,6 +199,71 @@ public class HouseExpensesViewModel extends ViewModel implements ExpenseAdapter.
         return job;
     }
 
+    public LiveData<AllExpensesJob> getUnSettledExpenses(String houseId)
+    {
+        AllExpensesJob expensesJob = new AllExpensesJob(FirestoreJob.JobStatus.IN_PROGRESS);
+        MutableLiveData<AllExpensesJob> job = new MutableLiveData<>(expensesJob);
+
+        db.collection(HOUSES_COLLECTION_NAME)
+                .document(houseId).collection(EXPENSES_COLLECTION_NAME).whereEqualTo("_isSettled",false)
+                .get().addOnCompleteListener(task -> {
+            if (task.isSuccessful())
+            {
+                List<Expense> fetchedList = new ArrayList<>();
+                for (DocumentSnapshot documentSnapshot : Objects.requireNonNull(task.getResult()))
+                {
+                    Expense expense = documentSnapshot.toObject(Expense.class);
+                    fetchedList.add(expense);
+                }
+                expenses.setValue(fetchedList);
+                expensesJob.setExpenses(fetchedList);
+                expensesJob.setJobStatus(FirestoreJob.JobStatus.SUCCESS);
+                job.setValue(expensesJob);
+            } else
+            {
+                expensesJob.setJobStatus(FirestoreJob.JobStatus.ERROR);
+                expensesJob.setJobErrorCode(FirestoreJob.JobErrorCode.GENERAL);
+                job.setValue(expensesJob);
+            }
+        });
+        return job;
+    }
+
+    public LiveData<AllExpensesJob> getExpensesFromLastWeek(String houseId)
+    {
+        AllExpensesJob expensesJob = new AllExpensesJob(FirestoreJob.JobStatus.IN_PROGRESS);
+        MutableLiveData<AllExpensesJob> job = new MutableLiveData<>(expensesJob);
+        Date date = new Date();
+        Calendar c = Calendar.getInstance();
+        c.setTime(date);
+        int i = c.get(Calendar.DAY_OF_WEEK) - c.getFirstDayOfWeek();
+        c.add(Calendar.DATE, -i - 7);
+        Date start = c.getTime();
+
+        db.collection(HOUSES_COLLECTION_NAME)
+                .document(houseId).collection(EXPENSES_COLLECTION_NAME).whereGreaterThan(CREATION_DATE_FIELD_NAME,start)
+                .get().addOnCompleteListener(task -> {
+            if (task.isSuccessful())
+            {
+                List<Expense> fetchedList = new ArrayList<>();
+                for (DocumentSnapshot documentSnapshot : Objects.requireNonNull(task.getResult()))
+                {
+                    Expense expense = documentSnapshot.toObject(Expense.class);
+                    fetchedList.add(expense);
+                }
+                expenses.setValue(fetchedList);
+                expensesJob.setExpenses(fetchedList);
+                expensesJob.setJobStatus(FirestoreJob.JobStatus.SUCCESS);
+                job.setValue(expensesJob);
+            } else
+            {
+                expensesJob.setJobStatus(FirestoreJob.JobStatus.ERROR);
+                expensesJob.setJobErrorCode(FirestoreJob.JobErrorCode.GENERAL);
+                job.setValue(expensesJob);
+            }
+        });
+        return job;
+    }
 
     @Override
     public void onExpenseClick(int pos)

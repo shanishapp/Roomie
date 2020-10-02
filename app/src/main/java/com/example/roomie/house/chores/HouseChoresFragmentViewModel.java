@@ -29,6 +29,7 @@ import java.util.List;
 import static com.example.roomie.util.FirestoreUtil.CHORES_COLLECTION_NAME;
 import static com.example.roomie.util.FirestoreUtil.CHORE_DONE_FIELD_NAME;
 import static com.example.roomie.util.FirestoreUtil.CREATION_DATE_FIELD_NAME;
+import static com.example.roomie.util.FirestoreUtil.DUE_DATE_FIELD_NAME;
 import static com.example.roomie.util.FirestoreUtil.HOUSES_COLLECTION_NAME;
 import static com.example.roomie.util.FirestoreUtil.SIZE_FIELD_NAME;
 
@@ -340,6 +341,39 @@ public class HouseChoresFragmentViewModel extends ViewModel {
                     }
                 });
 
+        return job;
+    }
+
+    public LiveData<AllChoresJob> getLastMonthAchievements(String houseId){
+        AllChoresJob choresJob = new AllChoresJob(FirestoreJob.JobStatus.IN_PROGRESS);
+        MutableLiveData<AllChoresJob> job = new MutableLiveData<>(choresJob);
+
+        Date date = new Date();
+        Calendar c = Calendar.getInstance();
+        c.setTime(date);
+        c.add(Calendar.MONTH, -1);
+        Date start = c.getTime();
+
+        db.collection(HOUSES_COLLECTION_NAME)
+                        .document(houseId).collection(CHORES_COLLECTION_NAME)
+                        .whereEqualTo(CHORE_DONE_FIELD_NAME,true)
+                        .whereGreaterThan(DUE_DATE_FIELD_NAME, start)
+                        .get().addOnCompleteListener(task -> {
+                            if(task.isSuccessful()) {
+                                List<Chore> fetchedList = new ArrayList<>();
+                                for(DocumentSnapshot documentSnapshot :  task.getResult()) {
+                                    Chore chore = documentSnapshot.toObject(Chore.class);
+                                    fetchedList.add(chore);
+                                }
+                                choresJob.setChoreList(fetchedList);
+                                choresJob.setJobStatus(FirestoreJob.JobStatus.SUCCESS);
+                                job.setValue(choresJob);
+                            } else {
+                                choresJob.setJobStatus(FirestoreJob.JobStatus.ERROR);
+                                choresJob.setJobErrorCode(FirestoreJob.JobErrorCode.GENERAL);
+                                job.setValue(choresJob);
+                            }
+                        });
         return job;
     }
 }

@@ -59,7 +59,7 @@
         android:layout_marginRight="2dp"
         android:gravity="center"
         android:text="@string/due_date"
-        app:layout_constraintEnd_toStartOf="@+id/assigneeImageCard"
+        app:layout_constraintEnd_toStartOf="@+id/feedImageCard"
         app:layout_constraintStart_toEndOf="@+id/timerLayout"
         app:layout_constraintTop_toBottomOf="@+id/choreTitleHolderView" />
 
@@ -74,13 +74,13 @@
         android:text="@string/currently_no_assignee"
         android:textSize="10sp"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/assigneeImageCard"
+        app:layout_constraintEnd_toStartOf="@+id/feedImageCard"
         app:layout_constraintStart_toStartOf="@+id/choreDueDateHolderView"
         app:layout_constraintTop_toBottomOf="@+id/choreDueDateHolderView" />
 
 
     <androidx.cardview.widget.CardView
-        android:id="@+id/assigneeImageCard"
+        android:id="@+id/feedImageCard"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerInParent="true"
