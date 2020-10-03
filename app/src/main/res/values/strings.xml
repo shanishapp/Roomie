@@ -131,7 +131,8 @@
     <!-- Join House Activity  -->
     <string name="join_house_activity_title">Join House</string>
     <string name="join_house_activity_already_user_has_house">You already have a house!</string>
-    <string name="join_house_activity_explanation">You are about to join the house %s. Click join to confirm.</string>
+    <string name="join_house_activity_explanation">You are about to join the house</string>
+    <string name="join_house_activity_confirm">Click join to confirm</string>
     <string name="join_house_activity_join_button">Join</string>
     <string name="join_house_activity_invitation_or_house_dont_exist">The invitation or house doesn\'t exist.</string>
     <string name="join_house_activity_invitation_expired">The invitation has been expired.</string>
