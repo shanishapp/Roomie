@@ -195,4 +195,6 @@
     <string name="no">לא</string>
     <string name="expense_type_hint">מלא את סוג ההוצאה כאן</string>
     <string name="describe_your_expense">תאר את ההוצאה</string>
+    <string name="add_receipt">האם אתה רוצה להוסיף צילום של קבלה?</string>
+    <string name="replace_photo">החלף את התמונה</string>
 </resources>

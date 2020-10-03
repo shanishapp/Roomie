@@ -6,18 +6,21 @@
 
     <ImageView
         android:id="@+id/current_receipt_image"
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <Button
         android:id="@+id/replace_receipt_button"
-        android:layout_width="match_parent"
+        android:layout_width="1000dp"
         android:layout_height="wrap_content"
-        android:background="@color/no_button_color"
-        android:text="@string/replace_receipt"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+        android:background="@drawable/button_yes_bg"
+        android:layout_marginBottom="20dp"
+        android:text="@string/replace_photo"
+        app:layout_constraintBottom_toBottomOf="@id/current_receipt_image"
+        app:layout_constraintEnd_toEndOf="@id/current_receipt_image"
+        app:layout_constraintStart_toStartOf="@id/current_receipt_image"
+        />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

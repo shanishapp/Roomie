@@ -8,9 +8,6 @@ import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
 import com.example.roomie.FirestoreJob;
-import com.example.roomie.House;
-import com.example.roomie.repositories.HouseRepository;
-import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.storage.StorageReference;
@@ -215,7 +212,7 @@ public class HouseExpensesViewModel extends ViewModel implements ExpenseAdapter.
     }
 
 
-    public LiveData<ExpenseJob> updateReceiptImageUri(String houseId, String expenseId, Uri uri)
+    public LiveData<ExpenseJob> updateReceiptImageUri(String houseId, String expenseId, String uri)
     {
         ExpenseJob expenseJob = new ExpenseJob(FirestoreJob.JobStatus.IN_PROGRESS);
         MutableLiveData<ExpenseJob> job = new MutableLiveData<>(expenseJob);
@@ -232,13 +229,16 @@ public class HouseExpensesViewModel extends ViewModel implements ExpenseAdapter.
                         {
                             List<Expense> expenseList = expenses.getValue();
                             expenseList.remove(expense);
-                            expense.set_receiptImageUri(uri);
+                            expense.set_receiptImageUriString(uri);
                             expense.set_hasReceipt(true);
                             expenseList.add(expense);
                             expenses.setValue(expenseList);
                             db.collection(HOUSES_COLLECTION_NAME)
                                     .document(houseId).collection(EXPENSES_COLLECTION_NAME)
-                                    .document(expenseId).update("_receiptImageUri", uri.toString());
+                                    .document(expenseId).update("_receiptImageUriString", uri);
+                            db.collection(HOUSES_COLLECTION_NAME)
+                                    .document(houseId).collection(EXPENSES_COLLECTION_NAME)
+                                    .document(expenseId).update("_hasReceipt", true);
 
                             expenseJob.setExpense(task.getResult().toObject(Expense.class));
                             expenseJob.setJobStatus(FirestoreJob.JobStatus.SUCCESS);

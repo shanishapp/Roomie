@@ -118,7 +118,6 @@ public class HouseExpensesFragment extends Fragment implements ExpenseAdapter.On
         houseActivityViewModel =
                 new ViewModelProvider(requireActivity()).get(HouseActivityViewModel.class);
         viewModel = new ViewModelProvider(this).get(HouseExpensesViewModel.class);
-        getRoommateNumber();
         LiveData<AllExpensesJob> job =
                 viewModel.getExpenses(houseActivityViewModel.getHouse().getId());
         job.observe(getViewLifecycleOwner(), allExpensesJob -> {
@@ -133,6 +132,7 @@ public class HouseExpensesFragment extends Fragment implements ExpenseAdapter.On
         replaceReceiptDialog = ReplaceReceiptDialog.newInstance(this);
         return v;
     }
+
 
     private void setUpUI(AllExpensesJob allExpensesJob, View view)
     {
@@ -164,6 +164,7 @@ public class HouseExpensesFragment extends Fragment implements ExpenseAdapter.On
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState)
     {
         super.onViewCreated(view, savedInstanceState);
+        getRoommateNumber();
         navController = Navigation.findNavController(view);
         setUpAddExpenseButton(view);
         setUpSettleExpensesButton(view);
@@ -412,12 +413,13 @@ public class HouseExpensesFragment extends Fragment implements ExpenseAdapter.On
                 LiveData<ExpenseJob> updatePhotoJob =
                         viewModel.updateReceiptImageUri(houseActivityViewModel.getHouse().getId(),
                                 expenseId,
-                                receiptPhotoUri);
+                                receiptPhotoUri.toString());
                 updatePhotoJob.observe(getViewLifecycleOwner(), ExpenseJob ->
                 {
                     if (ExpenseJob.getJobStatus() == FirestoreJob.JobStatus.SUCCESS)
                     {
                         //TODO: toast?
+                        currentExpense.set_hasReceipt(true);
                     }
                 });
             });
@@ -667,8 +669,8 @@ public class HouseExpensesFragment extends Fragment implements ExpenseAdapter.On
                     houseExpensesFragment.selectReceiptPicture(v);
                 }
             });
-            Picasso.get().load(houseExpensesFragment.currentExpense.getReceiptPhotoUrl())
-                    .resize(512, 512)
+            Picasso.get().load(houseExpensesFragment.currentExpense.get_receiptImageUriString())
+                    .resize(1200, 1600)
                     .centerCrop()
                     .into(image);
             return v;

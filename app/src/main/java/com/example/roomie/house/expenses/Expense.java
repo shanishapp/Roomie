@@ -24,7 +24,8 @@ public class Expense
     private ExpenseType _type;
     private double _cost;
     private Date _creationDate;
-    private Uri _receiptImageUri;
+    //    private Uri _receiptImageUri;
+    private String _receiptImageUriString;
     private String _payerName;
     private String _payerID;
     private boolean _hasReceipt;
@@ -97,14 +98,24 @@ public class Expense
         return _isSettled;
     }
 
-    public Uri getReceiptPhotoUrl()
+//    public Uri get_receiptImageUri()
+//    {
+//        return _receiptImageUri;
+//    }
+
+//    public void set_receiptImageUri(Uri _receiptImageUri)
+//    {
+//        this._receiptImageUri = _receiptImageUri;
+//    }
+
+    public String get_receiptImageUriString()
     {
-        return _receiptImageUri;
+        return _receiptImageUriString;
     }
 
-    public void set_receiptImageUri(Uri _receiptImageUri)
+    public void set_receiptImageUriString(String _receiptImageUriString)
     {
-        this._receiptImageUri = _receiptImageUri;
+        this._receiptImageUriString = _receiptImageUriString;
     }
 
 
@@ -134,7 +145,25 @@ public class Expense
         this._type = _type;
         this._cost = _cost;
         this._creationDate = _creationDate;
-        this._receiptImageUri = _receiptImageUri;
+//        this._receiptImageUri = _receiptImageUri;
+        this._payerName = _payerName;
+        this._payerID = _payerID;
+        this._hasReceipt = _hasReceipt;
+    }
+
+    public Expense(String _id, String _title, boolean _isSettled, String _description, ExpenseType _type,
+                   double _cost, Date _creationDate, String _receiptImageUri, String _payerName,
+                   String _payerID, boolean _hasReceipt)
+    {
+        this._id = _id;
+        this._title = _title;
+        this._isSettled = _isSettled;
+        this._description = _description;
+        this._type = _type;
+        this._cost = _cost;
+        this._creationDate = _creationDate;
+        _receiptImageUriString = _receiptImageUri;
+//        this._receiptImageUri = Uri.parse(_receiptImageUri);
         this._payerName = _payerName;
         this._payerID = _payerID;
         this._hasReceipt = _hasReceipt;

@@ -217,7 +217,7 @@
     <string name="expense_type_hint">Enter expense type here</string>
     <string name="describe_your_expense">Describe your expense</string>
     <string name="add_receipt">Do you want to add a receipt photo?</string>
-    <string name="replace_receipt">Replace Receipt</string>
+    <string name="replace_photo">Replace Photo</string>
 
     <string-array name="filter_by_sizes">
         <item>@string/big</item>
