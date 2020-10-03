@@ -36,9 +36,7 @@ public class FirestoreUtil
 
     public final static String DUE_DATE_FIELD_NAME = "_dueDate";
 
-
     public static final String SIZE_FIELD_NAME = "_score";
-
 
     public static final String CREATION_DATE_FIELD_NAME = "_creationDate";
 }

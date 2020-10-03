@@ -19,15 +19,20 @@
         android:theme="@style/AppTheme">
         <activity
             android:name=".join_house.JoinHouseActivity"
-            android:theme="@style/JoinHouseTheme" />
-        <activity android:name=".house.HouseActivity" />
+            android:theme="@style/JoinHouseTheme"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".house.HouseActivity"
+            android:screenOrientation="portrait"/>
         <activity
             android:name=".choose_house.ChooseHouseActivity"
-            android:theme="@style/ChooseHouseTheme" />
-        <activity android:name=".SignInActivity" />
+            android:theme="@style/ChooseHouseTheme"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".SignInActivity"
+            android:screenOrientation="portrait"/>
         <activity
             android:name=".splash.SplashScreenActivity"
-            android:theme="@style/SplashTheme">
+            android:theme="@style/SplashTheme"
+            android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -46,7 +51,8 @@
             </intent-filter>
         </activity>
         <activity android:name="com.theartofdev.edmodo.cropper.CropImageActivity"
-            android:theme="@style/Base.Theme.AppCompat" />
+            android:theme="@style/Base.Theme.AppCompat"
+            android:screenOrientation="portrait"/>
 
         <receiver android:name=".house.chores.chore.SnoozerBroadcast"/>
 

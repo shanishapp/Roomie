@@ -10,17 +10,19 @@ public class Grocery {
     private Date _creationDate;
     private Date _lastUpdateDate;
     private int _viewType;
+    private String _creatorName;
 
     public Grocery(){
 
     }
 
-    public Grocery(String name, int size, int viewType) {
+    public Grocery(String name, int size, int viewType,String creatorName) {
         _name = name;
         _size = size;
         _viewType = viewType;
         _creationDate = new Date();
         _lastUpdateDate = _creationDate;
+        _creatorName = creatorName;
     }
 
     public String get_id() {
@@ -65,5 +67,13 @@ public class Grocery {
 
     public void set_viewType(int _viewType) {
         this._viewType = _viewType;
+    }
+
+    public String get_creatorName() {
+        return _creatorName;
+    }
+
+    public void set_creatorName(String _creatorName) {
+        this._creatorName = _creatorName;
     }
 }

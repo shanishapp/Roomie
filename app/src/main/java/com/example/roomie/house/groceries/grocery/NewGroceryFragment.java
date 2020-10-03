@@ -22,6 +22,8 @@ import androidx.navigation.Navigation;
 import com.example.roomie.House;
 import com.example.roomie.R;
 import com.example.roomie.house.HouseActivityViewModel;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 
 public class NewGroceryFragment extends Fragment {
 
@@ -36,6 +38,8 @@ public class NewGroceryFragment extends Fragment {
     private String name = null;
     private int score = 1;
     private FrameLayout loadingOverlay;
+    private FirebaseUser user;
+
 
     public NewGroceryFragment(){
 
@@ -58,6 +62,8 @@ public class NewGroceryFragment extends Fragment {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         newGroceryFragmentViewModel = new ViewModelProvider(this).get(NewGroceryFragmentViewModel.class);
+        user = FirebaseAuth.getInstance().getCurrentUser();
+
     }
 
     @Nullable
@@ -89,7 +95,7 @@ public class NewGroceryFragment extends Fragment {
             return;
         }
 
-        LiveData<NewGroceryJob> job = newGroceryFragmentViewModel.createNewGrocery(house,name,1);
+        LiveData<NewGroceryJob> job = newGroceryFragmentViewModel.createNewGrocery(house,name,1,user.getDisplayName());
         job.observe(getViewLifecycleOwner(), newGroceryJob -> {
             switch (newGroceryJob.getJobStatus()){
                 case IN_PROGRESS:

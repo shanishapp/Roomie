@@ -207,6 +207,7 @@
     <string name="editAssigneeError">there was an error edit assignee, please try again</string>
     <string name="created_at">"created in: "</string>
     <string name="check">check</string>
+
     <string name="description_1">Description</string>
     <string name="owes">owes</string>
     <string name="is_owed">is owed</string>
@@ -218,6 +219,16 @@
     <string name="describe_your_expense">Describe your expense</string>
     <string name="add_receipt">Do you want to add a receipt photo?</string>
     <string name="replace_photo">Replace Photo</string>
+
+    <string name="groceriesPrice">"groceries price: "</string>
+    <string name="add_to_expense">add to expenses</string>
+    <string name="cancel">cancel</string>
+    <string name="total_groceries_left">total groceries left:</string>
+    <string name="top_contributer">top contributer of the month:</string>
+    <string name="lastActivity">Last Activity</string>
+    <string name="new_chore">"New chore: "</string>
+    <string name="new_expense">"New expense: "</string>
+    <string name="new_grocery">"Added new grocery: "</string>
 
     <string-array name="filter_by_sizes">
         <item>@string/big</item>

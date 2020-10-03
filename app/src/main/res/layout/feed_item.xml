@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical"
+    android:gravity="center"
+    android:weightSum="3"
+    android:padding="5dp"
+    android:background="@drawable/one_chore_bg"
+    android:layout_width="match_parent"
+    android:layout_height="120dp"
+    android:layout_margin="5dp">
+
+
+    <TextView
+        android:id="@+id/feedRoommateName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="10dp"
+        android:gravity="center"
+        android:text="Feed roomate name"
+        android:textColor="@color/black"
+        app:layout_constraintBottom_toBottomOf="@+id/feedImageCard"
+        app:layout_constraintStart_toEndOf="@+id/feedImageCard"
+        app:layout_constraintTop_toTopOf="@+id/feedImageCard"
+        app:layout_constraintVertical_bias="0.13999999" />
+
+    <View
+        android:id="@+id/seperator"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_marginTop="5dp"
+        android:background="@color/gray_holo_light"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/feedImageCard" />
+
+    <TextView
+        android:id="@+id/feedDateCreated"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:text="date created:"
+        android:textSize="12sp"
+        app:layout_constraintEnd_toEndOf="@+id/feedRoommateName"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="@+id/feedRoommateName"
+        app:layout_constraintTop_toBottomOf="@+id/feedRoommateName" />
+
+    <androidx.cardview.widget.CardView
+        android:id="@+id/feedImageCard"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_margin="5dp"
+        android:layout_centerInParent="true"
+        android:layout_centerVertical="true"
+        app:cardCornerRadius="64dp"
+        app:cardPreventCornerOverlap="false"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <ImageView
+            android:id="@+id/feed_creator_image_view"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:contentDescription="@string/house_user_profile_fragment_profile_pic_desc"
+            app:srcCompat="@drawable/avatar_1" />
+    </androidx.cardview.widget.CardView>
+
+    <TextView
+        android:id="@+id/feedDescription"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="3dp"
+        android:layout_marginTop="5dp"
+        android:text="@string/description"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/seperator" />
+
+    <ImageView
+        android:id="@+id/imageView2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:layout_marginEnd="10dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@android:drawable/arrow_down_float" />
+</androidx.constraintlayout.widget.ConstraintLayout>

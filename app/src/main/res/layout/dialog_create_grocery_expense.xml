@@ -11,20 +11,60 @@
     android:layout_marginEnd="15dp">
 
     <TextView
-        android:id="@+id/textView"
+        android:id="@+id/numberOfChosenGroceriesTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="20dp"
-        android:text="Grocery Name"
+        android:textSize="20sp"
+        android:text="number of chosen Groceries"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
-        android:id="@+id/textView6"
+        android:id="@+id/chosenGroceriesCount"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:text="0" />
+
+    <TextView
+        android:id="@+id/groceriesPrice"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="creation date" />
+        android:layout_marginTop="5dp"
+        android:textSize="20sp"
+        android:text="@string/groceriesPrice" />
+
+    <EditText
+        android:id="@+id/editTextNumber"
+        android:layout_width="70dp"
+        android:layout_height="30dp"
+        android:background="@drawable/input_bg"
+        android:text="0"
+        android:layout_marginTop="5dp"
+        android:textSize="15sp"
+        android:gravity="center"
+        android:inputType="number" />
+
+    <Button
+        android:id="@+id/doAddToExpensesBtn"
+        android:layout_width="wrap_content"
+        android:layout_height="30dp"
+        android:padding="5dp"
+        android:layout_marginTop="15dp"
+        android:text="@string/add_to_expense"
+        android:background="@drawable/button_bg"/>
+
+    <Button
+        android:id="@+id/cancelBtn"
+        android:layout_width="100dp"
+        android:layout_height="30dp"
+        android:layout_marginTop="5dp"
+        android:layout_marginBottom="20dp"
+        android:background="@drawable/button_bg"
+        android:padding="5dp"
+        android:text="@string/cancel" />
 
 
 </LinearLayout>

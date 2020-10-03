@@ -174,11 +174,11 @@
     <string name="description">תיאור (אופציונלי)</string>
     <string name="editChoreContent">ערוך תיאור</string>
     <string name="time_left">"זמן נותר"</string>
-    <string name="days">days</string>
-    <string name="hours">hours</string>
-    <string name="editAssigneeError">there was an error edit assignee, please try again</string>
-    <string name="created_at">"created in: "</string>
-    <string name="check">check</string>
+    <string name="days">ימים</string>
+    <string name="hours">שעות</string>
+    <string name="editAssigneeError">התרחשה שגיאה, נא נסה שוב</string>
+    <string name="created_at">"נוצר ב: "</string>
+    <string name="check">סמן מצרך</string>
     <string name="house_bottom_menu_chat">צ\'אט</string>
     <string name="house_chat_fragment_title">צ\'אט</string>
     <string name="house_chat_header_today">היום</string>
@@ -194,4 +194,13 @@
     <string name="describe_your_expense">תאר את ההוצאה</string>
     <string name="add_receipt">האם אתה רוצה להוסיף צילום של קבלה?</string>
     <string name="replace_photo">החלף את התמונה</string>
+    <string name="groceriesPrice">"מחיר המצרכים: "</string>
+    <string name="add_to_expense">הוסף.י להוצאות</string>
+    <string name="cancel">ביטול</string>
+    <string name="total_groceries_left">סך המצרכים שנותרו</string>
+    <string name="top_contributer">השותף הכי תורם של החודש</string>
+    <string name="lastActivity">פעילות אחרונה</string>
+    <string name="new_chore">"הוסיף.ה מטלה חדשה:  "</string>
+    <string name="new_expense">"הוצאה חדשה:  "</string>
+    <string name="new_grocery">"הוסיף.ה מצרך חדש: "</string>
 </resources>

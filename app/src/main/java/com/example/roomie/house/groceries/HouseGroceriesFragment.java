@@ -1,6 +1,8 @@
 package com.example.roomie.house.groceries;
 
 import android.app.AlertDialog;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -17,7 +19,9 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.FrameLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.roomie.FirestoreJob;
@@ -177,38 +181,63 @@ public class HouseGroceriesFragment extends Fragment implements GroceryAdapter.O
             }
         });
 
-        moveToExpensesBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                new AlertDialog.Builder(getContext())
-                        .setTitle("Add to expenses")
-                        .setMessage("you have "+pickedGroceries.size()+ " chosen groceries\nwould you like to combine them to one expense?")
+        moveToExpensesBtn.setOnClickListener(view12 -> {
+                    AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+                    AlertDialog alertDialog = builder.create();
+                    final View customLayout = getLayoutInflater().inflate(R.layout.dialog_create_grocery_expense, null);
+            ((TextView)customLayout.findViewById(R.id.chosenGroceriesCount)).setText(String.valueOf(pickedGroceries.size()));
+                    customLayout.findViewById(R.id.doAddToExpensesBtn).setOnClickListener(view1 -> {
+                        StringBuilder description = new StringBuilder();
+                        for (Grocery newGrocery : pickedGroceries) {
+                            description.append(newGrocery.get_name()).append("\n");
+                        }
+                        NewExpenseViewModel expenseViewModel = new ViewModelProvider(requireActivity()).get(NewExpenseViewModel.class);
+                        expenseViewModel.createNewExpense(houseActivityViewModel.getHouse(),
+                                getString(R.string.house_bottom_menu_groceries), description.toString(),
+                                0, user.getUid(), "Shani Shapp", Expense.ExpenseType.GROCERIES, new Date());
+                        for (Grocery grocery : pickedGroceries) {
+                            vm.deleteGroceryForever(grocery, houseActivityViewModel.getHouse().getId());
+                            groceryList.remove(grocery);
+                        }
+                        pickedGroceries.clear();
+                        adapter.notifyDataSetChanged();
+                        alertDialog.cancel();
+                    });
+                    customLayout.findViewById(R.id.cancelBtn).setOnClickListener(view13 -> {
+                        alertDialog.cancel();
+                    });
 
-                        // Specifying a listener allows you to take an action before dismissing the dialog.
-                        // The dialog is automatically dismissed when a dialog button is clicked.
-                        .setPositiveButton(android.R.string.yes, (dialog, which) -> {
-                            StringBuilder description = new StringBuilder();
-                            for(Grocery newGrocery:pickedGroceries){
-                                description.append(newGrocery.get_name()).append("\n");
-                            }
-                            NewExpenseViewModel expenseViewModel =  new ViewModelProvider(requireActivity()).get(NewExpenseViewModel.class);
-                            expenseViewModel.createNewExpense(houseActivityViewModel.getHouse(),
-                                    getString(R.string.house_bottom_menu_groceries),description.toString(),
-                                    0,user.getUid(),"Shani Shapp", Expense.ExpenseType.GROCERIES,new Date());
-                            for(Grocery grocery: pickedGroceries){
-                                vm.deleteGroceryForever(grocery,houseActivityViewModel.getHouse().getId());
-                                groceryList.remove(grocery);
-                            }
-                            pickedGroceries.clear();
-                            adapter.notifyDataSetChanged();
-                        })
+                    alertDialog.setView(customLayout);
+                    alertDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+                    alertDialog.show();
+                });
 
-                        // A null listener allows the button to dismiss the dialog and take no further action.
-                        .setNegativeButton(android.R.string.no, null)
-                        .setIcon(android.R.drawable.ic_dialog_alert)
-                        .show();
-            }
-        });
+
+
+//            new AlertDialog.Builder(getContext())
+//                    .setView(R.layout.dialog_create_grocery_expense)
+//                    .setPositiveButton(android.R.string.yes, (dialog, which) -> {
+//                        StringBuilder description = new StringBuilder();
+//                        for(Grocery newGrocery:pickedGroceries){
+//                            description.append(newGrocery.get_name()).append("\n");
+//                        }
+//                        NewExpenseViewModel expenseViewModel =  new ViewModelProvider(requireActivity()).get(NewExpenseViewModel.class);
+//                        expenseViewModel.createNewExpense(houseActivityViewModel.getHouse(),
+//                                getString(R.string.house_bottom_menu_groceries),description.toString(),
+//                                0,user.getUid(),"Shani Shapp", Expense.ExpenseType.GROCERIES,new Date());
+//                        for(Grocery grocery: pickedGroceries){
+//                            vm.deleteGroceryForever(grocery,houseActivityViewModel.getHouse().getId());
+//                            groceryList.remove(grocery);
+//                        }
+//                        pickedGroceries.clear();
+//                        adapter.notifyDataSetChanged();
+//                    })
+//
+//                    // A null listener allows the button to dismiss the dialog and take no further action.
+//                    .setNegativeButton(android.R.string.no, null)
+//                    .setIcon(android.R.drawable.ic_dialog_alert)
+//                    .show()
+//        });
         loadingOverlay = view.findViewById(R.id.groceries_loading_overlay);
         toggleLoadingOverlay(true);
     }

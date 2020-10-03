@@ -36,6 +36,8 @@ public class  Chore {
     }
 
     public String get_description() {
+        if(_description == null)
+            return "";
         return _description;
     }
 

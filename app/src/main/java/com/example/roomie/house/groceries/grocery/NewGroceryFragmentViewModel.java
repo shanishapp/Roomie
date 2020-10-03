@@ -25,11 +25,11 @@ public class NewGroceryFragmentViewModel extends ViewModel {
             db = FirebaseFirestore.getInstance();
         }
 
-        public LiveData<NewGroceryJob> createNewGrocery (House house, String name, int size){
+        public LiveData<NewGroceryJob> createNewGrocery (House house, String name, int size,String creator){
             NewGroceryJob newGroceryJob = new NewGroceryJob(FirestoreJob.JobStatus.IN_PROGRESS);
             MutableLiveData<NewGroceryJob> job = new MutableLiveData<>(newGroceryJob);
 
-            Grocery grocery = new Grocery(name,size,VIEWTYPE_GROCERY);
+            Grocery grocery = new Grocery(name,size,VIEWTYPE_GROCERY,creator);
 
             db.collection(HOUSES_COLLECTION_NAME)
                     .document(house.getId())
