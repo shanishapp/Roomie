@@ -2,6 +2,7 @@ package com.example.roomie.house.expenses;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.net.Uri;
 import android.support.v4.app.INotificationSideChannel;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -24,7 +25,11 @@ public class ExpenseAdapter extends RecyclerView.Adapter<ExpenseAdapter.ViewHold
     private OnExpenseListener _myExpenseListener;
     private OnReceiptListener _myReceiptListener;
     private Context _myContext;
-    SharedPreferences sp;
+    private HouseExpensesFragment houseExpensesFragment;
+    private SharedPreferences sp;
+    private ImageView receiptPicture;
+    private Uri receiptPictureUri;
+
 
     public ExpenseAdapter(List<Expense> expenses, OnExpenseListener onExpenseListener,
                           OnReceiptListener onReceiptListener, Context context)
@@ -79,7 +84,6 @@ public class ExpenseAdapter extends RecyclerView.Adapter<ExpenseAdapter.ViewHold
         LottieAnimationView checkMarkAnimation = holder.checkMarkAnimation;
         checkMarkAnimation.setMaxProgress(1);
 //        LottieAnimationView checkMarkFinalState = holder.checkMarkFinalState;
-
         String costString = String.valueOf(expense.get_cost());
         String payerName = expense.get_payerName();
         if (expense.get_type() == Expense.ExpenseType.GENERAL)
@@ -94,6 +98,8 @@ public class ExpenseAdapter extends RecyclerView.Adapter<ExpenseAdapter.ViewHold
         payerView.setText(payerName);
         if (expense.is_isSettled())
         {
+            //Handle settled expenses animation and graphics
+            markSettledAnimations();
             String expenseID = expense.get_id();
             boolean wasAnimated = sp.getBoolean(expenseID, false);
             blurUI(titleView, costView, payerView, receiptIcon, expenseTypeIcon);
@@ -112,7 +118,26 @@ public class ExpenseAdapter extends RecyclerView.Adapter<ExpenseAdapter.ViewHold
                 sp.edit().putBoolean(expenseID, true).apply();
 //                checkMarkAnimation.animate();
             }
+
+            if (expense.is_hasReceipt())
+            {
+                //TODO: change receipt color
+            } else
+            {
+
+
+            }
+
+            receiptIcon.setOnClickListener(new View.OnClickListener()
+            {
+                @Override
+                public void onClick(View v)
+                {
+                    houseExpensesFragment.onReceiptClick(position);
+                }
+            });
         }
+
 
         receiptIcon.setOnClickListener(new View.OnClickListener()
         {
@@ -130,6 +155,10 @@ public class ExpenseAdapter extends RecyclerView.Adapter<ExpenseAdapter.ViewHold
         });
     }
 
+    private void markSettledAnimations()
+    {
+    }
+
     private void blurUI(TextView titleView, TextView costView, TextView payerView,
                         ImageView receiptIcon, ImageView expenseTypeIcon)
     {
@@ -144,6 +173,21 @@ public class ExpenseAdapter extends RecyclerView.Adapter<ExpenseAdapter.ViewHold
     public int getItemCount()
     {
         return _expenses.size();
+    }
+
+    public void setReceiptPictureUri(Uri uri)
+    {
+        receiptPictureUri = uri;
+    }
+
+    public Uri getReceiptPictureUri()
+    {
+        return receiptPictureUri;
+    }
+
+    public ImageView getReceiptPicture()
+    {
+        return receiptPicture;
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener
@@ -172,7 +216,6 @@ public class ExpenseAdapter extends RecyclerView.Adapter<ExpenseAdapter.ViewHold
 //            checkMarkFinalState = view.findViewById(R.id.check_mark_animation_final_state);
             this.onExpenseListener = onExpenseListener;
             this.onReceiptListener = onReceiptListener;
-
             view.setOnClickListener(this);
         }
 
@@ -199,6 +242,12 @@ public class ExpenseAdapter extends RecyclerView.Adapter<ExpenseAdapter.ViewHold
 
     public interface OnReceiptListener
     {
-        void onReceiptClick();
+        void onReceiptClick(int pos);
+    }
+
+    private void setReceiptClick()
+    {
+
+
     }
 }

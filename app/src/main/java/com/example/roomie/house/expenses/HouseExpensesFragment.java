@@ -1,15 +1,14 @@
 package com.example.roomie.house.expenses;
 
+import android.Manifest;
+import android.app.Activity;
 import android.app.Dialog;
-import android.content.ActivityNotFoundException;
 import android.content.Intent;
-import android.graphics.Bitmap;
+import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
 import android.os.Bundle;
-import android.os.Environment;
-import android.provider.MediaStore;
 import android.util.Pair;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -17,14 +16,18 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
+import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.lifecycle.LiveData;
+import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
@@ -39,16 +42,13 @@ import com.example.roomie.house.HouseActivityViewModel;
 import com.example.roomie.repositories.GetHouseRoomiesJob;
 import com.example.roomie.repositories.HouseRepository;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
+import com.squareup.picasso.Picasso;
+import com.theartofdev.edmodo.cropper.CropImage;
 
-import java.io.File;
-import java.io.IOException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Date;
-
-import static android.app.Activity.RESULT_OK;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -60,8 +60,10 @@ public class HouseExpensesFragment extends Fragment implements ExpenseAdapter.On
 {
 
     static final int REQUEST_IMAGE_CAPTURE = 1;
+    private static final int READ_EXTERNAL_STORAGE_CODE = 2;
 
-    private RecyclerView expensesERecyclerView, balancesRecyclerView;
+    private ExpenseAdapter currentExpenseAdapter;
+    private RecyclerView expensesRecyclerView;
     private TextView myBalanceTextView, houseBalanceTextView;
     private RecyclerView.Adapter<ExpenseAdapter.ViewHolder> expenseAdapter = null;
     private MovableFloatingActionButton addExpenseButton;
@@ -69,9 +71,10 @@ public class HouseExpensesFragment extends Fragment implements ExpenseAdapter.On
     private Button settleExpensesButton;
     private BalanceDialogFragment balanceDialogFragment;
     private SettleExpensesDialogFragment settleExpensesDialogFragment;
+
     private ImageView currentThumbnail;
     private String currentPhotoPath;
-    private StorageReference mStorage;
+    private StorageReference storageReference;
 
 
     private HouseActivityViewModel houseActivityViewModel;
@@ -100,6 +103,7 @@ public class HouseExpensesFragment extends Fragment implements ExpenseAdapter.On
     @Override
     public void onCreate(Bundle savedInstanceState)
     {
+        storageReference = FirebaseStorage.getInstance().getReference();
         super.onCreate(savedInstanceState);
     }
 
@@ -132,10 +136,10 @@ public class HouseExpensesFragment extends Fragment implements ExpenseAdapter.On
         ExpenseByNewComparator s = new ExpenseByNewComparator();
         Collections.sort(expenses, s);
         expenseAdapter = new ExpenseAdapter(expenses, HouseExpensesFragment.this,
-                HouseExpensesFragment.this, this.getContext());
-        expensesERecyclerView = view.findViewById(R.id.expenses_recycler_view);
-        expensesERecyclerView.setAdapter(expenseAdapter);
-        expensesERecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+                HouseExpensesFragment.this, this);
+        expensesRecyclerView = view.findViewById(R.id.expenses_recycler_view);
+        expensesRecyclerView.setAdapter(expenseAdapter);
+        expensesRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         houseBalanceTextView = view.findViewById(R.id.house_balance_text);
         myBalanceTextView = view.findViewById(R.id.my_balance_amount_text);
         balanceBubble = view.findViewById(R.id.balance_bubble);
@@ -150,6 +154,15 @@ public class HouseExpensesFragment extends Fragment implements ExpenseAdapter.On
                 balanceDialogFragment.showDialog();
             }
         });
+    }
+
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState)
+    {
+        super.onViewCreated(view, savedInstanceState);
+        navController = Navigation.findNavController(view);
+        setUpAddExpenseButton(view);
+        setUpSettleExpensesButton(view);
     }
 
     private void handleBalances()
@@ -183,15 +196,6 @@ public class HouseExpensesFragment extends Fragment implements ExpenseAdapter.On
     }
 
 
-    @Override
-    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState)
-    {
-        super.onViewCreated(view, savedInstanceState);
-        navController = Navigation.findNavController(view);
-        setUpAddExpenseButton(view);
-        setUpSettleExpensesButton(view);
-    }
-
     private void setUpSettleExpensesButton(View view)
     {
         settleExpensesButton = view.findViewById(R.id.settle_up_button);
@@ -219,10 +223,10 @@ public class HouseExpensesFragment extends Fragment implements ExpenseAdapter.On
     {
         for (Expense expense : expenses)
         {
-            LiveData<CreateNewExpenseJob> settleJob = viewModel.settleExpense(expense,
+            LiveData<ExpenseJob> settleJob = viewModel.settleExpense(expense,
                     houseActivityViewModel.getHouse().getId());
-            settleJob.observe(getViewLifecycleOwner(), CreateNewExpenseJob -> {
-                if (CreateNewExpenseJob.getJobStatus() == FirestoreJob.JobStatus.SUCCESS)
+            settleJob.observe(getViewLifecycleOwner(), ExpenseJob -> {
+                if (ExpenseJob.getJobStatus() == FirestoreJob.JobStatus.SUCCESS)
                 {
                     //TODO: check if this is unnecessary
                     LiveData<AllExpensesJob> updateExpensesJob =
@@ -247,7 +251,7 @@ public class HouseExpensesFragment extends Fragment implements ExpenseAdapter.On
     }
 
     @Override
-    public void onReceiptClick()
+    public void onReceiptClick(int position)
     {
         //TODO: Implement
     }
@@ -300,6 +304,124 @@ public class HouseExpensesFragment extends Fragment implements ExpenseAdapter.On
                     //TODO: implement
             }
         });
+    }
+
+    public ExpenseAdapter getCurrentExpenseAdapter()
+    {
+        return currentExpenseAdapter;
+    }
+
+    public void setCurrentExpenseAdapter(ExpenseAdapter currentExpenseAdapter)
+    {
+        this.currentExpenseAdapter = currentExpenseAdapter;
+    }
+
+    private void selectReceiptPicture(View view)
+    {
+        boolean hasPermission = ActivityCompat
+                .checkSelfPermission(requireContext(), Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED;
+        if (hasPermission)
+        {
+            sendSelectReceiptPictureIntent();
+        } else
+        {
+            requestPermissions(
+                    new String[]{Manifest.permission.READ_EXTERNAL_STORAGE},
+                    READ_EXTERNAL_STORAGE_CODE
+            );
+        }
+    }
+
+    private void sendSelectReceiptPictureIntent()
+    {
+        CropImage.activity().start(getContext(), this);
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults)
+    {
+        if (requestCode == READ_EXTERNAL_STORAGE_CODE)
+        {
+            if (grantResults[0] == PackageManager.PERMISSION_GRANTED)
+            {
+                sendSelectReceiptPictureIntent();
+            } else
+            {
+                if (ActivityCompat.shouldShowRequestPermissionRationale(requireActivity(),
+                        Manifest.permission.READ_EXTERNAL_STORAGE))
+                {
+                    AlertDialog alertDialog = new AlertDialog.Builder(getContext()).create();
+                    alertDialog.setTitle(R.string.request_permission_title);
+                    alertDialog.setMessage(getString(R.string.request_read_external_storage_msg));
+                    alertDialog.setButton(AlertDialog.BUTTON_NEUTRAL, getString(R.string.request_permission_approve),
+                            (dialog, which) -> dialog.dismiss());
+                    alertDialog.show();
+                }
+            }
+        }
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data)
+    {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE)
+        {
+            CropImage.ActivityResult result = CropImage.getActivityResult(data);
+            if (resultCode == Activity.RESULT_OK)
+            {
+                currentExpenseAdapter.setReceiptPictureUri(result.getUri());
+
+                Picasso.get().load(currentExpenseAdapter.getReceiptPictureUri())
+                        .resize(256, 256)
+                        .centerCrop()
+                        .into(currentExpenseAdapter.getReceiptPicture());
+            } else if (resultCode == CropImage.CROP_IMAGE_ACTIVITY_RESULT_ERROR_CODE)
+            {
+                Toast.makeText(getContext(), "There was an error loading the image, please try again",
+                        Toast.LENGTH_LONG).show();
+            }
+        }
+    }
+
+    public void updateReceiptImage(String expenseId, Uri receiptPhoto)
+    {
+        ExpenseJob expenseJob = new ExpenseJob((FirestoreJob.JobStatus.IN_PROGRESS));
+        MutableLiveData<ExpenseJob> job = new MutableLiveData<>(expenseJob);
+        StorageReference receiptPhotoRef =
+                storageReference.child("houses/" + houseActivityViewModel.getHouse().getId() + "/receipts/" + expenseId
+                        + ".jpg");
+        receiptPhotoRef.putFile(receiptPhoto).addOnCompleteListener(task -> {
+            task.getResult().getStorage().getDownloadUrl().addOnCompleteListener(task1 -> {
+                Uri receiptPhotoUri = task1.getResult();
+                LiveData<ExpenseJob> updatePhotoJob =
+                        viewModel.updateReceiptImageUri(houseActivityViewModel.getHouse().getId(),
+                                expenseId,
+                                receiptPhotoUri);
+                updatePhotoJob.observe(getViewLifecycleOwner(), ExpenseJob ->
+                {
+                    if (ExpenseJob.getJobStatus() == FirestoreJob.JobStatus.SUCCESS)
+                    {
+                        //TODO: toast?
+                    }
+                });
+            });
+        });
+    }
+
+
+    //TODO
+
+    @Override
+    public void onPause()
+    {
+        super.onPause();
+    }
+
+    @Override
+    public void onResume()
+    {
+        super.onResume();
     }
 
     public static class SettleExpensesDialogFragment extends DialogFragment
@@ -438,45 +560,53 @@ public class HouseExpensesFragment extends Fragment implements ExpenseAdapter.On
         }
     }
 
-    private void dispatchTakePictureIntent()
+    private static class AddReceiptDialog extends DialogFragment
     {
-        Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-        try
+        private Button noButton, yesButton;
+        private TextView addReceiptDialogTextView;
+        private HouseExpensesFragment houseExpensesFragment;
+        Dialog dialog;
+
+        public static AddReceiptDialog newInstance(HouseExpensesFragment houseExpensesFragment)
         {
-            startActivityForResult(takePictureIntent, REQUEST_IMAGE_CAPTURE);
-        } catch (ActivityNotFoundException e)
+            AddReceiptDialog f = new AddReceiptDialog();
+            f.setHouseExpensesFragment(houseExpensesFragment);
+            return f;
+        }
+
+        public void setHouseExpensesFragment(HouseExpensesFragment houseExpensesFragment)
         {
-            // TODO: display error state to the user
+            this.houseExpensesFragment = houseExpensesFragment;
+        }
+
+        @Nullable
+        @Override
+        public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
+                                 @Nullable Bundle savedInstanceState)
+        {
+            View v = inflater.inflate(R.layout.dialog_settle_expenses, container, false);
+            noButton = v.findViewById(R.id.button_no);
+            noButton.setOnClickListener(new View.OnClickListener()
+            {
+                @Override
+                public void onClick(View v)
+                {
+                    dialog.dismiss();
+                }
+            });
+            yesButton = v.findViewById(R.id.button_yes);
+            yesButton.setOnClickListener(new View.OnClickListener()
+            {
+                @Override
+                public void onClick(View v)
+                {
+                    houseExpensesFragment.settleExpenses();
+                    dialog.dismiss();
+                }
+            });
+            addReceiptDialogTextView = v.findViewById(R.id.settle_expense_dialog_text);
+            addReceiptDialogTextView.setVisibility(View.VISIBLE);
+            return v;
         }
     }
-
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data)
-    {
-        if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK)
-        {
-            Bundle extras = data.getExtras();
-            Bitmap imageBitmap = (Bitmap) extras.get("data");
-            currentThumbnail.setImageBitmap(imageBitmap);
-            Uri uri = data.getData();
-        }
-    }
-
-
-    private File createImageFile() throws IOException {
-        // Create an image file name
-        String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
-        String imageFileName = "JPEG_" + timeStamp + "_";
-        File storageDir = getActivity().getExternalFilesDir(Environment.DIRECTORY_PICTURES);
-        File image = File.createTempFile(
-                imageFileName,  /* prefix */
-                ".jpg",         /* suffix */
-                storageDir      /* directory */
-        );
-
-        // Save a file: path for use with ACTION_VIEW intents
-        currentPhotoPath = image.getAbsolutePath();
-        return image;
-    }
-
 }

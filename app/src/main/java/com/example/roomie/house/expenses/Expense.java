@@ -1,8 +1,7 @@
 package com.example.roomie.house.expenses;
 
-import android.graphics.drawable.Drawable;
+import android.net.Uri;
 
-import java.sql.Time;
 import java.sql.Timestamp;
 import java.util.Arrays;
 import java.util.Date;
@@ -25,7 +24,8 @@ public class Expense
     private ExpenseType _type;
     private double _cost;
     private Date _creationDate;
-    private Drawable receiptImage;
+    private String _receiptImage;
+    private Uri _receiptImageUri;
     private String _payerName;
     private String _payerID;
     private boolean _hasReceipt;
@@ -33,6 +33,7 @@ public class Expense
 
     /**
      * A helper method which converts a string to an {@link ExpenseType} enum.
+     *
      * @param title - a string of an expense title.
      * @return The corresponding {@link ExpenseType}, or GENERAL if non matches.
      */
@@ -97,6 +98,16 @@ public class Expense
         return _isSettled;
     }
 
+    public Uri getReceiptPhotoUrl()
+    {
+        return _receiptImageUri;
+    }
+
+    public void set_receiptImageUri(Uri _receiptImageUri)
+    {
+        this._receiptImageUri = _receiptImageUri;
+    }
+
 
     public enum ExpenseType
     {
@@ -106,6 +117,8 @@ public class Expense
         GENERAL
     }
 
+
+    //TODO: add receipt URI to constructors
     public Expense()
     {
 

@@ -1,22 +1,24 @@
 package com.example.roomie.house.expenses;
 
-import android.content.Intent;
 import android.net.Uri;
+import android.util.Log;
 
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
+
 import com.example.roomie.FirestoreJob;
-import com.example.roomie.house.chores.chore.Chore;
-import com.example.roomie.house.chores.chore.newChoreJob;
+import com.example.roomie.House;
+import com.example.roomie.repositories.HouseRepository;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.storage.StorageReference;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
-import java.util.concurrent.Executor;
 
-import static com.example.roomie.util.FirestoreUtil.CHORES_COLLECTION_NAME;
 import static com.example.roomie.util.FirestoreUtil.EXPENSES_COLLECTION_NAME;
 import static com.example.roomie.util.FirestoreUtil.HOUSES_COLLECTION_NAME;
 
@@ -24,18 +26,22 @@ public class HouseExpensesViewModel extends ViewModel implements ExpenseAdapter.
         ExpenseAdapter.OnReceiptListener
 {
     private FirebaseFirestore db;
+    private StorageReference storageReference;
     private MutableLiveData<List<Expense>> expenses;
+    private MutableLiveData<Uri> receiptPhoto;
+    private static final String TAG = "HOUSE_EXPENSES";
 
     public HouseExpensesViewModel()
     {
         db = FirebaseFirestore.getInstance();
         expenses = new MutableLiveData<>(new ArrayList<>());
+
     }
 
-    public LiveData<CreateNewExpenseJob> setPayer(String expenseId, String payerID, String payerName, String houseId)
+    public LiveData<ExpenseJob> setPayer(String expenseId, String payerID, String payerName, String houseId)
     {
-        CreateNewExpenseJob expensesJob = new CreateNewExpenseJob(FirestoreJob.JobStatus.IN_PROGRESS);
-        MutableLiveData<CreateNewExpenseJob> job = new MutableLiveData<>(expensesJob);
+        ExpenseJob expensesJob = new ExpenseJob(FirestoreJob.JobStatus.IN_PROGRESS);
+        MutableLiveData<ExpenseJob> job = new MutableLiveData<>(expensesJob);
 
         db.collection(HOUSES_COLLECTION_NAME)
                 .document(houseId).collection(EXPENSES_COLLECTION_NAME)
@@ -76,12 +82,12 @@ public class HouseExpensesViewModel extends ViewModel implements ExpenseAdapter.
         return job;
     }
 
-    public LiveData<CreateNewExpenseJob> deleteExpense(Expense expense, String houseId)
+    public LiveData<ExpenseJob> deleteExpense(Expense expense, String houseId)
     {
 
 
-        CreateNewExpenseJob expenseJob = new CreateNewExpenseJob(FirestoreJob.JobStatus.IN_PROGRESS);
-        MutableLiveData<CreateNewExpenseJob> job = new MutableLiveData<>(expenseJob);
+        ExpenseJob expenseJob = new ExpenseJob(FirestoreJob.JobStatus.IN_PROGRESS);
+        MutableLiveData<ExpenseJob> job = new MutableLiveData<>(expenseJob);
 
         expenses.getValue().remove(expense);
         db.collection(HOUSES_COLLECTION_NAME)
@@ -140,26 +146,29 @@ public class HouseExpensesViewModel extends ViewModel implements ExpenseAdapter.
         return job;
     }
 
-    public LiveData<CreateNewExpenseJob>  settleExpense(Expense expense, String houseId) {
-        CreateNewExpenseJob expenseJob = new CreateNewExpenseJob(FirestoreJob.JobStatus.IN_PROGRESS);
-        MutableLiveData<CreateNewExpenseJob> job = new MutableLiveData<>(expenseJob);
+    public LiveData<ExpenseJob> settleExpense(Expense expense, String houseId)
+    {
+        ExpenseJob expenseJob = new ExpenseJob(FirestoreJob.JobStatus.IN_PROGRESS);
+        MutableLiveData<ExpenseJob> job = new MutableLiveData<>(expenseJob);
 
         db.collection(HOUSES_COLLECTION_NAME)
                 .document(houseId).collection(EXPENSES_COLLECTION_NAME)
                 .document(expense.get_id())
                 .get()
-                .addOnCompleteListener(task ->  {
-                    if(task.isSuccessful()) {
+                .addOnCompleteListener(task -> {
+                    if (task.isSuccessful())
+                    {
                         List<Expense> expenseList = expenses.getValue();
                         expense.settle();
                         expenses.setValue(expenseList);
                         db.collection(HOUSES_COLLECTION_NAME)
                                 .document(houseId).collection(EXPENSES_COLLECTION_NAME)
-                                .document(expense.get_id()).update("_isSettled",true);
+                                .document(expense.get_id()).update("_isSettled", true);
                         expenseJob.setExpense(task.getResult().toObject(Expense.class));
                         expenseJob.setJobStatus(FirestoreJob.JobStatus.SUCCESS);
                         job.setValue(expenseJob);
-                    } else {
+                    } else
+                    {
                         expenseJob.setJobStatus(FirestoreJob.JobStatus.ERROR);
                         expenseJob.setJobErrorCode(FirestoreJob.JobErrorCode.GENERAL);
                         job.setValue(expenseJob);
@@ -212,9 +221,75 @@ public class HouseExpensesViewModel extends ViewModel implements ExpenseAdapter.
         //TODO:implement
     }
 
-    public void uploadReceiptImage(Intent data)
-    {
 
-        Uri uri
+    public LiveData<ExpenseJob> updateReceiptImageUri( String houseId, String expenseId, Uri uri)
+    {
+        ExpenseJob expenseJob = new ExpenseJob(FirestoreJob.JobStatus.IN_PROGRESS);
+        MutableLiveData<ExpenseJob> job = new MutableLiveData<>(expenseJob);
+
+        db.collection(HOUSES_COLLECTION_NAME)
+                .document(houseId).collection(EXPENSES_COLLECTION_NAME)
+                .document(expenseId)
+                .get()
+                .addOnCompleteListener(task -> {
+                    if (task.isSuccessful())
+                    {
+                        Expense expense = task.getResult().toObject(Expense.class);
+                        if (expense != null)
+                        {
+                            List<Expense> expenseList = expenses.getValue();
+                            expenseList.remove(expense);
+                            expense.set_receiptImageUri(uri);
+                            expenseList.add(expense);
+                            expenses.setValue(expenseList);
+                            db.collection(HOUSES_COLLECTION_NAME)
+                                    .document(houseId).collection(EXPENSES_COLLECTION_NAME)
+                                    .document(expenseId).update("_receiptImageUri", uri);
+
+                            expenseJob.setExpense(task.getResult().toObject(Expense.class));
+                            expenseJob.setJobStatus(FirestoreJob.JobStatus.SUCCESS);
+                            job.setValue(expenseJob);
+                        }
+                    } else
+                    {
+                        expenseJob.setJobStatus(FirestoreJob.JobStatus.ERROR);
+                        expenseJob.setJobErrorCode(FirestoreJob.JobErrorCode.GENERAL);
+                        job.setValue(expenseJob);
+                    }
+                });
+
+        return job;
+    }
+
+    public LiveData<ExpenseJob> getExpenseById(String expenseId)
+    {
+        ExpenseJob expenseJob = new ExpenseJob(FirestoreJob.JobStatus.IN_PROGRESS);
+        MutableLiveData<ExpenseJob> job = new MutableLiveData<>(expenseJob);
+
+        db.collection(EXPENSES_COLLECTION_NAME)
+                .whereEqualTo("_id", expenseId)
+                .get()
+                .addOnSuccessListener(task -> {
+                    if (task.isEmpty() || task.size() > 1)
+                    {
+                        expenseJob.setJobStatus(FirestoreJob.JobStatus.ERROR);
+                        expenseJob.setJobErrorCode(FirestoreJob.JobErrorCode.GENERAL);
+                        job.setValue(expenseJob);
+                        Log.d(TAG, "Error too many or no records found (" + task.size() + ") in getExpenseById.");
+                        return;
+                    }
+
+                    Expense expense = task.getDocuments().get(0).toObject(Expense.class);
+                    expenseJob.setExpense(expense);
+                    expenseJob.setJobStatus(FirestoreJob.JobStatus.SUCCESS);
+                    job.setValue(expenseJob);
+                })
+                .addOnFailureListener(task -> {
+                    expenseJob.setJobStatus(FirestoreJob.JobStatus.ERROR);
+                    expenseJob.setJobErrorCode(FirestoreJob.JobErrorCode.GENERAL);
+                    job.setValue(expenseJob);
+                    Log.d(TAG, "Error while fetching the expense in getExpenseById", task.getCause());
+                });
+        return job;
     }
 }

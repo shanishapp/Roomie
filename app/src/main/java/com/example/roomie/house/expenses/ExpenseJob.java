@@ -2,21 +2,21 @@ package com.example.roomie.house.expenses;
 
 import com.example.roomie.FirestoreJob;
 
-public class CreateNewExpenseJob extends FirestoreJob
+public class ExpenseJob extends FirestoreJob
 {
     private Expense expense;
 
-    public CreateNewExpenseJob()
+    public ExpenseJob()
     {
         super();
     }
 
-    public CreateNewExpenseJob(FirestoreJob.JobStatus jobStatus, FirestoreJob.JobErrorCode errorCode)
+    public ExpenseJob(FirestoreJob.JobStatus jobStatus, FirestoreJob.JobErrorCode errorCode)
     {
         super(jobStatus,errorCode);
     }
 
-    public CreateNewExpenseJob(FirestoreJob.JobStatus jobStatus)
+    public ExpenseJob(FirestoreJob.JobStatus jobStatus)
     {
         super(jobStatus);
     }

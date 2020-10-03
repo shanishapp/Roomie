@@ -24,15 +24,15 @@ public class NewExpenseViewModel extends ViewModel
         db = FirebaseFirestore.getInstance();
     }
 
-    public LiveData<CreateNewExpenseJob> createNewExpense(House house, String title, String description, double cost,
-                                                          String payerID, String payerName,
-                                                          Expense.ExpenseType type,
-                                                          Date purchaseDate)
+    public LiveData<ExpenseJob> createNewExpense(House house, String title, String description, double cost,
+                                                 String payerID, String payerName,
+                                                 Expense.ExpenseType type,
+                                                 Date purchaseDate)
     {
-        CreateNewExpenseJob newExpenseJob = new CreateNewExpenseJob(FirestoreJob.JobStatus.IN_PROGRESS);
-        MutableLiveData<com.example.roomie.house.expenses.CreateNewExpenseJob> job =
+        ExpenseJob newExpenseJob = new ExpenseJob(FirestoreJob.JobStatus.IN_PROGRESS);
+        MutableLiveData<ExpenseJob> job =
                 new MutableLiveData<>(newExpenseJob);
-        Expense expense = new Expense(title, description, cost, type, payerID,payerName);
+        Expense expense = new Expense(title, description, cost, type, payerID, payerName);
         db.collection(HOUSES_COLLECTION_NAME).
                 document(house.getId()).
 
@@ -85,4 +85,5 @@ public class NewExpenseViewModel extends ViewModel
         expense.set_id(id);
         db.collection(HOUSES_COLLECTION_NAME).document(house.getId()).collection(EXPENSES_COLLECTION_NAME).document(id).set(expense);
     }
+
 }

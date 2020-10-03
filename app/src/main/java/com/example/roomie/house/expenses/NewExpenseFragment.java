@@ -189,12 +189,12 @@ public class NewExpenseFragment extends Fragment
         double cost = priceEditText.getCleanDoubleValue();
 
 
-        LiveData<CreateNewExpenseJob> job = newExpenseViewModel.createNewExpense(house, title,
+        LiveData<ExpenseJob> job = newExpenseViewModel.createNewExpense(house, title,
                 description, cost,
                 payerID, payerName, type, date);
 
-        job.observe(getViewLifecycleOwner(), CreateNewExpenseJob -> {
-            switch (CreateNewExpenseJob.getJobStatus())
+        job.observe(getViewLifecycleOwner(), ExpenseJob -> {
+            switch (ExpenseJob.getJobStatus())
             {
                 case IN_PROGRESS:
                     addExpenseButton.setEnabled(false);
