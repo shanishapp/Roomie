@@ -19,6 +19,11 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+<<<<<<< HEAD
+=======
+import android.widget.Button;
+import android.widget.EditText;
+>>>>>>> 32c4dbc... Groceries: improvements
 import android.widget.FrameLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -154,13 +159,17 @@ public class HouseGroceriesFragment extends Fragment implements GroceryAdapter.O
     @Override
     public void onGroceryPicked(Grocery grocery) {
         pickedGroceries.add(grocery);
-        Toast.makeText(getContext(),grocery.get_name()+" added to expenses",Toast.LENGTH_LONG).show();
+        if(pickedGroceries.size() == 1){
+            moveToExpensesBtn.setVisibility(View.VISIBLE);
+        }
     }
 
     @Override
     public void onGroceryUnPicked(Grocery grocery) {
         pickedGroceries.remove(grocery);
-        Toast.makeText(getContext(),grocery.get_name()+" removed from expenses",Toast.LENGTH_LONG).show();
+        if (pickedGroceries.size()== 0){
+            moveToExpensesBtn.setVisibility(View.GONE);
+        }
     }
 
 
@@ -182,7 +191,8 @@ public class HouseGroceriesFragment extends Fragment implements GroceryAdapter.O
                     AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
                     AlertDialog alertDialog = builder.create();
                     final View customLayout = getLayoutInflater().inflate(R.layout.dialog_create_grocery_expense, null);
-            ((TextView)customLayout.findViewById(R.id.chosenGroceriesCount)).setText(String.valueOf(pickedGroceries.size()));
+
+                    ((TextView)customLayout.findViewById(R.id.chosenGroceriesCount)).setText(String.valueOf(pickedGroceries.size()));
                     customLayout.findViewById(R.id.doAddToExpensesBtn).setOnClickListener(view1 -> {
                         StringBuilder description = new StringBuilder();
                         for (Grocery newGrocery : pickedGroceries) {
@@ -191,12 +201,17 @@ public class HouseGroceriesFragment extends Fragment implements GroceryAdapter.O
                         NewExpenseViewModel expenseViewModel = new ViewModelProvider(requireActivity()).get(NewExpenseViewModel.class);
                         expenseViewModel.createNewExpense(houseActivityViewModel.getHouse(),
                                 getString(R.string.house_bottom_menu_groceries), description.toString(),
+<<<<<<< HEAD
                                 0, user.getUid(), "Shani Shapp", Expense.ExpenseType.GROCERIES);
+=======
+                                Integer.parseInt(((EditText)customLayout.findViewById(R.id.editTextNumber)).getText().toString()), user.getUid(), user.getDisplayName(), Expense.ExpenseType.GROCERIES, new Date());
+>>>>>>> 32c4dbc... Groceries: improvements
                         for (Grocery grocery : pickedGroceries) {
                             vm.deleteGroceryForever(grocery, houseActivityViewModel.getHouse().getId());
                             groceryList.remove(grocery);
                         }
                         pickedGroceries.clear();
+                        moveToExpensesBtn.setVisibility(View.GONE);
                         adapter.notifyDataSetChanged();
                         alertDialog.cancel();
                     });
@@ -208,33 +223,6 @@ public class HouseGroceriesFragment extends Fragment implements GroceryAdapter.O
                     alertDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
                     alertDialog.show();
                 });
-
-
-
-//            new AlertDialog.Builder(getContext())
-//                    .setView(R.layout.dialog_create_grocery_expense)
-//                    .setPositiveButton(android.R.string.yes, (dialog, which) -> {
-//                        StringBuilder description = new StringBuilder();
-//                        for(Grocery newGrocery:pickedGroceries){
-//                            description.append(newGrocery.get_name()).append("\n");
-//                        }
-//                        NewExpenseViewModel expenseViewModel =  new ViewModelProvider(requireActivity()).get(NewExpenseViewModel.class);
-//                        expenseViewModel.createNewExpense(houseActivityViewModel.getHouse(),
-//                                getString(R.string.house_bottom_menu_groceries),description.toString(),
-//                                0,user.getUid(),"Shani Shapp", Expense.ExpenseType.GROCERIES,new Date());
-//                        for(Grocery grocery: pickedGroceries){
-//                            vm.deleteGroceryForever(grocery,houseActivityViewModel.getHouse().getId());
-//                            groceryList.remove(grocery);
-//                        }
-//                        pickedGroceries.clear();
-//                        adapter.notifyDataSetChanged();
-//                    })
-//
-//                    // A null listener allows the button_bg_grey to dismiss the dialog and take no further action.
-//                    .setNegativeButton(android.R.string.no, null)
-//                    .setIcon(android.R.drawable.ic_dialog_alert)
-//                    .show()
-//        });
         loadingOverlay = view.findViewById(R.id.groceries_loading_overlay);
         toggleLoadingOverlay(true);
     }

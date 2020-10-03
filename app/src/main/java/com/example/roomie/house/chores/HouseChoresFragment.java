@@ -412,7 +412,10 @@ public class HouseChoresFragment extends Fragment implements ChoreAdapter.OnChor
         Chore chore = choreList.get(pos);
         adapter.closeMenu();
         LiveData<newChoreJob> job = vm.deleteChoreForever(chore, houseActivityViewModel.getHouse().getId());
-        job.observe(getViewLifecycleOwner(), newChoreJob -> adapter.notifyDataSetChanged());
+        job.observe(getViewLifecycleOwner(), newChoreJob -> {
+            choreList.remove(chore);
+            adapter.notifyDataSetChanged();
+        });
     }
 
     @Override
