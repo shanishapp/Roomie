@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@drawable/house_chat_bg"
     android:fillViewport="true"
     tools:context=".choose_house.ChooseHouseNewHouseFragment">
 

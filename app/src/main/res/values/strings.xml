@@ -69,18 +69,14 @@
 
     <!--  House Invite Roomie Fragment  -->
     <string name="house_invite_roomie_fragment_title">Invite Roomie</string>
-    <string name="house_invite_roomie_fragment_explanation">
-        In order to invite a new roomie to your house:
-        \n
-        1. Click the button below.
-        \n
-        2. Choose your preferred way to send the invitation.
-        \n
-        3. Choose the recipient.
-        \n
-        (Note: an invitation link will be generated, and will expire in one day)
-    </string>
+    <string name="house_invite_roomie_fragment_step_num_1">1.</string>
+    <string name="house_invite_roomie_fragment_step_num_1_content">Click the button below</string>
+    <string name="house_invite_roomie_fragment_step_num_2">2.</string>
+    <string name="house_invite_roomie_fragment_step_num_2_content">Choose your preferred method to send the invitation</string>
+    <string name="house_invite_roomie_fragment_step_num_3">3.</string>
+    <string name="house_invite_roomie_fragment_step_num_3_content">Select the recipient</string>
     <string name="house_invite_roomie_fragment_invite_roomie_button">Invite Roomie</string>
+    <string name="house_invite_roomie_fragment_note">(the invitation link is valid for the next 24 hours)</string>
     <string name="house_invite_roomie_invite_message" translatable="false">
         Hey, wanna be my roomie?
         \n
@@ -120,6 +116,9 @@
     <string name="house_user_profile_fragmnet_chores">Chores</string>
     <string name="house_user_profile_fragmnet_expenses">Expenses</string>
     <string name="house_user_profile_fragment_edit_profile_button">Edit Profile</string>
+    <string name="house_user_profile_fragment_done_chores_dialog_title">Chores done this month</string>
+    <string name="house_user_profile_fragment_chores_dialog_title">Chores to do this month</string>
+    <string name="house_user_profile_fragment_expenses_dialog_title">Unsettled expenses</string>
 
     <!--  House Edit User Profile Fragment  -->
     <string name="house_edit_user_profile_fragment_title">Edit Profile</string>
@@ -132,7 +131,8 @@
     <!-- Join House Activity  -->
     <string name="join_house_activity_title">Join House</string>
     <string name="join_house_activity_already_user_has_house">You already have a house!</string>
-    <string name="join_house_activity_explanation">You are about to join the house %s. Click join to confirm.</string>
+    <string name="join_house_activity_explanation">You are about to join the house</string>
+    <string name="join_house_activity_confirm">Click join to confirm</string>
     <string name="join_house_activity_join_button">Join</string>
     <string name="join_house_activity_invitation_or_house_dont_exist">The invitation or house doesn\'t exist.</string>
     <string name="join_house_activity_invitation_expired">The invitation has been expired.</string>

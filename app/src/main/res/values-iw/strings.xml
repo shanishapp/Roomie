@@ -44,13 +44,12 @@
     <string name="house_feed_fragment_house_details_title">פרטי הבית</string>
     <string name="house_drawer_menu_invite_roomie">הזמנת שותף</string>
     <string name="house_invite_roomie_fragment_title">הזמנת שותף</string>
-    <string name="house_invite_roomie_fragment_explanation">על מנת להזמין שותף חדש לביתך, לחץ על הכפתור למטה, בחר את הדרך המועדפת עלייך לשלוח את ההזמנה ובחר את הנמען. הנמען יקבל קישור עם סיסמה שיפוג לאחר יום.</string>
     <string name="house_invite_roomie_fragment_invite_roomie_button">הזמן שותף</string>
     <string name="house_invite_roomie_chooser_title">הזמנת שותף</string>
     <string name="house_invite_roomie_error">ארעה שגיאה במהלך יצירת ההזמנה, אנא נסה שוב.</string>
     <string name="join_house_activity_title">הצטרפות לבית</string>
     <string name="join_house_activity_already_user_has_house">כבר יש לך בית!</string>
-    <string name="join_house_activity_explanation">אתה עומד להצטרף לבית %s. לחץ על הצטרף כדי לאשר.</string>
+    <string name="join_house_activity_explanation">אתה עומד להצטרף לבית</string>
     <string name="join_house_activity_join_button">הצטרף</string>
     <string name="join_house_activity_invitation_or_house_dont_exist">ההמזנה או הבית לא קיימים.</string>
     <string name="join_house_activity_welcome_msg">ברוך הבא, הצטרפת לבית החדש שלך!</string>
@@ -203,4 +202,15 @@
     <string name="new_chore">"הוסיף.ה מטלה חדשה:  "</string>
     <string name="new_expense">"הוצאה חדשה:  "</string>
     <string name="new_grocery">"הוסיף.ה מצרך חדש: "</string>
+    <string name="house_user_profile_fragment_done_chores_dialog_title">מטלות שבוצעו החודש</string>
+    <string name="house_user_profile_fragment_chores_dialog_title">מטלות שיש לבצע החודש</string>
+    <string name="house_user_profile_fragment_expenses_dialog_title">הוצאות שלא התחשבנו</string>
+    <string name="house_invite_roomie_fragment_step_num_1">1.</string>
+    <string name="house_invite_roomie_fragment_step_num_2">2.</string>
+    <string name="house_invite_roomie_fragment_step_num_3">3.</string>
+    <string name="house_invite_roomie_fragment_step_num_1_content">לחץ על הכפתור שלמטה</string>
+    <string name="house_invite_roomie_fragment_step_num_2_content">בחר את הדרך המועדפת עלייך לשליחת ההזמנה</string>
+    <string name="house_invite_roomie_fragment_step_num_3_content">בחר את הנמען</string>
+    <string name="house_invite_roomie_fragment_note">(ההזמנה תקפה ל-24 השעות הקרובות)</string>
+    <string name="join_house_activity_confirm">לחץ על הצטרף כדי לאשר</string>
 </resources>

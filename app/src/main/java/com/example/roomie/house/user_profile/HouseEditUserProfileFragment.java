@@ -125,9 +125,9 @@ public class HouseEditUserProfileFragment extends Fragment {
         });
 
         editUserProfileViewModel.getProfilePicture().observe(getViewLifecycleOwner(), profilePicture -> {
-            if (profilePicture == null) {
+            if (profilePicture == null || profilePicture.toString().isEmpty()) {
                 profilePictureUri = null;
-                loadDefaultProfilePicture();
+                toggleLoadingOverlay(false);
             } else {
                 profilePictureUri = profilePicture;
                 loadProfilePicture(profilePicture);
@@ -222,20 +222,6 @@ public class HouseEditUserProfileFragment extends Fragment {
         }
     }
 
-    private void loadDefaultProfilePicture() {
-        Picasso.get().load(R.drawable.avatar_1).into(this.profilePicture, new Callback() {
-            @Override
-            public void onSuccess() {
-                toggleLoadingOverlay(false);
-            }
-
-            @Override
-            public void onError(Exception e) {
-                toggleLoadingOverlay(false);
-            }
-        });
-    }
-
     private void loadProfilePicture(Uri profilePicture) {
         Picasso.get().load(profilePicture)
                 .resize(256, 256)
@@ -248,7 +234,7 @@ public class HouseEditUserProfileFragment extends Fragment {
 
                     @Override
                     public void onError(Exception e) {
-                        loadDefaultProfilePicture();
+                        toggleLoadingOverlay(false);
                     }
                 });
     }

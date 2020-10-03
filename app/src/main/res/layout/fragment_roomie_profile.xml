@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@drawable/house_chat_bg"
     android:fillViewport="true"
     tools:context=".house.RoomieProfileFragment">
 
@@ -112,15 +113,14 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"
                 android:baselineAligned="false"
+                android:gravity="center_horizontal"
                 android:orientation="horizontal"
                 app:layout_constraintTop_toBottomOf="@+id/roomie_profile_house_text"
                 tools:layout_editor_absoluteX="16dp">
 
                 <LinearLayout
+                    android:id="@+id/house_roomie_profile_brooms_wrapper"
                     style="@style/UserProfileStatItemWrapper"
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1"
                     android:orientation="vertical">
 
                     <TextView
@@ -138,10 +138,8 @@
                 </LinearLayout>
 
                 <LinearLayout
+                    android:id="@+id/house_roomie_profile_chores_wrapper"
                     style="@style/UserProfileStatItemWrapper"
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1"
                     android:orientation="vertical">
 
                     <TextView
@@ -159,10 +157,8 @@
                 </LinearLayout>
 
                 <LinearLayout
+                    android:id="@+id/house_roomie_profile_expenses_wrapper"
                     style="@style/UserProfileStatItemWrapper"
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1"
                     android:orientation="vertical">
 
                     <TextView

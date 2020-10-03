@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@drawable/house_chat_bg"
     tools:context=".join_house.JoinHouseActivity">
 
     <androidx.appcompat.widget.Toolbar
@@ -31,16 +32,42 @@
 
     <TextView
         android:id="@+id/join_house_activity_explanation"
-        android:layout_width="0dp"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
         android:layout_marginTop="16dp"
         android:layout_marginEnd="16dp"
-        android:textAlignment="center"
+        android:text="@string/join_house_activity_explanation"
+        android:textSize="16sp"
         android:visibility="gone"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/join_house_toolbar" />
+
+    <TextView
+        android:id="@+id/join_house_activity_house_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="16dp"
+        android:layout_marginTop="8dp"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        android:visibility="gone"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/join_house_activity_explanation" />
+
+    <TextView
+        android:id="@+id/join_house_activity_confirm"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="16dp"
+        android:layout_marginTop="8dp"
+        android:text="@string/join_house_activity_confirm"
+        android:visibility="gone"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/join_house_activity_house_name" />
 
     <Button
         android:id="@+id/join_house_activity_join_button"
@@ -49,12 +76,12 @@
         android:layout_marginStart="16dp"
         android:layout_marginTop="32dp"
         android:layout_marginEnd="16dp"
-        android:background="@color/buttonColor"
+        android:background="@drawable/button_bg"
         android:enabled="false"
         android:text="@string/join_house_activity_join_button"
         android:textColor="@color/white"
         android:visibility="gone"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/join_house_activity_explanation" />
+        app:layout_constraintTop_toBottomOf="@id/join_house_activity_confirm" />
 </androidx.constraintlayout.widget.ConstraintLayout>
