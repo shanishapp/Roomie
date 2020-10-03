@@ -1,12 +1,15 @@
 package com.example.roomie.house.expenses;
 
-import android.graphics.drawable.Drawable;
+import android.net.Uri;
 
-import java.sql.Time;
 import java.sql.Timestamp;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
+
+/**
+ * A class representing an expense made by a roommate.
+ */
 
 public class Expense
 {
@@ -14,7 +17,6 @@ public class Expense
     private static final String TYPE_GROCERY_SHOPPING_STRING = "Grocery Shopping";
     private static final String TYPE_BILL_STRING = "Bill";
     private static final String TYPE_GENERAL_STRING = "General";
-
     private String _id;
     private String _title;
     private boolean _isSettled;
@@ -22,11 +24,19 @@ public class Expense
     private ExpenseType _type;
     private double _cost;
     private Date _creationDate;
-    private Drawable receiptImage;
+    //    private Uri _receiptImageUri;
+    private String _receiptImageUriString;
     private String _payerName;
     private String _payerID;
     private boolean _hasReceipt;
 
+
+    /**
+     * A helper method which converts a string to an {@link ExpenseType} enum.
+     *
+     * @param title - a string of an expense title.
+     * @return The corresponding {@link ExpenseType}, or GENERAL if non matches.
+     */
     public static ExpenseType typeFromString(String title)
     {
         ExpenseType resultType = null;
@@ -46,6 +56,10 @@ public class Expense
         }
         return resultType;
     }
+
+    /**
+     * @return all possible strings matching expense types.
+     */
 
     public static List<String> getExpenseTypes()
     {
@@ -84,6 +98,26 @@ public class Expense
         return _isSettled;
     }
 
+//    public Uri get_receiptImageUri()
+//    {
+//        return _receiptImageUri;
+//    }
+
+//    public void set_receiptImageUri(Uri _receiptImageUri)
+//    {
+//        this._receiptImageUri = _receiptImageUri;
+//    }
+
+    public String get_receiptImageUriString()
+    {
+        return _receiptImageUriString;
+    }
+
+    public void set_receiptImageUriString(String _receiptImageUriString)
+    {
+        this._receiptImageUriString = _receiptImageUriString;
+    }
+
 
     public enum ExpenseType
     {
@@ -93,9 +127,46 @@ public class Expense
         GENERAL
     }
 
+
+    //TODO: add receipt URI to constructors
     public Expense()
     {
 
+    }
+
+    public Expense(String _id, String _title, boolean _isSettled, String _description, ExpenseType _type,
+                   double _cost, Date _creationDate, Uri _receiptImageUri, String _payerName,
+                   String _payerID, boolean _hasReceipt)
+    {
+        this._id = _id;
+        this._title = _title;
+        this._isSettled = _isSettled;
+        this._description = _description;
+        this._type = _type;
+        this._cost = _cost;
+        this._creationDate = _creationDate;
+//        this._receiptImageUri = _receiptImageUri;
+        this._payerName = _payerName;
+        this._payerID = _payerID;
+        this._hasReceipt = _hasReceipt;
+    }
+
+    public Expense(String _id, String _title, boolean _isSettled, String _description, ExpenseType _type,
+                   double _cost, Date _creationDate, String _receiptImageUri, String _payerName,
+                   String _payerID, boolean _hasReceipt)
+    {
+        this._id = _id;
+        this._title = _title;
+        this._isSettled = _isSettled;
+        this._description = _description;
+        this._type = _type;
+        this._cost = _cost;
+        this._creationDate = _creationDate;
+        _receiptImageUriString = _receiptImageUri;
+//        this._receiptImageUri = Uri.parse(_receiptImageUri);
+        this._payerName = _payerName;
+        this._payerID = _payerID;
+        this._hasReceipt = _hasReceipt;
     }
 
     public Expense(String name, String description, double cost,

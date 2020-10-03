@@ -165,7 +165,7 @@
     <string name="house_edit_user_profile_fragment_success">הפרופיל עודכן בהצלחה.</string>
     <string name="expense_title">שם ההוצאה</string>
     <string name="no_payer_set">לא הוגדר משלם</string>
-    <string name="total_house_spending">סך ההוצאות בבית:</string>
+    <string name="house_spending">סך ההוצאות בבית:</string>
     <string name="you_are_owed">חייבים לך</string>
     <string name="you_owe">אתה חייב</string>
     <string name="no_expenses_made_yet">טרם נוספו הוצאות</string>
@@ -183,6 +183,17 @@
     <string name="house_chat_fragment_title">צ\'אט</string>
     <string name="house_chat_header_today">היום</string>
     <string name="house_chat_header_yesterday">אתמול</string>
+    <string name="description_1">תיאור</string>
+    <string name="owes">חייב</string>
+    <string name="is_owed">צריך לקבל</string>
+    <string name="settle_up">בוא נתקזז!</string>
+    <string name="are_you_sure_you_want_to_settle_all_house_expenses">האם אתה בטוח שאתה רוצה לסגור את כל ההוצאות?</string>
+    <string name="yes">כן</string>
+    <string name="no">לא</string>
+    <string name="expense_type_hint">מלא את סוג ההוצאה כאן</string>
+    <string name="describe_your_expense">תאר את ההוצאה</string>
+    <string name="add_receipt">האם אתה רוצה להוסיף צילום של קבלה?</string>
+    <string name="replace_photo">החלף את התמונה</string>
     <string name="groceriesPrice">"מחיר המצרכים: "</string>
     <string name="add_to_expense">הוסף.י להוצאות</string>
     <string name="cancel">ביטול</string>

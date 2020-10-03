@@ -1,23 +1,33 @@
 package com.example.roomie.house.expenses;
 
+import android.Manifest;
+import android.app.Activity;
 import android.app.Dialog;
+import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
+import android.net.Uri;
 import android.os.Bundle;
 import android.util.Pair;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
+import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.lifecycle.LiveData;
+import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
@@ -32,6 +42,10 @@ import com.example.roomie.house.HouseActivityViewModel;
 import com.example.roomie.repositories.GetHouseRoomiesJob;
 import com.example.roomie.repositories.HouseRepository;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+import com.squareup.picasso.Picasso;
+import com.theartofdev.edmodo.cropper.CropImage;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -44,13 +58,24 @@ import java.util.Collections;
 public class HouseExpensesFragment extends Fragment implements ExpenseAdapter.OnExpenseListener,
         ExpenseAdapter.OnReceiptListener
 {
-    private RecyclerView expensesERecyclerView, balancesRecyclerView;
+
+    static final int REQUEST_IMAGE_CAPTURE = 1;
+    private static final int READ_EXTERNAL_STORAGE_CODE = 2;
+
+    private ExpenseAdapter currentExpenseAdapter;
+    private RecyclerView expensesRecyclerView;
     private TextView myBalanceTextView, houseBalanceTextView;
     private RecyclerView.Adapter<ExpenseAdapter.ViewHolder> expenseAdapter = null;
     private MovableFloatingActionButton addExpenseButton;
     private View balanceBubble;
     private Button settleExpensesButton;
     private BalanceDialogFragment balanceDialogFragment;
+    private SettleExpensesDialogFragment settleExpensesDialogFragment;
+    private AddReceiptDialog addReceiptDialog;
+    private ReplaceReceiptDialog replaceReceiptDialog;
+    private ImageView currentThumbnail;
+    private String currentPhotoPath;
+    private StorageReference storageReference;
 
 
     private HouseActivityViewModel houseActivityViewModel;
@@ -59,6 +84,7 @@ public class HouseExpensesFragment extends Fragment implements ExpenseAdapter.On
     private int numberOfRoommates;
     private NavController navController;
     private FirebaseAuth auth;
+    private Expense currentExpense;
 
     public HouseExpensesFragment()
     {
@@ -79,6 +105,7 @@ public class HouseExpensesFragment extends Fragment implements ExpenseAdapter.On
     @Override
     public void onCreate(Bundle savedInstanceState)
     {
+        storageReference = FirebaseStorage.getInstance().getReference();
         super.onCreate(savedInstanceState);
     }
 
@@ -91,7 +118,6 @@ public class HouseExpensesFragment extends Fragment implements ExpenseAdapter.On
         houseActivityViewModel =
                 new ViewModelProvider(requireActivity()).get(HouseActivityViewModel.class);
         viewModel = new ViewModelProvider(this).get(HouseExpensesViewModel.class);
-        getRoommateNumber();
         LiveData<AllExpensesJob> job =
                 viewModel.getExpenses(houseActivityViewModel.getHouse().getId());
         job.observe(getViewLifecycleOwner(), allExpensesJob -> {
@@ -101,8 +127,12 @@ public class HouseExpensesFragment extends Fragment implements ExpenseAdapter.On
             }
         });
         balanceDialogFragment = BalanceDialogFragment.newInstance(this);
+        settleExpensesDialogFragment = SettleExpensesDialogFragment.newInstance(this);
+        addReceiptDialog = AddReceiptDialog.newInstance(this);
+        replaceReceiptDialog = ReplaceReceiptDialog.newInstance(this);
         return v;
     }
+
 
     private void setUpUI(AllExpensesJob allExpensesJob, View view)
     {
@@ -110,13 +140,13 @@ public class HouseExpensesFragment extends Fragment implements ExpenseAdapter.On
         ExpenseByNewComparator s = new ExpenseByNewComparator();
         Collections.sort(expenses, s);
         expenseAdapter = new ExpenseAdapter(expenses, HouseExpensesFragment.this,
-                HouseExpensesFragment.this, this.getContext());
-        expensesERecyclerView = view.findViewById(R.id.expensesRecyclerView);
-        expensesERecyclerView.setAdapter(expenseAdapter);
-        expensesERecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-        houseBalanceTextView = view.findViewById(R.id.houseBalanceTextView);
-        myBalanceTextView = view.findViewById(R.id.myBalanceAmountTextView);
-        balanceBubble = view.findViewById(R.id.balanceBubble);
+                HouseExpensesFragment.this, this);
+        expensesRecyclerView = view.findViewById(R.id.expenses_recycler_view);
+        expensesRecyclerView.setAdapter(expenseAdapter);
+        expensesRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+        houseBalanceTextView = view.findViewById(R.id.house_balance_text);
+        myBalanceTextView = view.findViewById(R.id.my_balance_amount_text);
+        balanceBubble = view.findViewById(R.id.balance_bubble);
 
 
         HouseExpensesFragment houseExpensesFragment = this;
@@ -130,11 +160,21 @@ public class HouseExpensesFragment extends Fragment implements ExpenseAdapter.On
         });
     }
 
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState)
+    {
+        super.onViewCreated(view, savedInstanceState);
+        getRoommateNumber();
+        navController = Navigation.findNavController(view);
+        setUpAddExpenseButton(view);
+        setUpSettleExpensesButton(view);
+    }
+
     private void handleBalances()
     {
         String houseSpendingAmountString = String.valueOf(getHouseSpending());
         String houseSpendingString =
-                getString(R.string.total_house_spending)
+                getString(R.string.house_spending)
                         .concat(" ").concat(houseSpendingAmountString)
                         .concat(getString(R.string.currency_sign));
         houseBalanceTextView.setText(houseSpendingString);
@@ -160,51 +200,22 @@ public class HouseExpensesFragment extends Fragment implements ExpenseAdapter.On
         myBalanceTextView.setVisibility(View.VISIBLE);
     }
 
-    @Override
-    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState)
-    {
-        super.onViewCreated(view, savedInstanceState);
-        navController = Navigation.findNavController(view);
-        setUpAddExpenseButton(view);
-        setUpSettleExpensesButton(view);
-    }
 
     private void setUpSettleExpensesButton(View view)
     {
-        settleExpensesButton = view.findViewById(R.id.settleUpButton);
+        settleExpensesButton = view.findViewById(R.id.settle_up_button);
         settleExpensesButton.setOnClickListener(view2 ->
         {
             if (view2 != null)
             {
-                for (Expense expense : expenses)
-                {
-                    LiveData<CreateNewExpenseJob> settleJob = viewModel.settleExpense(expense,
-                            houseActivityViewModel.getHouse().getId());
-                    settleJob.observe(getViewLifecycleOwner(), CreateNewExpenseJob -> {
-                        if (CreateNewExpenseJob.getJobStatus() == FirestoreJob.JobStatus.SUCCESS)
-                        {
-                            //TODO: check if this is unnecessary
-                            LiveData<AllExpensesJob> updateExpensesJob =
-                                    viewModel.getExpenses(houseActivityViewModel.getHouse().getId());
-                            viewModel.getExpenses(houseActivityViewModel.getHouse().getId());
-                            updateExpensesJob.observe(getViewLifecycleOwner(), allExpensesJob -> {
-                                if (allExpensesJob.getJobStatus() == FirestoreJob.JobStatus.SUCCESS)
-                                {
-                                    expenses = (ArrayList<Expense>) allExpensesJob.getExpenses();
-                                }
-                            });
-                        }
-                        expenseAdapter.notifyDataSetChanged();
-                        handleBalances();
-                    });
-                }
+                settleExpensesDialogFragment.showDialog();
             }
         });
     }
 
     private void setUpAddExpenseButton(View view)
     {
-        addExpenseButton = view.findViewById(R.id.expensesFab);
+        addExpenseButton = view.findViewById(R.id.expenses_fab);
         addExpenseButton.setOnClickListener(view1 -> {
             if (view1 != null)
             {
@@ -215,7 +226,28 @@ public class HouseExpensesFragment extends Fragment implements ExpenseAdapter.On
 
     private void settleExpenses()
     {
-
+        for (Expense expense : expenses)
+        {
+            LiveData<ExpenseJob> settleJob = viewModel.settleExpense(expense,
+                    houseActivityViewModel.getHouse().getId());
+            settleJob.observe(getViewLifecycleOwner(), ExpenseJob -> {
+                if (ExpenseJob.getJobStatus() == FirestoreJob.JobStatus.SUCCESS)
+                {
+                    //TODO: check if this is unnecessary
+                    LiveData<AllExpensesJob> updateExpensesJob =
+                            viewModel.getExpenses(houseActivityViewModel.getHouse().getId());
+                    viewModel.getExpenses(houseActivityViewModel.getHouse().getId());
+                    updateExpensesJob.observe(getViewLifecycleOwner(), allExpensesJob -> {
+                        if (allExpensesJob.getJobStatus() == FirestoreJob.JobStatus.SUCCESS)
+                        {
+                            expenses = (ArrayList<Expense>) allExpensesJob.getExpenses();
+                        }
+                    });
+                }
+                expenseAdapter.notifyDataSetChanged();
+                handleBalances();
+            });
+        }
     }
 
     @Override
@@ -224,19 +256,29 @@ public class HouseExpensesFragment extends Fragment implements ExpenseAdapter.On
     }
 
     @Override
-    public void onReceiptClick()
+    public void onReceiptClick(Expense expense)
     {
-        //TODO: Implement
+        currentExpense = expense;
+        if (expense.is_hasReceipt())
+        {
+            replaceReceiptDialog.showDialog();
+        } else
+        {
+            addReceiptDialog.showDialog();
+        }
     }
 
     public double getHouseSpending()
     {
         double totalCost = 0;
-        for (Expense expense : expenses)
+        if (expenses != null)
         {
-            if (!expense.is_isSettled())
+            for (Expense expense : expenses)
             {
-                totalCost += expense.get_cost();
+                if (!expense.is_isSettled())
+                {
+                    totalCost += expense.get_cost();
+                }
             }
         }
         return totalCost;
@@ -279,79 +321,210 @@ public class HouseExpensesFragment extends Fragment implements ExpenseAdapter.On
         });
     }
 
-//    private void showSortDialog()
-//    {
-//        ArrayList<Pair<String, Double>> namesAndBalances = new ArrayList<>();
-////        RecyclerView.Adapter<BalanceAdapter.ViewHolder> adapter = null;
-//        final View customLayout = getLayoutInflater().inflate(R.layout.dialog_all_user_balances, null);
-//        LiveData<GetHouseRoomiesJob> job =
-//                HouseRepository.getInstance().getHouseRoomies(houseActivityViewModel.getHouse().getId());
-//        job.observe(getViewLifecycleOwner(), getHouseRoomiesJob -> {
-//            switch (getHouseRoomiesJob.getJobStatus())
-//            {
-//                case SUCCESS:
-//                    for (User user : getHouseRoomiesJob.getRoomiesList())
-//                    {
-//                        String username = user.getUsername();
-//                        double userBalance = getBalanceByUid(user.getUid());
-//                        Pair<String, Double> usernameAndBalance = new Pair<>(username, userBalance);
-//                        namesAndBalances.add(usernameAndBalance);
-//                    }
-//                    BalanceAdapter balanceAdapter = new BalanceAdapter(namesAndBalances);
-//                    balancesRecyclerView = customLayout.findViewById(R.id.balances_recycler_view);
-//                    balancesRecyclerView.setAdapter(balanceAdapter);
-//                    balancesRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-//
-//
-//                    AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
-//                    AlertDialog alertDialog = builder.create();
-//                    alertDialog.setView(customLayout);
-//                    alertDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-//                    alertDialog.show();
-//                case ERROR:
-//                    //TODO: implement
-//            }
-//        });
-//
-//    }
-//
-//    private void getNamesAndBalancesPairs(ArrayList<Pair<String, Double>> namesAndBalances)
-//    {
-//        LiveData<GetHouseRoomiesJob> job =
-//                HouseRepository.getInstance().getHouseRoomies(houseActivityViewModel.getHouse().getId());
-//        job.observe(getViewLifecycleOwner(), getHouseRoomiesJob -> {
-//            switch (getHouseRoomiesJob.getJobStatus())
-//            {
-//                case SUCCESS:
-//                    for (User user : getHouseRoomiesJob.getRoomiesList())
-//                    {
-//                        String username = user.getUsername();
-//                        double userBalance = getBalanceByUid(user.getUid());
-//                        Pair<String, Double> usernameAndBalance = new Pair<>(username, userBalance);
-//                        namesAndBalances.add(usernameAndBalance);
-//                    }
-//                case ERROR:
-//                    //TODO: implement
-//            }
-//        });
-//    }
+    public ExpenseAdapter getCurrentExpenseAdapter()
+    {
+        return currentExpenseAdapter;
+    }
+
+    public void setCurrentExpenseAdapter(ExpenseAdapter currentExpenseAdapter)
+    {
+        this.currentExpenseAdapter = currentExpenseAdapter;
+    }
+
+    private void selectReceiptPicture(View view)
+    {
+        boolean hasPermission = ActivityCompat
+                .checkSelfPermission(requireContext(), Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED;
+        if (hasPermission)
+        {
+            sendSelectReceiptPictureIntent();
+        } else
+        {
+            requestPermissions(
+                    new String[]{Manifest.permission.READ_EXTERNAL_STORAGE},
+                    READ_EXTERNAL_STORAGE_CODE
+            );
+        }
+    }
+
+    private void sendSelectReceiptPictureIntent()
+    {
+        CropImage.activity().start(getContext(), this);
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults)
+    {
+        if (requestCode == READ_EXTERNAL_STORAGE_CODE)
+        {
+            if (grantResults[0] == PackageManager.PERMISSION_GRANTED)
+            {
+                sendSelectReceiptPictureIntent();
+            } else
+            {
+                if (ActivityCompat.shouldShowRequestPermissionRationale(requireActivity(),
+                        Manifest.permission.READ_EXTERNAL_STORAGE))
+                {
+                    AlertDialog alertDialog = new AlertDialog.Builder(getContext()).create();
+                    alertDialog.setTitle(R.string.request_permission_title);
+                    alertDialog.setMessage(getString(R.string.request_read_external_storage_msg));
+                    alertDialog.setButton(AlertDialog.BUTTON_NEUTRAL, getString(R.string.request_permission_approve),
+                            (dialog, which) -> dialog.dismiss());
+                    alertDialog.show();
+                }
+            }
+        }
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data)
+    {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE)
+        {
+            CropImage.ActivityResult result = CropImage.getActivityResult(data);
+            if (resultCode == Activity.RESULT_OK)
+            {
+                updateReceiptImage(currentExpense.get_id(), result.getUri());
+                // TODO: 03/10/2020 display - somewhere else?
+
+//                Picasso.get().load(currentExpenseAdapter.getReceiptPictureUri())
+//                        .resize(256, 256)
+//                        .centerCrop()
+//                        .into(currentExpenseAdapter.getReceiptPicture());
+            } else if (resultCode == CropImage.CROP_IMAGE_ACTIVITY_RESULT_ERROR_CODE)
+            {
+                Toast.makeText(getContext(), "There was an error loading the image, please try again",
+                        Toast.LENGTH_LONG).show();
+            }
+        }
+    }
+
+    public void updateReceiptImage(String expenseId, Uri receiptPhoto)
+    {
+        ExpenseJob expenseJob = new ExpenseJob((FirestoreJob.JobStatus.IN_PROGRESS));
+        MutableLiveData<ExpenseJob> job = new MutableLiveData<>(expenseJob);
+        StorageReference receiptPhotoRef =
+                storageReference.child("houses/" + houseActivityViewModel.getHouse().getId() + "/receipts/" + expenseId
+                        + ".jpg");
+        receiptPhotoRef.putFile(receiptPhoto).addOnCompleteListener(task -> {
+            task.getResult().getStorage().getDownloadUrl().addOnCompleteListener(task1 -> {
+                Uri receiptPhotoUri = task1.getResult();
+                LiveData<ExpenseJob> updatePhotoJob =
+                        viewModel.updateReceiptImageUri(houseActivityViewModel.getHouse().getId(),
+                                expenseId,
+                                receiptPhotoUri.toString());
+                updatePhotoJob.observe(getViewLifecycleOwner(), ExpenseJob ->
+                {
+                    if (ExpenseJob.getJobStatus() == FirestoreJob.JobStatus.SUCCESS)
+                    {
+                        //TODO: toast?
+                        currentExpense.set_hasReceipt(true);
+                    }
+                });
+            });
+        });
+    }
+
+
+    //TODO
+
+    @Override
+    public void onPause()
+    {
+        super.onPause();
+    }
+
+    @Override
+    public void onResume()
+    {
+        super.onResume();
+    }
+
+    public static class SettleExpensesDialogFragment extends DialogFragment
+    {
+        private Button noButton, yesButton;
+        private TextView settleDialogTextView;
+        private HouseExpensesFragment houseExpensesFragment;
+        Dialog dialog;
+
+        public static SettleExpensesDialogFragment newInstance(HouseExpensesFragment houseExpensesFragment)
+        {
+            SettleExpensesDialogFragment f = new SettleExpensesDialogFragment();
+            f.setHouseExpensesFragment(houseExpensesFragment);
+            return f;
+        }
+
+        public void setHouseExpensesFragment(HouseExpensesFragment houseExpensesFragment)
+        {
+            this.houseExpensesFragment = houseExpensesFragment;
+        }
+
+        @Nullable
+        @Override
+        public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
+                                 @Nullable Bundle savedInstanceState)
+        {
+            View v = inflater.inflate(R.layout.yes_no_dialog, container, false);
+            noButton = v.findViewById(R.id.button_no);
+            noButton.setOnClickListener(new View.OnClickListener()
+            {
+                @Override
+                public void onClick(View v)
+                {
+                    dialog.dismiss();
+                }
+            });
+            yesButton = v.findViewById(R.id.button_yes);
+            yesButton.setOnClickListener(new View.OnClickListener()
+            {
+                @Override
+                public void onClick(View v)
+                {
+                    houseExpensesFragment.settleExpenses();
+                    dialog.dismiss();
+                }
+            });
+            settleDialogTextView = v.findViewById(R.id.settle_expense_dialog_text);
+            settleDialogTextView.setVisibility(View.VISIBLE);
+            return v;
+        }
+
+
+        public void showDialog()
+        {
+            FragmentManager fm = houseExpensesFragment.getParentFragmentManager();
+            this.show(fm, "dialog");
+        }
+
+        @NonNull
+        @Override
+        public Dialog onCreateDialog(@Nullable Bundle savedInstanceState)
+        {
+            dialog = super.onCreateDialog(savedInstanceState);
+            dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+            return dialog;
+        }
+
+    }
+
 
     public static class BalanceDialogFragment extends DialogFragment
     {
         private RecyclerView mRecyclerView;
         private BalanceAdapter adapter;
-        private HouseExpensesFragment parent;
+        private HouseExpensesFragment houseExpensesFragment;
 
-        public static BalanceDialogFragment newInstance(HouseExpensesFragment parent)
+        public static BalanceDialogFragment newInstance(HouseExpensesFragment houseExpensesFragment)
         {
             BalanceDialogFragment f = new BalanceDialogFragment();
-            f.setParent(parent);
+            f.setHouseExpensesFragment(houseExpensesFragment);
             return f;
         }
 
-        private void setParent(HouseExpensesFragment parent)
+        private void setHouseExpensesFragment(HouseExpensesFragment houseExpensesFragment)
         {
-            this.parent = parent;
+            this.houseExpensesFragment = houseExpensesFragment;
         }
 
         @Override
@@ -368,7 +541,7 @@ public class HouseExpensesFragment extends Fragment implements ExpenseAdapter.On
         {
             ArrayList<Pair<String, Double>> namesAndBalances = new ArrayList<>();
             LiveData<GetHouseRoomiesJob> job =
-                    HouseRepository.getInstance().getHouseRoomies(parent.houseActivityViewModel.getHouse().getId());
+                    HouseRepository.getInstance().getHouseRoomies(houseExpensesFragment.houseActivityViewModel.getHouse().getId());
             job.observe(getViewLifecycleOwner(), getHouseRoomiesJob -> {
                 switch (getHouseRoomiesJob.getJobStatus())
                 {
@@ -376,7 +549,7 @@ public class HouseExpensesFragment extends Fragment implements ExpenseAdapter.On
                         for (User user : getHouseRoomiesJob.getRoomiesList())
                         {
                             String username = user.getUsername();
-                            double userBalance = parent.getBalanceByUid(user.getUid());
+                            double userBalance = houseExpensesFragment.getBalanceByUid(user.getUid());
                             Pair<String, Double> usernameAndBalance = new Pair<>(username, userBalance);
                             namesAndBalances.add(usernameAndBalance);
                         }
@@ -388,9 +561,9 @@ public class HouseExpensesFragment extends Fragment implements ExpenseAdapter.On
             });
         }
 
-        void showDialog()
+        public void showDialog()
         {
-            FragmentManager fm = parent.getParentFragmentManager();
+            FragmentManager fm = houseExpensesFragment.getParentFragmentManager();
             this.show(fm, "dialog");
         }
 
@@ -404,5 +577,118 @@ public class HouseExpensesFragment extends Fragment implements ExpenseAdapter.On
         }
     }
 
+    public static class AddReceiptDialog extends DialogFragment
+    {
+        private Button noButton, yesButton;
+        private TextView addReceiptDialogTextView;
+        private HouseExpensesFragment houseExpensesFragment;
 
+        Dialog dialog;
+
+        public static AddReceiptDialog newInstance(HouseExpensesFragment houseExpensesFragment)
+        {
+            AddReceiptDialog f = new AddReceiptDialog();
+            f.setHouseExpensesFragment(houseExpensesFragment);
+            return f;
+        }
+
+
+        public void setHouseExpensesFragment(HouseExpensesFragment houseExpensesFragment)
+        {
+            this.houseExpensesFragment = houseExpensesFragment;
+        }
+
+        @Nullable
+        @Override
+        public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
+                                 @Nullable Bundle savedInstanceState)
+        {
+            View v = inflater.inflate(R.layout.yes_no_dialog, container, false);
+            noButton = v.findViewById(R.id.button_no);
+            yesButton = v.findViewById(R.id.button_yes);
+            noButton.setOnClickListener(v1 -> dialog.dismiss());
+            yesButton.setOnClickListener(v12 -> {
+                houseExpensesFragment.selectReceiptPicture(v12);
+                dialog.dismiss();
+            });
+            addReceiptDialogTextView = v.findViewById(R.id.settle_expense_dialog_text);
+            addReceiptDialogTextView.setVisibility(View.VISIBLE);
+            addReceiptDialogTextView.setText(R.string.add_receipt);
+            return v;
+        }
+
+        public void showDialog()
+        {
+            FragmentManager fm = houseExpensesFragment.getParentFragmentManager();
+            this.show(fm, "dialog");
+        }
+
+        @NonNull
+        @Override
+        public Dialog onCreateDialog(@Nullable Bundle savedInstanceState)
+        {
+            dialog = super.onCreateDialog(savedInstanceState);
+            dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+            return dialog;
+        }
+    }
+
+    public static class ReplaceReceiptDialog extends DialogFragment
+    {
+        private Button replaceReceiptButton;
+        private ImageView image;
+        private HouseExpensesFragment houseExpensesFragment;
+        Dialog dialog;
+
+        public static ReplaceReceiptDialog newInstance(HouseExpensesFragment houseExpensesFragment)
+        {
+            ReplaceReceiptDialog f = new ReplaceReceiptDialog();
+            f.setHouseExpensesFragment(houseExpensesFragment);
+            return f;
+        }
+
+
+        public void setHouseExpensesFragment(HouseExpensesFragment houseExpensesFragment)
+        {
+            this.houseExpensesFragment = houseExpensesFragment;
+        }
+
+        @Nullable
+        @Override
+        public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
+                                 @Nullable Bundle savedInstanceState)
+        {
+            View v = inflater.inflate(R.layout.receipt_replace_dialog, container, false);
+            replaceReceiptButton = v.findViewById(R.id.replace_receipt_button);
+            image = v.findViewById(R.id.current_receipt_image);
+            replaceReceiptButton.setOnClickListener(new View.OnClickListener()
+            {
+                @Override
+                public void onClick(View v)
+                {
+                    houseExpensesFragment.selectReceiptPicture(v);
+                }
+            });
+            Picasso.get().load(houseExpensesFragment.currentExpense.get_receiptImageUriString())
+                    .resize(1200, 1600)
+                    .centerCrop()
+                    .into(image);
+            return v;
+        }
+
+        public void showDialog()
+        {
+            FragmentManager fm = houseExpensesFragment.getParentFragmentManager();
+            this.show(fm, "dialog");
+        }
+
+        @NonNull
+        @Override
+        public Dialog onCreateDialog(@Nullable Bundle savedInstanceState)
+        {
+            dialog = super.onCreateDialog(savedInstanceState);
+            dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+            return dialog;
+        }
+    }
 }

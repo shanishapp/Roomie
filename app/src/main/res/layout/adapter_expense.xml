@@ -7,7 +7,7 @@
     android:background="@drawable/one_chore_bg">
 
     <ImageView
-        android:id="@+id/ReceiptIcon"
+        android:id="@+id/receipt_icon"
         android:layout_width="30dp"
         android:layout_height="30dp"
         android:layout_marginEnd="10dp"
@@ -18,53 +18,69 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <ImageView
-        android:id="@+id/expenseTypeIcon"
+        android:id="@+id/expense_type_icon"
         android:layout_width="30dp"
         android:layout_height="30dp"
         android:layout_marginEnd="10dp"
         android:visibility="visible"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/ReceiptIcon"
+        app:layout_constraintEnd_toStartOf="@+id/receipt_icon"
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
-        android:id="@+id/expenseTitleHolderView"
+        android:id="@+id/expense_title_text"
         android:layout_width="0dp"
         android:layout_height="20dp"
         android:layout_marginTop="10dp"
+        android:gravity="center_horizontal"
         android:text="@string/expense_title"
         android:textSize="15sp"
-        android:gravity="center_horizontal"
-        app:layout_constraintEnd_toStartOf="@+id/expenseTypeIcon"
-        app:layout_constraintStart_toEndOf="@+id/checkMarkAnimation"
+        app:layout_constraintEnd_toStartOf="@+id/expense_type_icon"
+        app:layout_constraintStart_toEndOf="@+id/check_mark_animation"
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
-        android:id="@+id/expenseCostHolderView"
+        android:id="@+id/expense_cost_text"
         android:layout_width="0dp"
         android:layout_height="20dp"
         android:layout_marginTop="10dp"
         android:gravity="center_horizontal"
         android:text="@string/cost"
         android:textSize="15sp"
-        app:layout_constraintEnd_toStartOf="@+id/expenseTypeIcon"
-        app:layout_constraintStart_toEndOf="@+id/checkMarkAnimation"
-        app:layout_constraintTop_toBottomOf="@+id/expenseTitleHolderView" />
+        app:layout_constraintEnd_toStartOf="@+id/expense_type_icon"
+        app:layout_constraintStart_toEndOf="@+id/check_mark_animation"
+        app:layout_constraintTop_toBottomOf="@+id/expense_title_text" />
 
     <TextView
-        android:id="@+id/expensePayerHolderView"
+        android:id="@+id/expense_payer_text"
         android:layout_width="0dp"
         android:layout_height="20dp"
         android:layout_marginTop="10dp"
         android:gravity="center_horizontal"
         android:text="@string/no_payer_set"
         android:textSize="15sp"
-        app:layout_constraintEnd_toStartOf="@+id/expenseTypeIcon"
-        app:layout_constraintStart_toEndOf="@+id/checkMarkAnimation"
-        app:layout_constraintTop_toBottomOf="@+id/expenseCostHolderView" />
+        app:layout_constraintEnd_toStartOf="@+id/expense_type_icon"
+        app:layout_constraintStart_toEndOf="@+id/check_mark_animation"
+        app:layout_constraintTop_toBottomOf="@+id/expense_cost_text" />
 
     <com.airbnb.lottie.LottieAnimationView
-        android:id="@+id/checkMarkAnimation"
+        android:id="@+id/check_mark_animation"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_centerHorizontal="true"
+        android:layout_marginStart="10dp"
+        android:background="@drawable/user_profile_picture_circle_border"
+        android:visibility="invisible"
+        app:lottie_progress="1"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:lottie_fileName="782-check-mark-success.json"
+        app:lottie_loop="false" />
+
+    <com.airbnb.lottie.LottieAnimationView
+        android:id="@+id/check_mark_animation_final_state"
         android:layout_width="40dp"
         android:layout_height="40dp"
         android:layout_centerHorizontal="true"
@@ -77,7 +93,8 @@
         app:layout_constraintTop_toTopOf="parent"
         app:lottie_autoPlay="false"
         app:lottie_fileName="782-check-mark-success.json"
-        app:lottie_loop="false" />
+        app:lottie_loop="false"
+        app:lottie_progress="0" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

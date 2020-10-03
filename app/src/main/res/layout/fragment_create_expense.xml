@@ -14,18 +14,18 @@
         android:layout_height="match_parent" />
 
     <TextView
-        android:id="@+id/costTextView"
+        android:id="@+id/cost_text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="40dp"
         android:text="@string/cost"
         android:textSize="20sp"
-        app:layout_constraintEnd_toEndOf="@+id/expenseTypeSpinner"
-        app:layout_constraintStart_toStartOf="@+id/expenseTypeSpinner"
+        app:layout_constraintEnd_toEndOf="@+id/expense_type_spinner"
+        app:layout_constraintStart_toStartOf="@+id/expense_type_spinner"
         app:layout_constraintTop_toTopOf="parent" />
 
     <me.abhinay.input.CurrencyEditText
-        android:id="@+id/expenseCostEditText"
+        android:id="@+id/expense_cost_edit_text"
         android:layout_width="300dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="30dp"
@@ -34,23 +34,23 @@
         android:textSize="20sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/costTextView" />
+        app:layout_constraintTop_toBottomOf="@id/cost_text" />
 
 
     <TextView
-        android:id="@+id/expenseTypeTextView"
+        android:id="@+id/expense_type_text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="40dp"
         android:text="@string/expenseType"
         android:textSize="20sp"
-        app:layout_constraintEnd_toEndOf="@+id/expenseTypeSpinner"
-        app:layout_constraintStart_toStartOf="@+id/expenseTypeSpinner"
-        app:layout_constraintTop_toBottomOf="@id/expenseCostEditText" />
+        app:layout_constraintEnd_toEndOf="@+id/expense_type_spinner"
+        app:layout_constraintStart_toStartOf="@+id/expense_type_spinner"
+        app:layout_constraintTop_toBottomOf="@id/expense_cost_edit_text" />
 
 
     <com.skydoves.powerspinner.PowerSpinnerView
-        android:id="@+id/expenseTypeSpinner"
+        android:id="@+id/expense_type_spinner"
 
         android:layout_width="0dp"
         android:layout_height="wrap_content"
@@ -67,7 +67,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
 
-        app:layout_constraintTop_toBottomOf="@+id/expenseTypeTextView"
+        app:layout_constraintTop_toBottomOf="@+id/expense_type_text"
 
 
         app:spinner_arrow_animate="true"
@@ -86,23 +86,25 @@
 
 
     <EditText
-        android:id="@+id/customExpenseTypeEditText"
+        android:id="@+id/custom_expense_type_edit_text"
         android:layout_width="match_parent"
         android:layout_height="50dp"
         android:layout_marginStart="20dp"
         android:layout_marginTop="10dp"
         android:layout_marginEnd="20dp"
+        android:autofillHints="@string/expense_type_hint"
         android:background="@drawable/input_bg"
         android:gravity="center"
         android:hint="@string/enter_custom_expense"
+        android:inputType="text"
         android:visibility="invisible"
         app:errorEnabled="true"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/expenseTypeSpinner" />
+        app:layout_constraintTop_toBottomOf="@+id/expense_type_spinner" />
 
     <TextView
-        android:id="@+id/expenseDescriptionTextView"
+        android:id="@+id/expense_description_text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="10dp"
@@ -110,7 +112,7 @@
         android:textSize="20sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/customExpenseTypeEditText" />
+        app:layout_constraintTop_toBottomOf="@+id/custom_expense_type_edit_text" />
 
     <EditText
         android:id="@+id/expenseDescriptionEditText"
@@ -120,14 +122,16 @@
         android:layout_marginTop="10dp"
         android:layout_marginEnd="20dp"
         android:layout_marginBottom="40dp"
+        android:autofillHints="@string/describe_your_expense"
         android:background="@drawable/input_bg"
         android:gravity="center"
+        android:inputType="text"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/expenseDescriptionTextView" />
+        app:layout_constraintTop_toBottomOf="@+id/expense_description_text" />
 
     <TextView
-        android:id="@+id/expensePayerTextView"
+        android:id="@+id/expense_payer_text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="20dp"
@@ -138,7 +142,7 @@
         app:layout_constraintTop_toBottomOf="@+id/expenseDescriptionEditText" />
 
     <com.skydoves.powerspinner.PowerSpinnerView
-        android:id="@+id/expensePayerSpinner"
+        android:id="@+id/expense_payer_spinner"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="20dp"
@@ -158,7 +162,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
 
-        app:layout_constraintTop_toBottomOf="@+id/expensePayerTextView"
+        app:layout_constraintTop_toBottomOf="@+id/expense_payer_text"
         app:spinner_arrow_animate="true"
         app:spinner_arrow_gravity="start"
 
@@ -177,13 +181,13 @@
         android:id="@+id/createExpenseBtn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="20dp"
         android:layout_marginTop="60dp"
+        android:layout_marginBottom="20dp"
         android:background="@drawable/button_bg"
         android:text="@string/create"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/expensePayerSpinner" />
+        app:layout_constraintTop_toBottomOf="@id/expense_payer_spinner" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

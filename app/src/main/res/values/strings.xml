@@ -186,7 +186,7 @@
     <string name="currency_sign">₪</string>
     <string name="expense_title">Expense Title</string>
     <string name="no_payer_set">No Payer Set</string>
-    <string name="total_house_spending">Total House Spending:</string>
+    <string name="house_spending">House Spending:</string>
     <string name="filter">filter by</string>
     <string name="sortBy">sort by</string>
     <string name="doFilter">filter</string>
@@ -211,6 +211,14 @@
     <string name="description_1">Description</string>
     <string name="owes">owes</string>
     <string name="is_owed">is owed</string>
+    <string name="settle_up">Settle \n Up!</string>
+    <string name="are_you_sure_you_want_to_settle_all_house_expenses">Are you sure you want to settle all house expenses?</string>
+    <string name="yes">YES</string>
+    <string name="no">NO</string>
+    <string name="expense_type_hint">Enter expense type here</string>
+    <string name="describe_your_expense">Describe your expense</string>
+    <string name="add_receipt">Do you want to add a receipt photo?</string>
+    <string name="replace_photo">Replace Photo</string>
 
     <string name="groceriesPrice">"groceries price: "</string>
     <string name="add_to_expense">add to expenses</string>
