@@ -203,4 +203,7 @@
     <string name="new_chore">"הוסיף.ה מטלה חדשה:  "</string>
     <string name="new_expense">"הוצאה חדשה:  "</string>
     <string name="new_grocery">"הוסיף.ה מצרך חדש: "</string>
+    <string name="house_user_profile_fragment_done_chores_dialog_title">מטלות שבוצעו החודש</string>
+    <string name="house_user_profile_fragment_chores_dialog_title">מטלות שיש לבצע החודש</string>
+    <string name="house_user_profile_fragment_expenses_dialog_title">הוצאות שלא התחשבנו</string>
 </resources>

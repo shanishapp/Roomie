@@ -120,6 +120,9 @@
     <string name="house_user_profile_fragmnet_chores">Chores</string>
     <string name="house_user_profile_fragmnet_expenses">Expenses</string>
     <string name="house_user_profile_fragment_edit_profile_button">Edit Profile</string>
+    <string name="house_user_profile_fragment_done_chores_dialog_title">Chores done this month</string>
+    <string name="house_user_profile_fragment_chores_dialog_title">Chores to do this month</string>
+    <string name="house_user_profile_fragment_expenses_dialog_title">Unsettled expenses</string>
 
     <!--  House Edit User Profile Fragment  -->
     <string name="house_edit_user_profile_fragment_title">Edit Profile</string>
