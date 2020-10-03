@@ -69,18 +69,14 @@
 
     <!--  House Invite Roomie Fragment  -->
     <string name="house_invite_roomie_fragment_title">Invite Roomie</string>
-    <string name="house_invite_roomie_fragment_explanation">
-        In order to invite a new roomie to your house:
-        \n
-        1. Click the button below.
-        \n
-        2. Choose your preferred way to send the invitation.
-        \n
-        3. Choose the recipient.
-        \n
-        (Note: an invitation link will be generated, and will expire in one day)
-    </string>
+    <string name="house_invite_roomie_fragment_step_num_1">1.</string>
+    <string name="house_invite_roomie_fragment_step_num_1_content">Click the button below</string>
+    <string name="house_invite_roomie_fragment_step_num_2">2.</string>
+    <string name="house_invite_roomie_fragment_step_num_2_content">Choose your preferred method to send the invitation</string>
+    <string name="house_invite_roomie_fragment_step_num_3">3.</string>
+    <string name="house_invite_roomie_fragment_step_num_3_content">Select the recipient</string>
     <string name="house_invite_roomie_fragment_invite_roomie_button">Invite Roomie</string>
+    <string name="house_invite_roomie_fragment_note">(the invitation link is valid for the next 24 hours)</string>
     <string name="house_invite_roomie_invite_message" translatable="false">
         Hey, wanna be my roomie?
         \n

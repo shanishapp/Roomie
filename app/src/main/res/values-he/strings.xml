@@ -44,7 +44,6 @@
     <string name="house_feed_fragment_house_details_title">פרטי הבית</string>
     <string name="house_drawer_menu_invite_roomie">הזמנת שותף</string>
     <string name="house_invite_roomie_fragment_title">הזמנת שותף</string>
-    <string name="house_invite_roomie_fragment_explanation">על מנת להזמין שותף חדש לביתך, לחץ על הכפתור למטה, בחר את הדרך המועדפת עלייך לשלוח את ההזמנה ובחר את הנמען. הנמען יקבל קישור עם סיסמה שיפוג לאחר יום.</string>
     <string name="house_invite_roomie_fragment_invite_roomie_button">הזמן שותף</string>
     <string name="house_invite_roomie_chooser_title">הזמנת שותף</string>
     <string name="house_invite_roomie_error">ארעה שגיאה במהלך יצירת ההזמנה, אנא נסה שוב.</string>
@@ -206,4 +205,11 @@
     <string name="house_user_profile_fragment_done_chores_dialog_title">מטלות שבוצעו החודש</string>
     <string name="house_user_profile_fragment_chores_dialog_title">מטלות שיש לבצע החודש</string>
     <string name="house_user_profile_fragment_expenses_dialog_title">הוצאות שלא התחשבנו</string>
+    <string name="house_invite_roomie_fragment_step_num_1">1.</string>
+    <string name="house_invite_roomie_fragment_step_num_2">2.</string>
+    <string name="house_invite_roomie_fragment_step_num_3">3.</string>
+    <string name="house_invite_roomie_fragment_step_num_1_content">לחץ על הכפתור שלמטה</string>
+    <string name="house_invite_roomie_fragment_step_num_2_content">בחר את הדרך המועדפת עלייך לשליחת ההזמנה</string>
+    <string name="house_invite_roomie_fragment_step_num_3_content">בחר את הנמען</string>
+    <string name="house_invite_roomie_fragment_note">(ההזמנה תקפה ל-24 השעות הקרובות)</string>
 </resources>
