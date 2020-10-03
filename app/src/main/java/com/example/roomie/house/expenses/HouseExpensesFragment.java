@@ -71,7 +71,8 @@ public class HouseExpensesFragment extends Fragment implements ExpenseAdapter.On
     private Button settleExpensesButton;
     private BalanceDialogFragment balanceDialogFragment;
     private SettleExpensesDialogFragment settleExpensesDialogFragment;
-
+    private AddReceiptDialog addReceiptDialog;
+    private ReplaceReceiptDialog replaceReceiptDialog;
     private ImageView currentThumbnail;
     private String currentPhotoPath;
     private StorageReference storageReference;
@@ -83,6 +84,7 @@ public class HouseExpensesFragment extends Fragment implements ExpenseAdapter.On
     private int numberOfRoommates;
     private NavController navController;
     private FirebaseAuth auth;
+    private Expense currentExpense;
 
     public HouseExpensesFragment()
     {
@@ -127,6 +129,8 @@ public class HouseExpensesFragment extends Fragment implements ExpenseAdapter.On
         });
         balanceDialogFragment = BalanceDialogFragment.newInstance(this);
         settleExpensesDialogFragment = SettleExpensesDialogFragment.newInstance(this);
+        addReceiptDialog = AddReceiptDialog.newInstance(this);
+        replaceReceiptDialog = ReplaceReceiptDialog.newInstance(this);
         return v;
     }
 
@@ -251,19 +255,29 @@ public class HouseExpensesFragment extends Fragment implements ExpenseAdapter.On
     }
 
     @Override
-    public void onReceiptClick(int position)
+    public void onReceiptClick(Expense expense)
     {
-        //TODO: Implement
+        currentExpense = expense;
+        if (expense.is_hasReceipt())
+        {
+            replaceReceiptDialog.showDialog();
+        } else
+        {
+            addReceiptDialog.showDialog();
+        }
     }
 
     public double getHouseSpending()
     {
         double totalCost = 0;
-        for (Expense expense : expenses)
+        if (expenses != null)
         {
-            if (!expense.is_isSettled())
+            for (Expense expense : expenses)
             {
-                totalCost += expense.get_cost();
+                if (!expense.is_isSettled())
+                {
+                    totalCost += expense.get_cost();
+                }
             }
         }
         return totalCost;
@@ -370,12 +384,13 @@ public class HouseExpensesFragment extends Fragment implements ExpenseAdapter.On
             CropImage.ActivityResult result = CropImage.getActivityResult(data);
             if (resultCode == Activity.RESULT_OK)
             {
-                currentExpenseAdapter.setReceiptPictureUri(result.getUri());
+                updateReceiptImage(currentExpense.get_id(), result.getUri());
+                // TODO: 03/10/2020 display - somewhere else?
 
-                Picasso.get().load(currentExpenseAdapter.getReceiptPictureUri())
-                        .resize(256, 256)
-                        .centerCrop()
-                        .into(currentExpenseAdapter.getReceiptPicture());
+//                Picasso.get().load(currentExpenseAdapter.getReceiptPictureUri())
+//                        .resize(256, 256)
+//                        .centerCrop()
+//                        .into(currentExpenseAdapter.getReceiptPicture());
             } else if (resultCode == CropImage.CROP_IMAGE_ACTIVITY_RESULT_ERROR_CODE)
             {
                 Toast.makeText(getContext(), "There was an error loading the image, please try again",
@@ -448,7 +463,7 @@ public class HouseExpensesFragment extends Fragment implements ExpenseAdapter.On
         public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
                                  @Nullable Bundle savedInstanceState)
         {
-            View v = inflater.inflate(R.layout.dialog_settle_expenses, container, false);
+            View v = inflater.inflate(R.layout.yes_no_dialog, container, false);
             noButton = v.findViewById(R.id.button_no);
             noButton.setOnClickListener(new View.OnClickListener()
             {
@@ -560,11 +575,12 @@ public class HouseExpensesFragment extends Fragment implements ExpenseAdapter.On
         }
     }
 
-    private static class AddReceiptDialog extends DialogFragment
+    public static class AddReceiptDialog extends DialogFragment
     {
         private Button noButton, yesButton;
         private TextView addReceiptDialogTextView;
         private HouseExpensesFragment houseExpensesFragment;
+
         Dialog dialog;
 
         public static AddReceiptDialog newInstance(HouseExpensesFragment houseExpensesFragment)
@@ -573,6 +589,7 @@ public class HouseExpensesFragment extends Fragment implements ExpenseAdapter.On
             f.setHouseExpensesFragment(houseExpensesFragment);
             return f;
         }
+
 
         public void setHouseExpensesFragment(HouseExpensesFragment houseExpensesFragment)
         {
@@ -584,29 +601,92 @@ public class HouseExpensesFragment extends Fragment implements ExpenseAdapter.On
         public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
                                  @Nullable Bundle savedInstanceState)
         {
-            View v = inflater.inflate(R.layout.dialog_settle_expenses, container, false);
+            View v = inflater.inflate(R.layout.yes_no_dialog, container, false);
             noButton = v.findViewById(R.id.button_no);
-            noButton.setOnClickListener(new View.OnClickListener()
-            {
-                @Override
-                public void onClick(View v)
-                {
-                    dialog.dismiss();
-                }
-            });
             yesButton = v.findViewById(R.id.button_yes);
-            yesButton.setOnClickListener(new View.OnClickListener()
-            {
-                @Override
-                public void onClick(View v)
-                {
-                    houseExpensesFragment.settleExpenses();
-                    dialog.dismiss();
-                }
+            noButton.setOnClickListener(v1 -> dialog.dismiss());
+            yesButton.setOnClickListener(v12 -> {
+                houseExpensesFragment.selectReceiptPicture(v12);
+                dialog.dismiss();
             });
             addReceiptDialogTextView = v.findViewById(R.id.settle_expense_dialog_text);
             addReceiptDialogTextView.setVisibility(View.VISIBLE);
+            addReceiptDialogTextView.setText(R.string.add_receipt);
             return v;
+        }
+
+        public void showDialog()
+        {
+            FragmentManager fm = houseExpensesFragment.getParentFragmentManager();
+            this.show(fm, "dialog");
+        }
+
+        @NonNull
+        @Override
+        public Dialog onCreateDialog(@Nullable Bundle savedInstanceState)
+        {
+            dialog = super.onCreateDialog(savedInstanceState);
+            dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+            return dialog;
+        }
+    }
+
+    public static class ReplaceReceiptDialog extends DialogFragment
+    {
+        private Button replaceReceiptButton;
+        private ImageView image;
+        private HouseExpensesFragment houseExpensesFragment;
+        Dialog dialog;
+
+        public static ReplaceReceiptDialog newInstance(HouseExpensesFragment houseExpensesFragment)
+        {
+            ReplaceReceiptDialog f = new ReplaceReceiptDialog();
+            f.setHouseExpensesFragment(houseExpensesFragment);
+            return f;
+        }
+
+
+        public void setHouseExpensesFragment(HouseExpensesFragment houseExpensesFragment)
+        {
+            this.houseExpensesFragment = houseExpensesFragment;
+        }
+
+        @Nullable
+        @Override
+        public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
+                                 @Nullable Bundle savedInstanceState)
+        {
+            View v = inflater.inflate(R.layout.receipt_replace_dialog, container, false);
+            replaceReceiptButton = v.findViewById(R.id.replace_receipt_button);
+            image = v.findViewById(R.id.current_receipt_image);
+            replaceReceiptButton.setOnClickListener(new View.OnClickListener()
+            {
+                @Override
+                public void onClick(View v)
+                {
+                    houseExpensesFragment.selectReceiptPicture(v);
+                }
+            });
+            Picasso.get().load(houseExpensesFragment.currentExpense.getReceiptPhotoUrl())
+                    .resize(512, 512)
+                    .centerCrop()
+                    .into(image);
+            return v;
+        }
+
+        public void showDialog()
+        {
+            FragmentManager fm = houseExpensesFragment.getParentFragmentManager();
+            this.show(fm, "dialog");
+        }
+
+        @NonNull
+        @Override
+        public Dialog onCreateDialog(@Nullable Bundle savedInstanceState)
+        {
+            dialog = super.onCreateDialog(savedInstanceState);
+            dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+            return dialog;
         }
     }
 }

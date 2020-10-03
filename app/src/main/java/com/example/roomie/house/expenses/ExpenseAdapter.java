@@ -24,7 +24,6 @@ public class ExpenseAdapter extends RecyclerView.Adapter<ExpenseAdapter.ViewHold
     List<Expense> _expenses;
     private OnExpenseListener _myExpenseListener;
     private OnReceiptListener _myReceiptListener;
-    private Context _myContext;
     private HouseExpensesFragment houseExpensesFragment;
     private SharedPreferences sp;
     private ImageView receiptPicture;
@@ -32,13 +31,13 @@ public class ExpenseAdapter extends RecyclerView.Adapter<ExpenseAdapter.ViewHold
 
 
     public ExpenseAdapter(List<Expense> expenses, OnExpenseListener onExpenseListener,
-                          OnReceiptListener onReceiptListener, Context context)
+                          OnReceiptListener onReceiptListener, HouseExpensesFragment houseExpensesFragment)
     {
         _expenses = expenses;
         _myExpenseListener = onExpenseListener;
         _myReceiptListener = onReceiptListener;
-        _myContext = context;
-        sp = _myContext.getSharedPreferences("trackAnimation", Context.MODE_PRIVATE);
+        this.houseExpensesFragment = houseExpensesFragment;
+        sp = houseExpensesFragment.getContext().getSharedPreferences("trackAnimation", Context.MODE_PRIVATE);
     }
 
     @NonNull
@@ -94,7 +93,7 @@ public class ExpenseAdapter extends RecyclerView.Adapter<ExpenseAdapter.ViewHold
             titleView.setText(expense.get_description());
         }
         setExpenseIcon(expenseTypeIcon, expense.get_type());
-        costView.setText(costString.concat(_myContext.getString(R.string.currency_sign)));
+        costView.setText(costString.concat(houseExpensesFragment.getContext().getString(R.string.currency_sign)));
         payerView.setText(payerName);
         if (expense.is_isSettled())
         {
@@ -128,29 +127,13 @@ public class ExpenseAdapter extends RecyclerView.Adapter<ExpenseAdapter.ViewHold
 
             }
 
-            receiptIcon.setOnClickListener(new View.OnClickListener()
-            {
-                @Override
-                public void onClick(View v)
-                {
-                    houseExpensesFragment.onReceiptClick(position);
-                }
-            });
         }
-
-
         receiptIcon.setOnClickListener(new View.OnClickListener()
         {
             @Override
             public void onClick(View v)
             {
-                if (expense.is_hasReceipt())
-                {
-                    //TODO: popup of receipt image + replace option
-                } else
-                {
-
-                }
+                houseExpensesFragment.onReceiptClick(expense);
             }
         });
     }
@@ -242,7 +225,7 @@ public class ExpenseAdapter extends RecyclerView.Adapter<ExpenseAdapter.ViewHold
 
     public interface OnReceiptListener
     {
-        void onReceiptClick(int pos);
+        void onReceiptClick(Expense expense);
     }
 
     private void setReceiptClick()

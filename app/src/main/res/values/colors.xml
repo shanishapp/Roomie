@@ -17,7 +17,10 @@
     <color name="very_light_gray">#F2F2F2</color>
     <color name="transparent">#0036D8F4</color>
     <color name="bnb_salmon">#FF5A5F</color>
-    <color name="button_no_color">#ff1744</color>
+    <color name="no_button_color">#ff1744</color>
     <color name="button_yes_color">#00A589</color>
+    <color name="dark_blue">#2152E7</color>
+    <color name="money_green">#85BB65</color>
+    <color name="gold">#B39E3B</color>
 
 </resources>

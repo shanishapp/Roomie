@@ -24,7 +24,6 @@ public class Expense
     private ExpenseType _type;
     private double _cost;
     private Date _creationDate;
-    private String _receiptImage;
     private Uri _receiptImageUri;
     private String _payerName;
     private String _payerID;
@@ -122,6 +121,23 @@ public class Expense
     public Expense()
     {
 
+    }
+
+    public Expense(String _id, String _title, boolean _isSettled, String _description, ExpenseType _type,
+                   double _cost, Date _creationDate, Uri _receiptImageUri, String _payerName,
+                   String _payerID, boolean _hasReceipt)
+    {
+        this._id = _id;
+        this._title = _title;
+        this._isSettled = _isSettled;
+        this._description = _description;
+        this._type = _type;
+        this._cost = _cost;
+        this._creationDate = _creationDate;
+        this._receiptImageUri = _receiptImageUri;
+        this._payerName = _payerName;
+        this._payerID = _payerID;
+        this._hasReceipt = _hasReceipt;
     }
 
     public Expense(String name, String description, double cost,

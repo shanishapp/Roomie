@@ -22,8 +22,7 @@ import java.util.Objects;
 import static com.example.roomie.util.FirestoreUtil.EXPENSES_COLLECTION_NAME;
 import static com.example.roomie.util.FirestoreUtil.HOUSES_COLLECTION_NAME;
 
-public class HouseExpensesViewModel extends ViewModel implements ExpenseAdapter.OnExpenseListener,
-        ExpenseAdapter.OnReceiptListener
+public class HouseExpensesViewModel extends ViewModel implements ExpenseAdapter.OnExpenseListener
 {
     private FirebaseFirestore db;
     private StorageReference storageReference;
@@ -215,14 +214,8 @@ public class HouseExpensesViewModel extends ViewModel implements ExpenseAdapter.
         //TODO: implementation missing - delete/settle dialog
     }
 
-    @Override
-    public void onReceiptClick()
-    {
-        //TODO:implement
-    }
 
-
-    public LiveData<ExpenseJob> updateReceiptImageUri( String houseId, String expenseId, Uri uri)
+    public LiveData<ExpenseJob> updateReceiptImageUri(String houseId, String expenseId, Uri uri)
     {
         ExpenseJob expenseJob = new ExpenseJob(FirestoreJob.JobStatus.IN_PROGRESS);
         MutableLiveData<ExpenseJob> job = new MutableLiveData<>(expenseJob);
@@ -240,11 +233,12 @@ public class HouseExpensesViewModel extends ViewModel implements ExpenseAdapter.
                             List<Expense> expenseList = expenses.getValue();
                             expenseList.remove(expense);
                             expense.set_receiptImageUri(uri);
+                            expense.set_hasReceipt(true);
                             expenseList.add(expense);
                             expenses.setValue(expenseList);
                             db.collection(HOUSES_COLLECTION_NAME)
                                     .document(houseId).collection(EXPENSES_COLLECTION_NAME)
-                                    .document(expenseId).update("_receiptImageUri", uri);
+                                    .document(expenseId).update("_receiptImageUri", uri.toString());
 
                             expenseJob.setExpense(task.getResult().toObject(Expense.class));
                             expenseJob.setJobStatus(FirestoreJob.JobStatus.SUCCESS);
