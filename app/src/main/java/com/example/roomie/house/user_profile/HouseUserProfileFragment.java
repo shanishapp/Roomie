@@ -163,8 +163,8 @@ public class HouseUserProfileFragment extends Fragment {
             userEmail.setText(email);
         });
         userProfileViewModel.getUserProfilePicture().observe(getViewLifecycleOwner(), profilePicture -> {
-            if (profilePicture == null) {
-                loadDefaultProfilePicture();
+            if (profilePicture == null || profilePicture.toString().isEmpty()) {
+                overlayCounterIncCheck();
                 return;
             }
 
@@ -251,20 +251,6 @@ public class HouseUserProfileFragment extends Fragment {
         }
     }
 
-    private void loadDefaultProfilePicture() {
-        Picasso.get().load(R.drawable.avatar_1).into(this.userProfilePicture, new Callback() {
-            @Override
-            public void onSuccess() {
-                overlayCounterIncCheck();
-            }
-
-            @Override
-            public void onError(Exception e) {
-                overlayCounterIncCheck();
-            }
-        });
-    }
-
     private void loadProfilePicture(Uri profilePicture) {
         Picasso.get().load(profilePicture)
                 .resize(256, 256)
@@ -277,7 +263,7 @@ public class HouseUserProfileFragment extends Fragment {
 
                     @Override
                     public void onError(Exception e) {
-                        loadDefaultProfilePicture();
+                        overlayCounterIncCheck();
                     }
                 });
     }
