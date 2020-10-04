@@ -386,12 +386,6 @@ public class HouseExpensesFragment extends Fragment implements ExpenseAdapter.On
             if (resultCode == Activity.RESULT_OK)
             {
                 updateReceiptImage(currentExpense.get_id(), result.getUri());
-                // TODO: 03/10/2020 display - somewhere else?
-
-//                Picasso.get().load(currentExpenseAdapter.getReceiptPictureUri())
-//                        .resize(256, 256)
-//                        .centerCrop()
-//                        .into(currentExpenseAdapter.getReceiptPicture());
             } else if (resultCode == CropImage.CROP_IMAGE_ACTIVITY_RESULT_ERROR_CODE)
             {
                 Toast.makeText(getContext(), "There was an error loading the image, please try again",
@@ -658,7 +652,7 @@ public class HouseExpensesFragment extends Fragment implements ExpenseAdapter.On
         public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
                                  @Nullable Bundle savedInstanceState)
         {
-            View v = inflater.inflate(R.layout.receipt_replace_dialog, container, false);
+            View v = inflater.inflate(R.layout.dialog_replace_receipt, container, false);
             replaceReceiptButton = v.findViewById(R.id.replace_receipt_button);
             image = v.findViewById(R.id.current_receipt_image);
             replaceReceiptButton.setOnClickListener(new View.OnClickListener()

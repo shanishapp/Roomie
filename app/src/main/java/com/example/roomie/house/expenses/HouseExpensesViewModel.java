@@ -24,6 +24,7 @@ import static com.example.roomie.util.FirestoreUtil.HOUSES_COLLECTION_NAME;
 
 public class HouseExpensesViewModel extends ViewModel implements ExpenseAdapter.OnExpenseListener
 {
+    static final String CREATION_DATE_FIELD_NAME = "_creationDate";
     private FirebaseFirestore db;
     private StorageReference storageReference;
     private MutableLiveData<List<Expense>> expenses;
@@ -213,7 +214,7 @@ public class HouseExpensesViewModel extends ViewModel implements ExpenseAdapter.
         MutableLiveData<AllExpensesJob> job = new MutableLiveData<>(expensesJob);
 
         db.collection(HOUSES_COLLECTION_NAME)
-                .document(houseId).collection(EXPENSES_COLLECTION_NAME).whereEqualTo("_isSettled",false)
+                .document(houseId).collection(EXPENSES_COLLECTION_NAME).whereEqualTo("_isSettled", false)
                 .get().addOnCompleteListener(task -> {
             if (task.isSuccessful())
             {
@@ -249,7 +250,9 @@ public class HouseExpensesViewModel extends ViewModel implements ExpenseAdapter.
         Date start = c.getTime();
 
         db.collection(HOUSES_COLLECTION_NAME)
-                .document(houseId).collection(EXPENSES_COLLECTION_NAME).whereGreaterThan("_creationDate",start)
+                .document(houseId).collection(EXPENSES_COLLECTION_NAME).whereGreaterThan(CREATION_DATE_FIELD_NAME,
+                start)
+
                 .get().addOnCompleteListener(task -> {
             if (task.isSuccessful())
             {

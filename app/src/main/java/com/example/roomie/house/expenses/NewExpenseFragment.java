@@ -105,7 +105,15 @@ public class NewExpenseFragment extends Fragment
         addExpenseButton.setOnClickListener(view1 -> {
             if (view1 != null)
             {
-                createExpense(view);
+                if (payerName == null)
+                {
+                    CharSequence text = getResources().getString(R.string.no_payer_set).concat("!");
+                    Toast.makeText(getContext(), text, Toast.LENGTH_SHORT).show();
+                } else
+                {
+                    createExpense(view);
+                }
+
             }
         });
     }
