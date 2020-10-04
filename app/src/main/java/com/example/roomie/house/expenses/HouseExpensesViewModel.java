@@ -252,6 +252,7 @@ public class HouseExpensesViewModel extends ViewModel implements ExpenseAdapter.
         db.collection(HOUSES_COLLECTION_NAME)
                 .document(houseId).collection(EXPENSES_COLLECTION_NAME).whereGreaterThan(CREATION_DATE_FIELD_NAME,
                 start)
+
                 .get().addOnCompleteListener(task -> {
             if (task.isSuccessful())
             {

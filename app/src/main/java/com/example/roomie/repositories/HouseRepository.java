@@ -9,19 +9,25 @@ import com.example.roomie.FirestoreJob;
 import com.example.roomie.House;
 import com.example.roomie.User;
 import com.example.roomie.house.chat.Message;
+import com.example.roomie.house.chores.chore.Chore;
+import com.example.roomie.house.expenses.Expense;
 import com.example.roomie.splash.GetUserHouseJob;
 import com.example.roomie.util.FirestoreUtil;
-import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.FieldPath;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.ListenerRegistration;
 import com.google.firebase.firestore.Query;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
 import static com.example.roomie.util.FirestoreUtil.CHAT_COLLECTION_NAME;
+import static com.example.roomie.util.FirestoreUtil.CHORES_COLLECTION_NAME;
+import static com.example.roomie.util.FirestoreUtil.EXPENSES_COLLECTION_NAME;
 import static com.example.roomie.util.FirestoreUtil.HOUSES_COLLECTION_NAME;
 
 /**
@@ -271,5 +277,93 @@ public class HouseRepository {
         }
 
         chatMessagesListener.remove();
+    }
+
+    private Date getCurMonthStart() throws ParseException {
+        SimpleDateFormat monthFormat = new SimpleDateFormat("MM");
+        String curMonth = monthFormat.format(new Date());
+        SimpleDateFormat yearFormat = new SimpleDateFormat("yyyy");
+        String curYear = yearFormat.format(new Date());
+        SimpleDateFormat localDateFormat = new SimpleDateFormat("dd.MM.yyyy");
+
+        return localDateFormat.parse("01." + curMonth + "." + curYear);
+    }
+
+    public LiveData<GetChoresJob> getChoresByParameters(String houseId, String username, boolean choreDone) {
+        GetChoresJob getChoresJob = new GetChoresJob(FirestoreJob.JobStatus.IN_PROGRESS);
+        MutableLiveData<GetChoresJob> job = new MutableLiveData<>(getChoresJob);
+
+        Date curMonthStart;
+        try {
+            curMonthStart = getCurMonthStart();
+        } catch (ParseException e) {
+            getChoresJob.setJobStatus(FirestoreJob.JobStatus.ERROR);
+            getChoresJob.setJobErrorCode(FirestoreJob.JobErrorCode.GENERAL);
+            job.setValue(getChoresJob);
+
+            return job;
+        }
+
+        db.collection(HOUSES_COLLECTION_NAME)
+                .document(houseId)
+                .collection(CHORES_COLLECTION_NAME)
+                .whereEqualTo("_assignee", username)
+                .whereEqualTo("_choreDone" , choreDone)
+                .whereGreaterThanOrEqualTo("_dueDate", curMonthStart)
+                .get()
+                .addOnSuccessListener(task -> {
+                    List<Chore> choreList = task.toObjects(Chore.class);
+                    getChoresJob.setChoreList(choreList);
+                    getChoresJob.setJobStatus(FirestoreJob.JobStatus.SUCCESS);
+                    job.setValue(getChoresJob);
+                })
+                .addOnFailureListener(task -> {
+                    getChoresJob.setJobStatus(FirestoreJob.JobStatus.ERROR);
+                    getChoresJob.setJobErrorCode(FirestoreJob.JobErrorCode.GENERAL);
+                    job.setValue(getChoresJob);
+
+                    Log.d(TAG, "Error while fetching chores by parameters.", task.getCause());
+                });
+
+        return job;
+    }
+
+    public LiveData<GetExpensesJob> getExpensesByParameters(String houseId, String uid) {
+        GetExpensesJob getExpensesJob = new GetExpensesJob(FirestoreJob.JobStatus.IN_PROGRESS);
+        MutableLiveData<GetExpensesJob> job = new MutableLiveData<>(getExpensesJob);
+
+        Date curMonthStart;
+        try {
+            curMonthStart = getCurMonthStart();
+        } catch (ParseException e) {
+            getExpensesJob.setJobStatus(FirestoreJob.JobStatus.ERROR);
+            getExpensesJob.setJobErrorCode(FirestoreJob.JobErrorCode.GENERAL);
+            job.setValue(getExpensesJob);
+
+            return job;
+        }
+
+        db.collection(HOUSES_COLLECTION_NAME)
+                .document(houseId)
+                .collection(EXPENSES_COLLECTION_NAME)
+                .whereEqualTo("_payerID", uid)
+                .whereEqualTo("_isSettled", false)
+                .whereGreaterThanOrEqualTo("_creationDate", curMonthStart)
+                .get()
+                .addOnSuccessListener(task -> {
+                    List<Expense> expenseList = task.toObjects(Expense.class);
+                    getExpensesJob.setExpenseList(expenseList);
+                    getExpensesJob.setJobStatus(FirestoreJob.JobStatus.SUCCESS);
+                    job.setValue(getExpensesJob);
+                })
+                .addOnFailureListener(task -> {
+                    getExpensesJob.setJobStatus(FirestoreJob.JobStatus.ERROR);
+                    getExpensesJob.setJobErrorCode(FirestoreJob.JobErrorCode.GENERAL);
+                    job.setValue(getExpensesJob);
+
+                    Log.d(TAG, "Error while fetching expenses by parameters.", task.getCause());
+                });
+
+        return job;
     }
 }

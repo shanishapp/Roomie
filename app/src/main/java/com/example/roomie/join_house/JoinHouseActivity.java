@@ -33,6 +33,10 @@ public class JoinHouseActivity extends AppCompatActivity {
 
     private TextView joinExplanation;
 
+    private TextView houseName;
+
+    private TextView joinConfirm;
+
     private Button joinButton;
 
     @Override
@@ -75,6 +79,8 @@ public class JoinHouseActivity extends AppCompatActivity {
     private void setUIElements() {
         progressBar = findViewById(R.id.join_house_activity_progress_bar);
         joinExplanation = findViewById(R.id.join_house_activity_explanation);
+        houseName = findViewById(R.id.join_house_activity_house_name);
+        joinConfirm = findViewById(R.id.join_house_activity_confirm);
         joinButton = findViewById(R.id.join_house_activity_join_button);
     }
 
@@ -115,12 +121,11 @@ public class JoinHouseActivity extends AppCompatActivity {
         job.observe(this, getInviteInfoJob -> {
             switch (getInviteInfoJob.getJobStatus()) {
                 case SUCCESS:
-                    BidiFormatter myBidiFormatter = BidiFormatter.getInstance();
-                    String msg = String.format(getString(R.string.join_house_activity_explanation),
-                            myBidiFormatter.unicodeWrap(getInviteInfoJob.getHouse().getName()));
-                    joinExplanation.setText(msg);
+                    houseName.setText(getInviteInfoJob.getHouse().getName());
                     progressBar.setVisibility(View.GONE);
                     joinExplanation.setVisibility(View.VISIBLE);
+                    houseName.setVisibility(View.VISIBLE);
+                    joinConfirm.setVisibility(View.VISIBLE);
                     joinButton.setVisibility(View.VISIBLE);
                     toggleJoinButton(true);
                     break;
