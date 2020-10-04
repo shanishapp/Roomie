@@ -15,12 +15,14 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.DialogFragment;
@@ -41,6 +43,8 @@ import com.example.roomie.User;
 import com.example.roomie.house.HouseActivityViewModel;
 import com.example.roomie.repositories.GetHouseRoomiesJob;
 import com.example.roomie.repositories.HouseRepository;
+import com.google.android.material.bottomsheet.BottomSheetBehavior;
+import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
@@ -59,16 +63,10 @@ public class HouseExpensesFragment extends Fragment implements ExpenseAdapter.On
         ExpenseAdapter.OnReceiptListener
 {
 
-    static final int REQUEST_IMAGE_CAPTURE = 1;
     private static final int READ_EXTERNAL_STORAGE_CODE = 2;
 
-    private ExpenseAdapter currentExpenseAdapter;
-    private RecyclerView expensesRecyclerView;
     private TextView myBalanceTextView, houseBalanceTextView;
     private RecyclerView.Adapter<ExpenseAdapter.ViewHolder> expenseAdapter = null;
-    private MovableFloatingActionButton addExpenseButton;
-    private View balanceBubble;
-    private Button settleExpensesButton;
     private BalanceDialogFragment balanceDialogFragment;
     private SettleExpensesDialogFragment settleExpensesDialogFragment;
     private AddReceiptDialog addReceiptDialog;
@@ -131,6 +129,7 @@ public class HouseExpensesFragment extends Fragment implements ExpenseAdapter.On
         addReceiptDialog = AddReceiptDialog.newInstance(this);
         replaceReceiptDialog = ReplaceReceiptDialog.newInstance(this);
         deleteExpenseDialog = DeleteExpenseDialog.newInstance(this);
+
         return v;
     }
 
@@ -142,23 +141,13 @@ public class HouseExpensesFragment extends Fragment implements ExpenseAdapter.On
         Collections.sort(expenses, s);
         expenseAdapter = new ExpenseAdapter(expenses, HouseExpensesFragment.this,
                 HouseExpensesFragment.this, this);
-        expensesRecyclerView = view.findViewById(R.id.expenses_recycler_view);
+        RecyclerView expensesRecyclerView = view.findViewById(R.id.expenses_recycler_view);
         expensesRecyclerView.setAdapter(expenseAdapter);
         expensesRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         houseBalanceTextView = view.findViewById(R.id.house_balance_text);
         myBalanceTextView = view.findViewById(R.id.my_balance_amount_text);
-        balanceBubble = view.findViewById(R.id.balance_bubble);
-
-
-        HouseExpensesFragment houseExpensesFragment = this;
-        balanceBubble.setOnClickListener(new View.OnClickListener()
-        {
-            @Override
-            public void onClick(View v)
-            {
-                balanceDialogFragment.showDialog();
-            }
-        });
+        View balanceBubble = view.findViewById(R.id.balance_bubble);
+        balanceBubble.setOnClickListener(v -> balanceDialogFragment.showDialog());
     }
 
     @Override
@@ -204,7 +193,7 @@ public class HouseExpensesFragment extends Fragment implements ExpenseAdapter.On
 
     private void setUpSettleExpensesButton(View view)
     {
-        settleExpensesButton = view.findViewById(R.id.settle_up_button);
+        Button settleExpensesButton = view.findViewById(R.id.settle_up_button);
         settleExpensesButton.setOnClickListener(view2 ->
         {
             if (view2 != null)
@@ -216,7 +205,7 @@ public class HouseExpensesFragment extends Fragment implements ExpenseAdapter.On
 
     private void setUpAddExpenseButton(View view)
     {
-        addExpenseButton = view.findViewById(R.id.expenses_fab);
+        MovableFloatingActionButton addExpenseButton = view.findViewById(R.id.expenses_fab);
         addExpenseButton.setOnClickListener(view1 -> {
             if (view1 != null)
             {
@@ -324,17 +313,7 @@ public class HouseExpensesFragment extends Fragment implements ExpenseAdapter.On
         });
     }
 
-    public ExpenseAdapter getCurrentExpenseAdapter()
-    {
-        return currentExpenseAdapter;
-    }
-
-    public void setCurrentExpenseAdapter(ExpenseAdapter currentExpenseAdapter)
-    {
-        this.currentExpenseAdapter = currentExpenseAdapter;
-    }
-
-    private void selectReceiptPicture(View view)
+    private void selectReceiptPicture()
     {
         boolean hasPermission = ActivityCompat
                 .checkSelfPermission(requireContext(), Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED;
@@ -389,6 +368,7 @@ public class HouseExpensesFragment extends Fragment implements ExpenseAdapter.On
             if (resultCode == Activity.RESULT_OK)
             {
                 updateReceiptImage(currentExpense.get_id(), result.getUri());
+                expenseAdapter.notifyDataSetChanged();
             } else if (resultCode == CropImage.CROP_IMAGE_ACTIVITY_RESULT_ERROR_CODE)
             {
                 Toast.makeText(getContext(), "There was an error loading the image, please try again",
@@ -423,25 +403,8 @@ public class HouseExpensesFragment extends Fragment implements ExpenseAdapter.On
         });
     }
 
-
-    //TODO
-
-    @Override
-    public void onPause()
-    {
-        super.onPause();
-    }
-
-    @Override
-    public void onResume()
-    {
-        super.onResume();
-    }
-
     public static class SettleExpensesDialogFragment extends DialogFragment
     {
-        private Button noButton, yesButton;
-        private TextView settleDialogTextView;
         private HouseExpensesFragment houseExpensesFragment;
         Dialog dialog;
 
@@ -463,26 +426,14 @@ public class HouseExpensesFragment extends Fragment implements ExpenseAdapter.On
                                  @Nullable Bundle savedInstanceState)
         {
             View v = inflater.inflate(R.layout.dialog_yes_no, container, false);
-            noButton = v.findViewById(R.id.button_no);
-            noButton.setOnClickListener(new View.OnClickListener()
-            {
-                @Override
-                public void onClick(View v)
-                {
-                    dialog.dismiss();
-                }
+            Button noButton = v.findViewById(R.id.button_no);
+            noButton.setOnClickListener(v1 -> dialog.dismiss());
+            Button yesButton = v.findViewById(R.id.button_yes);
+            yesButton.setOnClickListener(v12 -> {
+                houseExpensesFragment.settleExpenses();
+                dialog.dismiss();
             });
-            yesButton = v.findViewById(R.id.button_yes);
-            yesButton.setOnClickListener(new View.OnClickListener()
-            {
-                @Override
-                public void onClick(View v)
-                {
-                    houseExpensesFragment.settleExpenses();
-                    dialog.dismiss();
-                }
-            });
-            settleDialogTextView = v.findViewById(R.id.settle_expense_dialog_text);
+            TextView settleDialogTextView = v.findViewById(R.id.settle_expense_dialog_text);
             settleDialogTextView.setVisibility(View.VISIBLE);
             return v;
         }
@@ -605,7 +556,7 @@ public class HouseExpensesFragment extends Fragment implements ExpenseAdapter.On
             yesButton = v.findViewById(R.id.button_yes);
             noButton.setOnClickListener(v1 -> dialog.dismiss());
             yesButton.setOnClickListener(v12 -> {
-                houseExpensesFragment.selectReceiptPicture(v12);
+                houseExpensesFragment.selectReceiptPicture();
                 dialog.dismiss();
             });
             addReceiptDialogTextView = v.findViewById(R.id.settle_expense_dialog_text);
@@ -663,7 +614,7 @@ public class HouseExpensesFragment extends Fragment implements ExpenseAdapter.On
                 @Override
                 public void onClick(View v)
                 {
-                    houseExpensesFragment.selectReceiptPicture(v);
+                    houseExpensesFragment.selectReceiptPicture();
                 }
             });
             Picasso.get().load(houseExpensesFragment.currentExpense.get_receiptImageUriString())
@@ -691,8 +642,6 @@ public class HouseExpensesFragment extends Fragment implements ExpenseAdapter.On
 
     public static class DeleteExpenseDialog extends DialogFragment
     {
-        private Button noButton, yesButton;
-        private TextView deleteExpenseDialogTextView;
         private HouseExpensesFragment houseExpensesFragment;
         private int position;
 
@@ -722,8 +671,8 @@ public class HouseExpensesFragment extends Fragment implements ExpenseAdapter.On
                                  @Nullable Bundle savedInstanceState)
         {
             View v = inflater.inflate(R.layout.dialog_delete_expense, container, false);
-            noButton = v.findViewById(R.id.button_no);
-            yesButton = v.findViewById(R.id.button_yes);
+            Button noButton = v.findViewById(R.id.button_no);
+            Button yesButton = v.findViewById(R.id.button_yes);
             noButton.setOnClickListener(v1 -> dialog.dismiss());
             yesButton.setOnClickListener(v12 -> {
                 Expense expense = houseExpensesFragment.expenses.get(position);
@@ -732,9 +681,8 @@ public class HouseExpensesFragment extends Fragment implements ExpenseAdapter.On
                 houseExpensesFragment.expenseAdapter.notifyDataSetChanged();
                 dialog.dismiss();
             });
-            deleteExpenseDialogTextView = v.findViewById(R.id.delete_expense_dialog_text);
+            TextView deleteExpenseDialogTextView = v.findViewById(R.id.delete_expense_dialog_text);
             deleteExpenseDialogTextView.setVisibility(View.VISIBLE);
-            deleteExpenseDialogTextView.setText(R.string.add_receipt);
             return v;
         }
 

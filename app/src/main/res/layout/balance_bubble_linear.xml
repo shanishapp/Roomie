@@ -1,15 +1,15 @@
-<?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:paddingTop="10dp"
     android:layout_width="match_parent"
     android:layout_height="70dp"
     android:layout_marginBottom="10dp"
-    android:background="@drawable/button_bg">
+    android:background="@drawable/button_bg"
+    android:orientation="horizontal"
+    android:paddingTop="10dp">
 
     <TextView
         android:id="@+id/house_balance_text"
-        android:layout_width="0dp"
+        android:layout_width="match_parent"
         android:layout_height="20dp"
         android:layout_marginStart="10dp"
         android:layout_marginTop="10dp"
@@ -25,21 +25,21 @@
 
     <TextView
         android:id="@+id/my_balance_amount_text"
-        android:layout_width="0dp"
+        android:layout_width="match_parent"
         android:layout_height="20dp"
         android:layout_marginStart="10dp"
         android:layout_marginTop="4dp"
+        android:layout_marginBottom="10dp"
         android:gravity="center"
-        android:visibility="invisible"
         android:text="@string/you_are_owed"
         android:textColor="@color/green"
         android:textSize="13sp"
         android:textStyle="bold"
-        android:layout_marginBottom="10dp"
+        android:visibility="invisible"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/house_balance_text" />
 
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+</LinearLayout>

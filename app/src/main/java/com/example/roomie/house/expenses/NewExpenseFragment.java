@@ -18,6 +18,7 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 
+import com.example.roomie.FirestoreJob;
 import com.example.roomie.House;
 import com.example.roomie.R;
 import com.example.roomie.User;
@@ -57,7 +58,6 @@ public class NewExpenseFragment extends Fragment
     private Date date = new Date();
     private String title = null;
     private String payerName = null;
-    private String payerID = null;
     private HashMap<String, String> idByNameMap = new HashMap<>();
 
     public NewExpenseFragment()
@@ -73,7 +73,6 @@ public class NewExpenseFragment extends Fragment
      * @param param2 Parameter 2.
      * @return A new instance of fragment NewExpenseFragment.
      */
-    // TODO: Rename and change types and number of parameters
     public static NewExpenseFragment newInstance(String param1, String param2)
     {
         return new NewExpenseFragment();
@@ -100,8 +99,8 @@ public class NewExpenseFragment extends Fragment
     {
         super.onViewCreated(view, savedInstanceState);
         initViews(view);
-        //set up add button
-        loadRoommies(view);
+        //set up add button_bg_grey
+        loadRoommies();
         addExpenseButton.setOnClickListener(view1 -> {
             if (view1 != null)
             {
@@ -111,7 +110,7 @@ public class NewExpenseFragment extends Fragment
                     Toast.makeText(getContext(), text, Toast.LENGTH_SHORT).show();
                 } else
                 {
-                    createExpense(view);
+                    createExpense();
                 }
 
             }
@@ -171,13 +170,13 @@ public class NewExpenseFragment extends Fragment
 
     }
 
-    private void createExpense(View view)
+    private void createExpense()
     {
-        payerID = idByNameMap.get(payerName);
+        String payerID = idByNameMap.get(payerName);
         Expense.ExpenseType type;
         if (title == null)
         {
-            TextView errorText = (TextView) titleSpinner;
+            TextView errorText = titleSpinner;
             errorText.setError("");
             errorText.setText(R.string.no_title_error_msg);//changes the selected item text to this
             return; //TODO error massage
@@ -199,7 +198,7 @@ public class NewExpenseFragment extends Fragment
 
         LiveData<ExpenseJob> job = newExpenseViewModel.createNewExpense(house, title,
                 description, cost,
-                payerID, payerName, type, date);
+                payerID, payerName, type);
 
         job.observe(getViewLifecycleOwner(), ExpenseJob -> {
             switch (ExpenseJob.getJobStatus())
@@ -220,23 +219,22 @@ public class NewExpenseFragment extends Fragment
         });
     }
 
-    private void loadRoommies(View view)
+    private void loadRoommies()
     {
         LiveData<GetHouseRoomiesJob> job =
                 HouseRepository.getInstance().getHouseRoomies(house.getId());
         job.observe(getViewLifecycleOwner(), getHouseRoomiesJob -> {
-            switch (getHouseRoomiesJob.getJobStatus())
+            if (getHouseRoomiesJob.getJobStatus() == FirestoreJob.JobStatus.SUCCESS)
             {
-                case SUCCESS:
-                    for (User user : getHouseRoomiesJob.getRoomiesList())
-                    {
-                        String id = user.getUid();
-                        String name = user.getUsername();
-                        roommateNamesList.add(name);
-                        idByNameMap.put(name, id);
-                    }
-                    setupPayerSpinner();
-                    //TODO: case FAILURE
+                for (User user : getHouseRoomiesJob.getRoomiesList())
+                {
+                    String id = user.getUid();
+                    String name = user.getUsername();
+                    roommateNamesList.add(name);
+                    idByNameMap.put(name, id);
+                }
+                setupPayerSpinner();
+                //TODO: case FAILURE
             }
         });
     }

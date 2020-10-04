@@ -229,6 +229,9 @@
     <string name="new_chore">"New chore: "</string>
     <string name="new_expense">"New expense: "</string>
     <string name="new_grocery">"Added new grocery: "</string>
+    <string name="cancel_caps">CANCEL</string>
+    <string name="do_you_want_to_delete_this_expense">Do you want to delete this expense?</string>
+    <string name="delete_caps">DELETE</string>
 
     <string-array name="filter_by_sizes">
         <item>@string/big</item>

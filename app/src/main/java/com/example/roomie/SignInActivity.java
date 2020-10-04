@@ -104,11 +104,11 @@ public class SignInActivity extends AppCompatActivity {
                 });
             } else {
                 // Sign in failed. If response is null the user canceled the
-                // sign-in flow using the back button. Otherwise check
+                // sign-in flow using the back button_bg_grey. Otherwise check
                 // response.getError().getErrorCode() and handle the error.
                 toggleLoadingLayout(false);
                 if (response == null) {
-                    Log.d(TAG, "User cancelled sign in using back button.");
+                    Log.d(TAG, "User cancelled sign in using back button_bg_grey.");
                 } else {
                     Log.d(TAG, "Sign in failed with error code " + response.getError().getErrorCode());
                 }

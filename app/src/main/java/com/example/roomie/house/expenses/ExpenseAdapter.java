@@ -2,8 +2,6 @@ package com.example.roomie.house.expenses;
 
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.net.Uri;
-import android.support.v4.app.INotificationSideChannel;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -26,8 +24,6 @@ public class ExpenseAdapter extends RecyclerView.Adapter<ExpenseAdapter.ViewHold
     private OnReceiptListener _myReceiptListener;
     private HouseExpensesFragment houseExpensesFragment;
     private SharedPreferences sp;
-    private ImageView receiptPicture;
-    private Uri receiptPictureUri;
 
 
     public ExpenseAdapter(List<Expense> expenses, OnExpenseListener onExpenseListener,
@@ -128,14 +124,7 @@ public class ExpenseAdapter extends RecyclerView.Adapter<ExpenseAdapter.ViewHold
             }
 
         }
-        receiptIcon.setOnClickListener(new View.OnClickListener()
-        {
-            @Override
-            public void onClick(View v)
-            {
-                houseExpensesFragment.onReceiptClick(expense);
-            }
-        });
+        receiptIcon.setOnClickListener(v -> houseExpensesFragment.onReceiptClick(expense));
     }
 
     private void markSettledAnimations()
@@ -156,21 +145,6 @@ public class ExpenseAdapter extends RecyclerView.Adapter<ExpenseAdapter.ViewHold
     public int getItemCount()
     {
         return _expenses.size();
-    }
-
-    public void setReceiptPictureUri(Uri uri)
-    {
-        receiptPictureUri = uri;
-    }
-
-    public Uri getReceiptPictureUri()
-    {
-        return receiptPictureUri;
-    }
-
-    public ImageView getReceiptPicture()
-    {
-        return receiptPicture;
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener
@@ -208,15 +182,6 @@ public class ExpenseAdapter extends RecyclerView.Adapter<ExpenseAdapter.ViewHold
             onExpenseListener.onExpenseClick(getAdapterPosition());
         }
     }
-//
-//    private void dispatchTakePictureIntent()
-//    {
-//        Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-//        if (takePictureIntent.resolveActivity(getPackageManager()) != null)
-//        {
-//            startActivityForResult(takePictureIntent, REQUEST_IMAGE_CAPTURE);
-//        }
-//    }
 
     public interface OnExpenseListener
     {
@@ -226,11 +191,5 @@ public class ExpenseAdapter extends RecyclerView.Adapter<ExpenseAdapter.ViewHold
     public interface OnReceiptListener
     {
         void onReceiptClick(Expense expense);
-    }
-
-    private void setReceiptClick()
-    {
-
-
     }
 }

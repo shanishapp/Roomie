@@ -18,14 +18,5 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <!--    <com.airbnb.lottie.LottieAnimationView-->
-    <!--        android:id="@+id/roommateBalanceAnimation"-->
-    <!--        android:layout_width="wrap_content"-->
-    <!--        android:layout_height="wrap_content"-->
-    <!--        app:layout_constraintTop_toTopOf="parent"-->
-    <!--        app:layout_constraintEnd_toEndOf="parent"-->
-    <!--        app:lottie_fileName="13398-money-stack.json"-->
-    <!--        app:layout_constraintStart_toEndOf="@id/balances_recycler_view" />-->
-
 
 </androidx.constraintlayout.widget.ConstraintLayout>
