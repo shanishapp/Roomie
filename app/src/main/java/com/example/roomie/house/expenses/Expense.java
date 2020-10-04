@@ -24,7 +24,6 @@ public class Expense
     private ExpenseType _type;
     private double _cost;
     private Date _creationDate;
-    //    private Uri _receiptImageUri;
     private String _receiptImageUriString;
     private String _payerName;
     private String _payerID;
@@ -39,7 +38,7 @@ public class Expense
      */
     public static ExpenseType typeFromString(String title)
     {
-        ExpenseType resultType = null;
+        ExpenseType resultType;
         switch (title)
         {
             case TYPE_PROFESSIONAL_STRING:
@@ -98,16 +97,6 @@ public class Expense
         return _isSettled;
     }
 
-//    public Uri get_receiptImageUri()
-//    {
-//        return _receiptImageUri;
-//    }
-
-//    public void set_receiptImageUri(Uri _receiptImageUri)
-//    {
-//        this._receiptImageUri = _receiptImageUri;
-//    }
-
     public String get_receiptImageUriString()
     {
         return _receiptImageUriString;
@@ -128,14 +117,13 @@ public class Expense
     }
 
 
-    //TODO: add receipt URI to constructors
     public Expense()
     {
 
     }
 
     public Expense(String _id, String _title, boolean _isSettled, String _description, ExpenseType _type,
-                   double _cost, Date _creationDate, Uri _receiptImageUri, String _payerName,
+                   double _cost, Date _creationDate, String _payerName,
                    String _payerID, boolean _hasReceipt)
     {
         this._id = _id;
@@ -145,7 +133,6 @@ public class Expense
         this._type = _type;
         this._cost = _cost;
         this._creationDate = _creationDate;
-//        this._receiptImageUri = _receiptImageUri;
         this._payerName = _payerName;
         this._payerID = _payerID;
         this._hasReceipt = _hasReceipt;
@@ -163,7 +150,6 @@ public class Expense
         this._cost = _cost;
         this._creationDate = _creationDate;
         _receiptImageUriString = _receiptImageUri;
-//        this._receiptImageUri = Uri.parse(_receiptImageUri);
         this._payerName = _payerName;
         this._payerID = _payerID;
         this._hasReceipt = _hasReceipt;
@@ -180,7 +166,7 @@ public class Expense
         _payerID = payerID;
         _payerName = payerName;
         _isSettled = false;
-        boolean hasReceiptImage = false;
+        _hasReceipt = false;
     }
 
     public Expense(String name, String description, double cost,
@@ -194,7 +180,7 @@ public class Expense
         _payerID = payerID;
         _payerName = payerName;
         _isSettled = false;
-        boolean hasReceiptImage = false;
+        _hasReceipt = false;
     }
 
     public Expense(String name, String description, double cost,
@@ -208,7 +194,7 @@ public class Expense
         _payerID = payerID;
         _payerName = payerName;
         _isSettled = false;
-        boolean hasReceiptImage = false;
+        _hasReceipt = false;
         _isSettled = isSettled;
     }
 
@@ -224,7 +210,7 @@ public class Expense
         _payerID = payerID;
         _payerName = payerName;
         _isSettled = false;
-        boolean hasReceiptImage = false;
+        _hasReceipt = false;
     }
 
 
@@ -299,13 +285,4 @@ public class Expense
     {
         this._type = _type;
     }
-    //Todo: take picture
-//    static final int REQUEST_IMAGE_CAPTURE = 1;
-//    private void dispatchTakePictureIntent () {
-//        Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-//        if (takePictureIntent.resolveActivity(myActivity.getPackageManager()) != null)
-//        {
-//            myActivity.startActivityForResult(takePictureIntent, 1);
-//        }
-//    }
 }

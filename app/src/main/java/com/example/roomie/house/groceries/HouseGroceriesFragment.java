@@ -19,7 +19,6 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -35,14 +34,12 @@ import com.example.roomie.house.groceries.grocery.Grocery;
 import com.example.roomie.house.groceries.grocery.NewGroceryJob;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.firestore.FirebaseFirestore;
 
 import net.igenius.customcheckbox.CustomCheckBox;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -135,7 +132,7 @@ public class HouseGroceriesFragment extends Fragment implements GroceryAdapter.O
                 .setTitle(grocery.get_name())
                 .setMessage(getString(R.string.created_at)+" "+df.format(grocery.get_creationDate()))
                 // Specifying a listener allows you to take an action before dismissing the dialog.
-                // The dialog is automatically dismissed when a dialog button is clicked.
+                // The dialog is automatically dismissed when a dialog button_bg_grey is clicked.
                 .setPositiveButton(getString(R.string.delete), (dialog, which) -> {
                     // Continue with delete operation
                     LiveData<NewGroceryJob> job = vm.deleteGroceryForever(groceryList.get(pos), houseActivityViewModel.getHouse().getId());
@@ -146,7 +143,7 @@ public class HouseGroceriesFragment extends Fragment implements GroceryAdapter.O
                         }
                     });
                 })
-                // A null listener allows the button to dismiss the dialog and take no further action.
+                // A null listener allows the button_bg_grey to dismiss the dialog and take no further action.
                 .setNegativeButton(getString(R.string.check), (dialogInterface, i) -> {
                     pickGroceryCheckBox.setChecked(!pickGroceryCheckBox.isChecked());
                 })
@@ -174,7 +171,7 @@ public class HouseGroceriesFragment extends Fragment implements GroceryAdapter.O
         addChoreButton = view.findViewById(R.id.fab);
         moveToExpensesBtn = view.findViewById(R.id.addToExpensesBtn);
         pickedGroceries = new ArrayList<>();
-        //set up add button
+        //set up add button_bg_grey
         addChoreButton.setOnClickListener(view1 -> {
             if(view1 != null){
                 navController.navigate(R.id.action_house_groceries_fragment_dest_to_newGroceryFragment);
@@ -194,7 +191,7 @@ public class HouseGroceriesFragment extends Fragment implements GroceryAdapter.O
                         NewExpenseViewModel expenseViewModel = new ViewModelProvider(requireActivity()).get(NewExpenseViewModel.class);
                         expenseViewModel.createNewExpense(houseActivityViewModel.getHouse(),
                                 getString(R.string.house_bottom_menu_groceries), description.toString(),
-                                0, user.getUid(), "Shani Shapp", Expense.ExpenseType.GROCERIES, new Date());
+                                0, user.getUid(), "Shani Shapp", Expense.ExpenseType.GROCERIES);
                         for (Grocery grocery : pickedGroceries) {
                             vm.deleteGroceryForever(grocery, houseActivityViewModel.getHouse().getId());
                             groceryList.remove(grocery);
@@ -233,7 +230,7 @@ public class HouseGroceriesFragment extends Fragment implements GroceryAdapter.O
 //                        adapter.notifyDataSetChanged();
 //                    })
 //
-//                    // A null listener allows the button to dismiss the dialog and take no further action.
+//                    // A null listener allows the button_bg_grey to dismiss the dialog and take no further action.
 //                    .setNegativeButton(android.R.string.no, null)
 //                    .setIcon(android.R.drawable.ic_dialog_alert)
 //                    .show()

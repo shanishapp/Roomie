@@ -9,9 +9,6 @@ import com.example.roomie.House;
 import com.google.firebase.firestore.FieldPath;
 import com.google.firebase.firestore.FirebaseFirestore;
 
-
-import java.util.Date;
-
 import static com.example.roomie.util.FirestoreUtil.EXPENSES_COLLECTION_NAME;
 import static com.example.roomie.util.FirestoreUtil.HOUSES_COLLECTION_NAME;
 
@@ -26,8 +23,7 @@ public class NewExpenseViewModel extends ViewModel
 
     public LiveData<ExpenseJob> createNewExpense(House house, String title, String description, double cost,
                                                  String payerID, String payerName,
-                                                 Expense.ExpenseType type,
-                                                 Date purchaseDate)
+                                                 Expense.ExpenseType type)
     {
         ExpenseJob newExpenseJob = new ExpenseJob(FirestoreJob.JobStatus.IN_PROGRESS);
         MutableLiveData<ExpenseJob> job =

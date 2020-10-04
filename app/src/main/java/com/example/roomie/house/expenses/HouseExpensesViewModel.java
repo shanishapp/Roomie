@@ -1,6 +1,7 @@
 package com.example.roomie.house.expenses;
 
 import android.net.Uri;
+import android.preference.PreferenceFragment;
 import android.util.Log;
 
 import androidx.lifecycle.LiveData;
@@ -24,12 +25,19 @@ import static com.example.roomie.util.FirestoreUtil.HOUSES_COLLECTION_NAME;
 
 public class HouseExpensesViewModel extends ViewModel implements ExpenseAdapter.OnExpenseListener
 {
-    static final String CREATION_DATE_FIELD_NAME = "_creationDate";
+    public static final String CREATION_DATE_FIELD_NAME = "_creationDate";
+    public static final String PAYER_ID_FIELD_NAME = "_payerId";
+    public static final String IS_SETTLED_FIELD_NAME = "_isSettled";
+    public static final String PAYER_NAME_FIELD_NAME = "_payerName";
+    public static final String RECEIPT_IMAGE_URI_FIELD_NAME = "_receiptImageUriString";
+    public static final String HAS_RECEIPT_FIELD_NAME = "_hasReceipt";
+    public static final String ID_FIELD_NAME = "_id";
+    private static final String TAG = "HOUSE_EXPENSES";
+
     private FirebaseFirestore db;
     private StorageReference storageReference;
     private MutableLiveData<List<Expense>> expenses;
     private MutableLiveData<Uri> receiptPhoto;
-    private static final String TAG = "HOUSE_EXPENSES";
 
     public HouseExpensesViewModel()
     {
@@ -62,10 +70,10 @@ public class HouseExpensesViewModel extends ViewModel implements ExpenseAdapter.
                             expenses.setValue(expenseList);
                             db.collection(HOUSES_COLLECTION_NAME)
                                     .document(houseId).collection(EXPENSES_COLLECTION_NAME)
-                                    .document(expenseId).update("_payerID", payerID);
+                                    .document(expenseId).update(PAYER_ID_FIELD_NAME, payerID);
                             db.collection(HOUSES_COLLECTION_NAME)
                                     .document(houseId).collection(EXPENSES_COLLECTION_NAME)
-                                    .document(expenseId).update("_payerName", payerID);
+                                    .document(expenseId).update(PAYER_NAME_FIELD_NAME, payerName);
 
                             expensesJob.setExpense(task.getResult().toObject(Expense.class));
                             expensesJob.setJobStatus(FirestoreJob.JobStatus.SUCCESS);
@@ -130,7 +138,7 @@ public class HouseExpensesViewModel extends ViewModel implements ExpenseAdapter.
                     db.collection(HOUSES_COLLECTION_NAME)
                             .document(houseId)
                             .collection(EXPENSES_COLLECTION_NAME)
-                            .document(expensID).update("_isSettled", true);
+                            .document(expensID).update(IS_SETTLED_FIELD_NAME, true);
                 }
                 expenses.setValue(expenseList);
                 expensesJob.setExpenses(expenseList);
@@ -163,7 +171,7 @@ public class HouseExpensesViewModel extends ViewModel implements ExpenseAdapter.
                         expenses.setValue(expenseList);
                         db.collection(HOUSES_COLLECTION_NAME)
                                 .document(houseId).collection(EXPENSES_COLLECTION_NAME)
-                                .document(expense.get_id()).update("_isSettled", true);
+                                .document(expense.get_id()).update(IS_SETTLED_FIELD_NAME, true);
                         expenseJob.setExpense(task.getResult().toObject(Expense.class));
                         expenseJob.setJobStatus(FirestoreJob.JobStatus.SUCCESS);
                         job.setValue(expenseJob);
@@ -214,7 +222,7 @@ public class HouseExpensesViewModel extends ViewModel implements ExpenseAdapter.
         MutableLiveData<AllExpensesJob> job = new MutableLiveData<>(expensesJob);
 
         db.collection(HOUSES_COLLECTION_NAME)
-                .document(houseId).collection(EXPENSES_COLLECTION_NAME).whereEqualTo("_isSettled", false)
+                .document(houseId).collection(EXPENSES_COLLECTION_NAME).whereEqualTo(IS_SETTLED_FIELD_NAME, false)
                 .get().addOnCompleteListener(task -> {
             if (task.isSuccessful())
             {
@@ -306,10 +314,10 @@ public class HouseExpensesViewModel extends ViewModel implements ExpenseAdapter.
                             expenses.setValue(expenseList);
                             db.collection(HOUSES_COLLECTION_NAME)
                                     .document(houseId).collection(EXPENSES_COLLECTION_NAME)
-                                    .document(expenseId).update("_receiptImageUriString", uri);
+                                    .document(expenseId).update(RECEIPT_IMAGE_URI_FIELD_NAME, uri);
                             db.collection(HOUSES_COLLECTION_NAME)
                                     .document(houseId).collection(EXPENSES_COLLECTION_NAME)
-                                    .document(expenseId).update("_hasReceipt", true);
+                                    .document(expenseId).update(HAS_RECEIPT_FIELD_NAME, true);
 
                             expenseJob.setExpense(task.getResult().toObject(Expense.class));
                             expenseJob.setJobStatus(FirestoreJob.JobStatus.SUCCESS);
@@ -332,7 +340,7 @@ public class HouseExpensesViewModel extends ViewModel implements ExpenseAdapter.
         MutableLiveData<ExpenseJob> job = new MutableLiveData<>(expenseJob);
 
         db.collection(EXPENSES_COLLECTION_NAME)
-                .whereEqualTo("_id", expenseId)
+                .whereEqualTo(ID_FIELD_NAME, expenseId)
                 .get()
                 .addOnSuccessListener(task -> {
                     if (task.isEmpty() || task.size() > 1)
@@ -357,4 +365,5 @@ public class HouseExpensesViewModel extends ViewModel implements ExpenseAdapter.
                 });
         return job;
     }
+
 }

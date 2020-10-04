@@ -115,7 +115,7 @@ public class NewChoreFragment extends Fragment implements HouseActivity.IOnBackP
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        //set up add button
+        //set up add button_bg_grey
 
         createNotificationChannel();
         initViews(view);

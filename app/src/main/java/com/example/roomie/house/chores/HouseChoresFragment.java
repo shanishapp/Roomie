@@ -385,7 +385,7 @@ public class HouseChoresFragment extends Fragment implements ChoreAdapter.OnChor
         super.onViewCreated(view, savedInstanceState);
         navController = Navigation.findNavController(view);
         button = view.findViewById(R.id.fab);
-        //set up add button
+        //set up add button_bg_grey
         button.setOnClickListener(view1 -> {
             if(view1 != null){
                 Bundle result = new Bundle();
