@@ -73,8 +73,8 @@ public class HouseExpensesFragment extends Fragment implements ExpenseAdapter.On
     private SettleExpensesDialogFragment settleExpensesDialogFragment;
     private AddReceiptDialog addReceiptDialog;
     private ReplaceReceiptDialog replaceReceiptDialog;
-    private ImageView currentThumbnail;
-    private String currentPhotoPath;
+    private DeleteExpenseDialog deleteExpenseDialog;
+
     private StorageReference storageReference;
 
 
@@ -130,6 +130,7 @@ public class HouseExpensesFragment extends Fragment implements ExpenseAdapter.On
         settleExpensesDialogFragment = SettleExpensesDialogFragment.newInstance(this);
         addReceiptDialog = AddReceiptDialog.newInstance(this);
         replaceReceiptDialog = ReplaceReceiptDialog.newInstance(this);
+        deleteExpenseDialog = DeleteExpenseDialog.newInstance(this);
         return v;
     }
 
@@ -253,6 +254,8 @@ public class HouseExpensesFragment extends Fragment implements ExpenseAdapter.On
     @Override
     public void onExpenseClick(int pos)
     {
+        deleteExpenseDialog.setPosition(pos);
+        deleteExpenseDialog.showDialog();
     }
 
     @Override
@@ -459,7 +462,7 @@ public class HouseExpensesFragment extends Fragment implements ExpenseAdapter.On
         public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
                                  @Nullable Bundle savedInstanceState)
         {
-            View v = inflater.inflate(R.layout.yes_no_dialog, container, false);
+            View v = inflater.inflate(R.layout.dialog_yes_no, container, false);
             noButton = v.findViewById(R.id.button_no);
             noButton.setOnClickListener(new View.OnClickListener()
             {
@@ -597,7 +600,7 @@ public class HouseExpensesFragment extends Fragment implements ExpenseAdapter.On
         public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
                                  @Nullable Bundle savedInstanceState)
         {
-            View v = inflater.inflate(R.layout.yes_no_dialog, container, false);
+            View v = inflater.inflate(R.layout.dialog_yes_no, container, false);
             noButton = v.findViewById(R.id.button_no);
             yesButton = v.findViewById(R.id.button_yes);
             noButton.setOnClickListener(v1 -> dialog.dismiss());
@@ -667,6 +670,71 @@ public class HouseExpensesFragment extends Fragment implements ExpenseAdapter.On
                     .resize(1200, 1600)
                     .centerCrop()
                     .into(image);
+            return v;
+        }
+
+        public void showDialog()
+        {
+            FragmentManager fm = houseExpensesFragment.getParentFragmentManager();
+            this.show(fm, "dialog");
+        }
+
+        @NonNull
+        @Override
+        public Dialog onCreateDialog(@Nullable Bundle savedInstanceState)
+        {
+            dialog = super.onCreateDialog(savedInstanceState);
+            dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+            return dialog;
+        }
+    }
+
+    public static class DeleteExpenseDialog extends DialogFragment
+    {
+        private Button noButton, yesButton;
+        private TextView deleteExpenseDialogTextView;
+        private HouseExpensesFragment houseExpensesFragment;
+        private int position;
+
+        Dialog dialog;
+
+        public static DeleteExpenseDialog newInstance(HouseExpensesFragment houseExpensesFragment)
+        {
+            DeleteExpenseDialog f = new DeleteExpenseDialog();
+            f.setHouseExpensesFragment(houseExpensesFragment);
+            return f;
+        }
+
+        private void setPosition(int position)
+        {
+            this.position = position;
+        }
+
+
+        public void setHouseExpensesFragment(HouseExpensesFragment houseExpensesFragment)
+        {
+            this.houseExpensesFragment = houseExpensesFragment;
+        }
+
+        @Nullable
+        @Override
+        public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
+                                 @Nullable Bundle savedInstanceState)
+        {
+            View v = inflater.inflate(R.layout.dialog_delete_expense, container, false);
+            noButton = v.findViewById(R.id.button_no);
+            yesButton = v.findViewById(R.id.button_yes);
+            noButton.setOnClickListener(v1 -> dialog.dismiss());
+            yesButton.setOnClickListener(v12 -> {
+                Expense expense = houseExpensesFragment.expenses.get(position);
+                String houseId = houseExpensesFragment.houseActivityViewModel.getHouse().getId();
+                houseExpensesFragment.viewModel.deleteExpense(expense, houseId);
+                houseExpensesFragment.expenseAdapter.notifyDataSetChanged();
+                dialog.dismiss();
+            });
+            deleteExpenseDialogTextView = v.findViewById(R.id.delete_expense_dialog_text);
+            deleteExpenseDialogTextView.setVisibility(View.VISIBLE);
+            deleteExpenseDialogTextView.setText(R.string.add_receipt);
             return v;
         }
 
