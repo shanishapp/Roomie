@@ -36,7 +36,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:gravity="center"
-                    android:text="@string/total_house_spending" />
+                    android:text="@string/no_expenses_made_yet" />
                 <TextView
                     android:id="@+id/totalHouseSpendingTextView"
                     android:layout_width="wrap_content"

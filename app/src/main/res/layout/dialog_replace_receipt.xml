@@ -14,6 +14,7 @@
     <Button
         android:id="@+id/replace_receipt_button"
         android:layout_width="1000dp"
+        android:gravity="center"
         android:layout_height="wrap_content"
         android:background="@drawable/button_yes_bg"
         android:layout_marginBottom="20dp"
