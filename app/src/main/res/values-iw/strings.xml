@@ -213,4 +213,7 @@
     <string name="house_invite_roomie_fragment_step_num_3_content">בחר את הנמען</string>
     <string name="house_invite_roomie_fragment_note">(ההזמנה תקפה ל-24 השעות הקרובות)</string>
     <string name="join_house_activity_confirm">לחץ על הצטרף כדי לאשר</string>
+    <string name="reminderMsg">"just a reminder to do:  "</string>
+    <string name="fragment_new_grocery_title">new grocery</string>
+    <string name="fragment_chore_title">chore</string>
 </resources>

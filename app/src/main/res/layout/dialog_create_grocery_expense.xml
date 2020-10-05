@@ -39,7 +39,7 @@
     <EditText
         android:id="@+id/editTextNumber"
         android:layout_width="70dp"
-        android:layout_height="30dp"
+        android:layout_height="50dp"
         android:background="@drawable/input_bg"
         android:text="0"
         android:layout_marginTop="5dp"
@@ -50,7 +50,7 @@
     <Button
         android:id="@+id/doAddToExpensesBtn"
         android:layout_width="wrap_content"
-        android:layout_height="30dp"
+        android:layout_height="50dp"
         android:padding="5dp"
         android:layout_marginTop="15dp"
         android:text="@string/add_to_expense"
@@ -59,8 +59,8 @@
     <Button
         android:id="@+id/cancelBtn"
         android:layout_width="100dp"
-        android:layout_height="30dp"
-        android:layout_marginTop="5dp"
+        android:layout_height="50dp"
+        android:layout_marginTop="10dp"
         android:layout_marginBottom="20dp"
         android:background="@drawable/button_bg"
         android:padding="5dp"

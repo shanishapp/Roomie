@@ -108,7 +108,7 @@
     <fragment
         android:id="@+id/newChoreFragment"
         android:name="com.example.roomie.house.chores.chore.NewChoreFragment"
-        android:label="fragment_chore"
+        android:label="@string/fragment_chore_title"
         tools:layout="@layout/fragment_new_chore" >
         <action
             android:id="@+id/action_newChoreFragment_to_house_chores_fragment_dest"
@@ -224,7 +224,7 @@
     <fragment
         android:id="@+id/newGroceryFragment"
         android:name="com.example.roomie.house.groceries.grocery.NewGroceryFragment"
-        android:label="fragment_new_grocery"
+        android:label="@string/fragment_new_grocery_title"
         tools:layout="@layout/fragment_new_grocery" >
         <action
             android:id="@+id/action_newGroceryFragment_to_house_groceries_fragment_dest"

@@ -12,7 +12,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:padding="4dp"
-        android:background="@color/lightButtonColor"
+        android:background="@drawable/house_chat_bg"
         />
 
     <com.example.roomie.MovableFloatingActionButton
@@ -31,6 +31,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_above="@+id/fab"
+        android:visibility="gone"
         android:layout_alignStart="@+id/fab"
         android:layout_alignEnd="@+id/fab"
         android:src="@drawable/money"

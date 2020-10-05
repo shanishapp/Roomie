@@ -291,7 +291,7 @@ public class ChoreFragment extends Fragment implements HouseActivity.IOnBackPres
                 TextView errorText = (TextView)titleSpinner;
                 errorText.setError("");
                 errorText.setText(R.string.no_title_error_msg);//changes the selected item text to this
-                return; //TODO error massage
+                return;
             } else if (title != null && title.equals(getString(R.string.other))) {
                 String diffT = editText.getText().toString();
                 if(! diffT.equals("")) {
@@ -299,7 +299,7 @@ public class ChoreFragment extends Fragment implements HouseActivity.IOnBackPres
                 }
             }
 
-            LiveData<newChoreJob> job = choreFragmentViewModel.setTitle(choreId, title, house.getId()); //TODO livedata
+            LiveData<newChoreJob> job = choreFragmentViewModel.setTitle(choreId, title, house.getId());
 
             job.observe(getViewLifecycleOwner(), createNewChoreJob -> {
                 switch (createNewChoreJob.getJobStatus()) {

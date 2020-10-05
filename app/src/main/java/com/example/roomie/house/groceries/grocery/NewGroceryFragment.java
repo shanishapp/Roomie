@@ -53,7 +53,6 @@ public class NewGroceryFragment extends Fragment {
      * @param param2 Parameter 2.
      * @return A new instance of fragment ChoreFragment.
      */
-    // TODO: Rename and change types and number of parameters
     public static NewGroceryFragment newInstance(String param1, String param2) {
         return new NewGroceryFragment();
     }

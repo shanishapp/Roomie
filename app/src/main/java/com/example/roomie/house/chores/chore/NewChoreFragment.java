@@ -95,7 +95,6 @@ public class NewChoreFragment extends Fragment implements HouseActivity.IOnBackP
      * @param param2 Parameter 2.
      * @return A new instance of fragment ChoreFragment.
      */
-    // TODO: Rename and change types and number of parameters
     public static NewChoreFragment newInstance(String param1, String param2) {
         return new NewChoreFragment();
     }
@@ -187,7 +186,6 @@ public class NewChoreFragment extends Fragment implements HouseActivity.IOnBackP
                .curved()
                .title("Pick a Date")
                .listener(date -> {
-                   //TODO save the snooze date in firestore
                    snoozeDate = date;
                }).display());
     }
@@ -238,7 +236,7 @@ public class NewChoreFragment extends Fragment implements HouseActivity.IOnBackP
             TextView errorText = (TextView)titleSpinner;
             errorText.setError("");
             errorText.setText(R.string.no_title_error_msg);//changes the selected item text to this
-            return; //TODO error massage
+            return;
         } else if (title != null && title.equals(getString(R.string.other))) {
              String diffT = differentTitleEditText.getText().toString();
              if(! diffT.equals("")) {

@@ -23,13 +23,11 @@ import java.util.List;
 
 public class FeedAdapter extends RecyclerView .Adapter<RecyclerView.ViewHolder> {
 
-    private final OnFeedListener onFeedListener;
     private List<Feed> feedList;
     private HashMap<String,String> _rommiesNameToImages;
 
-    public FeedAdapter(List<Feed> feedList, OnFeedListener onFeedListener, ArrayList<String> roommiesNames, ArrayList<String> rommiesProfiles){
+    public FeedAdapter(List<Feed> feedList, ArrayList<String> roommiesNames, ArrayList<String> rommiesProfiles){
         this.feedList = feedList;
-        this.onFeedListener = onFeedListener;
         _rommiesNameToImages = new HashMap<>();
         for(int i = 0; i < roommiesNames.size(); i++){
             _rommiesNameToImages.put(roommiesNames.get(i),rommiesProfiles.get(i));
@@ -47,7 +45,7 @@ public class FeedAdapter extends RecyclerView .Adapter<RecyclerView.ViewHolder> 
         Context context = parent.getContext();
         LayoutInflater inflater = LayoutInflater.from(context);
         View view = inflater.inflate(R.layout.feed_item, parent, false);
-        return new FeedViewHolder(view,onFeedListener);
+        return new FeedViewHolder(view);
     }
 
     @Override
@@ -55,12 +53,11 @@ public class FeedAdapter extends RecyclerView .Adapter<RecyclerView.ViewHolder> 
 
         Feed feed = feedList.get(position);
         FeedViewHolder feedViewHolder = (FeedViewHolder) holder;
-//        Picasso.get().load(feed.getRoommie().getProfilePicture()).into(feedViewHolder.feedCreatorImageView);
         feedViewHolder.feedDescription.setText(feed.getDescription());
         feedViewHolder.feedRoommateName.setText(feed.getRoommieName());
         feedViewHolder.feedDateCreated.setText(feed.getDateCreated().toString());
 
-        if(feed.getRoommieName()!= null && !feed.getRoommieName().equals("")) {
+        if(feed.getRoommieName()!= null && !feed.getRoommieName().equals("") && _rommiesNameToImages.get(feed.getRoommieName()) != null) {
             Picasso.get().setLoggingEnabled(true);
             Uri profilePictureUri = Uri.parse(_rommiesNameToImages.get(feed.getRoommieName()));
             Picasso.get().load(profilePictureUri).resize(60, 60).centerCrop().into(feedViewHolder.feedCreatorImageView);
@@ -76,28 +73,21 @@ public class FeedAdapter extends RecyclerView .Adapter<RecyclerView.ViewHolder> 
         void onFeedClicked(int pos);
     }
 
-    public class FeedViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+    public class FeedViewHolder extends RecyclerView.ViewHolder {
 
         public TextView feedRoommateName;
         public TextView feedDescription;
         public TextView feedDateCreated;
         public ImageView feedCreatorImageView;
-        public OnFeedListener onFeedListener;
 
-        public FeedViewHolder(View view, OnFeedListener onFeedListener){
+        public FeedViewHolder(View view){
             super(view);
             feedRoommateName = view.findViewById(R.id.feedRoommateName);
             feedDescription = view.findViewById(R.id.feedDescription);
             feedDateCreated = view.findViewById(R.id.feedDateCreated);
             feedCreatorImageView = view.findViewById(R.id.feed_creator_image_view);
-            this.onFeedListener = onFeedListener;
-            view.setOnClickListener(this);
         }
 
 
-        @Override
-        public void onClick(View view) {
-            onFeedListener.onFeedClicked(getAdapterPosition());
-        }
     }
 }

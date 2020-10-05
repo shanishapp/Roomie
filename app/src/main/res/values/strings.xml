@@ -232,6 +232,9 @@
     <string name="cancel_caps">CANCEL</string>
     <string name="do_you_want_to_delete_this_expense">Do you want to delete this expense?</string>
     <string name="delete_caps">DELETE</string>
+    <string name="reminderMsg">"just a reminder to do:  "</string>
+    <string name="fragment_new_grocery_title">new grocery</string>
+    <string name="fragment_chore_title">chore</string>
 
     <string-array name="filter_by_sizes">
         <item>@string/big</item>

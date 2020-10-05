@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="100dp"
     android:layout_marginBottom="10dp"
-    android:background="@drawable/one_chore_bg">
+    android:background="@drawable/user_profile_header_gradient">
 
     <ImageView
         android:id="@+id/receipt_icon"
