@@ -42,7 +42,7 @@ import java.util.List;
  * Use the {@link HouseFeedFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class HouseFeedFragment extends Fragment implements FeedAdapter.OnFeedListener {
+public class HouseFeedFragment extends Fragment  {
 
     private static final int CHORE_FEED_TYPE = 0;
     private static final int EXPENSE_FEED_TYPE = 1;
@@ -102,7 +102,6 @@ public class HouseFeedFragment extends Fragment implements FeedAdapter.OnFeedLis
         houseGroceriesFragmentViewModel = new ViewModelProvider(requireActivity()).get(HouseGroceriesFragmentViewModel.class);
 
         setUIElements(view);
-        setContent();
         loadRoommies(view);
         loadStatsExpenses(view);
         loadStatsGroceries(view);
@@ -164,12 +163,8 @@ public class HouseFeedFragment extends Fragment implements FeedAdapter.OnFeedLis
 
     }
 
-    private void setContent() {
-        //TODO
-    }
-
     private void setRecyclerView(View v, List<Feed> feedList) {
-        adapter = new FeedAdapter(feedList,this,roommatesNamesList,rommatesMap);
+        adapter = new FeedAdapter(feedList,roommatesNamesList,rommatesMap);
         recyclerView = v.findViewById(R.id.feed_recycler_view);
         recyclerView.setAdapter(adapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
@@ -231,8 +226,4 @@ public class HouseFeedFragment extends Fragment implements FeedAdapter.OnFeedLis
         });
     }
 
-    @Override
-    public void onFeedClicked(int pos) {
-        //TODO
-    }
 }

@@ -19,14 +19,9 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-<<<<<<< HEAD
-=======
-import android.widget.Button;
 import android.widget.EditText;
->>>>>>> 32c4dbc... Groceries: improvements
 import android.widget.FrameLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.example.roomie.FirestoreJob;
 import com.example.roomie.LinearLayoutManagerWithSmoothScroller;
@@ -45,6 +40,7 @@ import net.igenius.customcheckbox.CustomCheckBox;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -198,14 +194,13 @@ public class HouseGroceriesFragment extends Fragment implements GroceryAdapter.O
                         for (Grocery newGrocery : pickedGroceries) {
                             description.append(newGrocery.get_name()).append("\n");
                         }
+
                         NewExpenseViewModel expenseViewModel = new ViewModelProvider(requireActivity()).get(NewExpenseViewModel.class);
                         expenseViewModel.createNewExpense(houseActivityViewModel.getHouse(),
                                 getString(R.string.house_bottom_menu_groceries), description.toString(),
-<<<<<<< HEAD
-                                0, user.getUid(), "Shani Shapp", Expense.ExpenseType.GROCERIES);
-=======
-                                Integer.parseInt(((EditText)customLayout.findViewById(R.id.editTextNumber)).getText().toString()), user.getUid(), user.getDisplayName(), Expense.ExpenseType.GROCERIES, new Date());
->>>>>>> 32c4dbc... Groceries: improvements
+                                Integer.parseInt(((EditText)customLayout.findViewById(R.id.editTextNumber)).getText().toString()),
+                                user.getUid(), user.getDisplayName(), Expense.ExpenseType.GROCERIES);
+
                         for (Grocery grocery : pickedGroceries) {
                             vm.deleteGroceryForever(grocery, houseActivityViewModel.getHouse().getId());
                             groceryList.remove(grocery);

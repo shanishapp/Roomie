@@ -12,11 +12,11 @@ public class  Chore {
     private Date _dueDate;
     private Date _creationDate;
     private Date _lastUpdatedDate;
-    private Date _snoozeDate;//TODO need to be changed dynamically through the running
+    private Date _snoozeDate;
     private String _title;
     private String _description;
     private int _score;
-    private String _assignee; //TODO change to residence class
+    private String _assignee;
     private boolean _showMenu;
     private boolean _choreDone;
 

@@ -3,6 +3,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@drawable/house_chat_bg"
+
     xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".house.chores.HouseChoresFragment">
 
@@ -11,7 +13,6 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:padding="4dp"
-        android:background="@color/lightButtonColor"
     />
 
     <com.example.roomie.MovableFloatingActionButton

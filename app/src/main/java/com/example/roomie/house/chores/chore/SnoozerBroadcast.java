@@ -14,8 +14,8 @@ public class SnoozerBroadcast extends BroadcastReceiver {
     @Override
     public void onReceive(Context context, Intent intent) {
         NotificationCompat.Builder builder = new NotificationCompat.Builder(context,"notifyRoommie")
-                .setSmallIcon(R.drawable.baseline_error_outline_black_18dp)
-                .setContentText("just a reminder to do:  " +  intent.getStringExtra("title"))//TODO pass in intent the chore details
+                .setSmallIcon(R.drawable.ic_baseline_local_laundry_service_24)
+                .setContentText(context.getString(R.string.reminderMsg) +  intent.getStringExtra("title"))
                 .setPriority(NotificationCompat.PRIORITY_DEFAULT);
 
         NotificationManagerCompat notificationManager = NotificationManagerCompat.from(context);

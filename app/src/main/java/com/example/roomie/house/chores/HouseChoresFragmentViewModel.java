@@ -84,7 +84,7 @@ public class HouseChoresFragmentViewModel extends ViewModel {
         newChoreJob choresJob = new newChoreJob(FirestoreJob.JobStatus.IN_PROGRESS);
         MutableLiveData<newChoreJob> job = new MutableLiveData<>(choresJob);
 
-        chores.getValue().remove(chore); // TODO does it work ?
+        chores.getValue().remove(chore);
         db.collection(HOUSES_COLLECTION_NAME)
                 .document(houseId).collection(CHORES_COLLECTION_NAME)
                 .document(chore.get_id()).delete()
