@@ -35,7 +35,6 @@ import java.util.List;
 
 import me.abhinay.input.CurrencyEditText;
 
-//TODO: translate menu options to hebrew?
 
 /**
  * A simple {@link Fragment} subclass.
@@ -179,7 +178,7 @@ public class NewExpenseFragment extends Fragment
             TextView errorText = titleSpinner;
             errorText.setError("");
             errorText.setText(R.string.no_title_error_msg);//changes the selected item text to this
-            return; //TODO error massage
+            return;
         } else if (title.equals(getString(R.string.general)))
         {
             String diffT = customTitleEditText.getText().toString();
@@ -234,7 +233,6 @@ public class NewExpenseFragment extends Fragment
                     idByNameMap.put(name, id);
                 }
                 setupPayerSpinner();
-                //TODO: case FAILURE
             }
         });
     }

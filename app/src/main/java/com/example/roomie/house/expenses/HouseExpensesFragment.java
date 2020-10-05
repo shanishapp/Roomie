@@ -223,7 +223,6 @@ public class HouseExpensesFragment extends Fragment implements ExpenseAdapter.On
             settleJob.observe(getViewLifecycleOwner(), ExpenseJob -> {
                 if (ExpenseJob.getJobStatus() == FirestoreJob.JobStatus.SUCCESS)
                 {
-                    //TODO: check if this is unnecessary
                     LiveData<AllExpensesJob> updateExpensesJob =
                             viewModel.getExpenses(houseActivityViewModel.getHouse().getId());
                     viewModel.getExpenses(houseActivityViewModel.getHouse().getId());
@@ -302,13 +301,10 @@ public class HouseExpensesFragment extends Fragment implements ExpenseAdapter.On
         LiveData<GetHouseRoomiesJob> job =
                 HouseRepository.getInstance().getHouseRoomies(houseActivityViewModel.getHouse().getId());
         job.observe(getViewLifecycleOwner(), getHouseRoomiesJob -> {
-            switch (getHouseRoomiesJob.getJobStatus())
+            if (getHouseRoomiesJob.getJobStatus() == FirestoreJob.JobStatus.SUCCESS)
             {
-                case SUCCESS:
-                    numberOfRoommates = getHouseRoomiesJob.getRoomiesList().size();
-                    handleBalances();
-                case ERROR:
-                    //TODO: implement
+                numberOfRoommates = getHouseRoomiesJob.getRoomiesList().size();
+                handleBalances();
             }
         });
     }
@@ -395,7 +391,6 @@ public class HouseExpensesFragment extends Fragment implements ExpenseAdapter.On
                 {
                     if (ExpenseJob.getJobStatus() == FirestoreJob.JobStatus.SUCCESS)
                     {
-                        //TODO: toast?
                         currentExpense.set_hasReceipt(true);
                     }
                 });
@@ -491,20 +486,17 @@ public class HouseExpensesFragment extends Fragment implements ExpenseAdapter.On
             LiveData<GetHouseRoomiesJob> job =
                     HouseRepository.getInstance().getHouseRoomies(houseExpensesFragment.houseActivityViewModel.getHouse().getId());
             job.observe(getViewLifecycleOwner(), getHouseRoomiesJob -> {
-                switch (getHouseRoomiesJob.getJobStatus())
+                if (getHouseRoomiesJob.getJobStatus() == FirestoreJob.JobStatus.SUCCESS)
                 {
-                    case SUCCESS:
-                        for (User user : getHouseRoomiesJob.getRoomiesList())
-                        {
-                            String username = user.getUsername();
-                            double userBalance = houseExpensesFragment.getBalanceByUid(user.getUid());
-                            Pair<String, Double> usernameAndBalance = new Pair<>(username, userBalance);
-                            namesAndBalances.add(usernameAndBalance);
-                        }
-                        adapter = new BalanceAdapter(namesAndBalances);
-                        mRecyclerView.setAdapter(adapter);
-                    case ERROR:
-                        //TODO: implement
+                    for (User user : getHouseRoomiesJob.getRoomiesList())
+                    {
+                        String username = user.getUsername();
+                        double userBalance = houseExpensesFragment.getBalanceByUid(user.getUid());
+                        Pair<String, Double> usernameAndBalance = new Pair<>(username, userBalance);
+                        namesAndBalances.add(usernameAndBalance);
+                    }
+                    adapter = new BalanceAdapter(namesAndBalances);
+                    mRecyclerView.setAdapter(adapter);
                 }
             });
         }

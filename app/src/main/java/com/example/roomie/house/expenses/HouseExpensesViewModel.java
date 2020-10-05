@@ -23,7 +23,7 @@ import java.util.Objects;
 import static com.example.roomie.util.FirestoreUtil.EXPENSES_COLLECTION_NAME;
 import static com.example.roomie.util.FirestoreUtil.HOUSES_COLLECTION_NAME;
 
-public class HouseExpensesViewModel extends ViewModel implements ExpenseAdapter.OnExpenseListener
+public class HouseExpensesViewModel extends ViewModel
 {
     public static final String CREATION_DATE_FIELD_NAME = "_creationDate";
     public static final String PAYER_ID_FIELD_NAME = "_payerId";
@@ -284,11 +284,6 @@ public class HouseExpensesViewModel extends ViewModel implements ExpenseAdapter.
         return job;
     }
 
-    @Override
-    public void onExpenseClick(int pos)
-    {
-        //TODO: implementation missing - delete/settle dialog
-    }
 
 
     public LiveData<ExpenseJob> updateReceiptImageUri(String houseId, String expenseId, String uri)
