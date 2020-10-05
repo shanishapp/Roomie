@@ -69,6 +69,7 @@ public class GroceryAdapter  extends RecyclerView.Adapter<RecyclerView.ViewHolde
             String pattern = "dd/MM/yyyy HH:mm";
             DateFormat df = new SimpleDateFormat(pattern);
             groceryViewHolder.pickGroceryCheckBox.setCheckedColor(R.color.colorAccent);
+            groceryViewHolder.pickGroceryCheckBox.setChecked(false);
             groceryViewHolder.pickGroceryCheckBox.setOnCheckedChangeListener((checkBox, isChecked) -> {
                 if(isChecked){
                     _onGroceryListener.onGroceryPicked(groceryItem);
