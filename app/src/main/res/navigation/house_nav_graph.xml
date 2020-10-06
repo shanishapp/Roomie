@@ -90,15 +90,15 @@
     <fragment
         android:id="@+id/house_expenses_fragment_dest"
         android:name="com.roomiemain.roomie.house.expenses.HouseExpensesFragment"
-        android:label="@string/house_expenses_fragment_title"
-        tools:layout="@layout/fragment_house_expenses" >
+        android:label="House Expenses"
+        tools:layout="@layout/fragment_house_expenses">
         <action
             android:id="@+id/action_house_expenses_fragment_dest_to_newExpenseFragment"
             app:destination="@id/newExpenseFragment"
-            app:popEnterAnim="@anim/slide_in_right"
-            app:popExitAnim="@anim/slide_out_left"
             app:enterAnim="@anim/slide_in_left"
-            app:exitAnim="@anim/slide_out_right"/>
+            app:exitAnim="@anim/slide_out_right"
+            app:popEnterAnim="@anim/slide_in_right"
+            app:popExitAnim="@anim/slide_out_left" />
     </fragment>
     <fragment
         android:id="@+id/house_invite_roomie_fragment_dest"
@@ -110,15 +110,16 @@
         android:name="com.roomiemain.roomie.house.chores.chore.NewChoreFragment"
         android:label="@string/fragment_new_chore_title"
         tools:layout="@layout/fragment_new_chore" >
+
         <action
             android:id="@+id/action_newChoreFragment_to_house_chores_fragment_dest"
             app:destination="@id/house_chores_fragment_dest"
-            app:popEnterAnim="@anim/slide_in_right"
-            app:popExitAnim="@anim/slide_out_left"
             app:enterAnim="@anim/slide_in_left"
             app:exitAnim="@anim/slide_out_right"
+            app:popEnterAnim="@anim/slide_in_right"
+            app:popExitAnim="@anim/slide_out_left"
             app:popUpTo="@id/house_chores_fragment_dest"
-            app:popUpToInclusive="true"/>
+            app:popUpToInclusive="true" />
         <argument
             android:name="isFiltered"
             app:argType="boolean" />
