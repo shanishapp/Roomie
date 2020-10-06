@@ -15,10 +15,79 @@
       },
       "oauth_client": [
         {
+          "client_id": "335374237150-56d5vupftig8cog4ht7k1rclbf9hoijl.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.roomie",
+            "certificate_hash": "407913375ca02135f9ad9177216d09d8a4e3fde7"
+          }
+        },
+        {
+          "client_id": "335374237150-pj8qf4iuifstanuftre2jvqr0lk3jnvq.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.roomie",
+            "certificate_hash": "964dca22bcbbab29adfad4566d2c79161e097365"
+          }
+        },
+        {
           "client_id": "335374237150-ooj862bqmdoh54hc98s4scvfcbaqtqvb.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
             "package_name": "com.example.roomie",
+            "certificate_hash": "415cde4a709da64df2669924deb4e61c8122a9a4"
+          }
+        },
+        {
+          "client_id": "335374237150-a1i1qksjappo2uok902e49j3023mr9ft.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB-6luQST-nZPspr7Eqq40O6vFYI5ht91U"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "335374237150-a1i1qksjappo2uok902e49j3023mr9ft.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:335374237150:android:34195b279ed101500f314f",
+        "android_client_info": {
+          "package_name": "com.roomiemain.roomie"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "335374237150-vvbauck3htf39g0htc5qe8lhf79kncbj.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.roomiemain.roomie",
+            "certificate_hash": "407913375ca02135f9ad9177216d09d8a4e3fde7"
+          }
+        },
+        {
+          "client_id": "335374237150-l07ouese12otqgqt2tlo9gtl2gv9t5j3.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.roomiemain.roomie",
+            "certificate_hash": "964dca22bcbbab29adfad4566d2c79161e097365"
+          }
+        },
+        {
+          "client_id": "335374237150-b8hpkdk792c9k9bra34pflto7u7e3l8k.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.roomiemain.roomie",
             "certificate_hash": "415cde4a709da64df2669924deb4e61c8122a9a4"
           }
         },
