@@ -224,7 +224,7 @@
     <string name="add_to_expense">add to expenses</string>
     <string name="cancel">cancel</string>
     <string name="total_groceries_left">total groceries left:</string>
-    <string name="top_contributer">top contributor of the month:</string>
+    <string name="top_contributer">top contributer of the month:</string>
     <string name="lastActivity">Last Activity</string>
     <string name="new_chore">"New chore: "</string>
     <string name="new_expense">"New expense: "</string>
@@ -235,6 +235,7 @@
     <string name="reminderMsg">"just a reminder to do:  "</string>
     <string name="fragment_new_grocery_title">new grocery</string>
     <string name="fragment_chore_title">chore</string>
+    <string name="total_house_expenses">"total house expenses "</string>
 
     <string-array name="filter_by_sizes">
         <item>@string/big</item>

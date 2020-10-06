@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.roomiemain.roomie">
+    package="com.example.roomie">
 
     <uses-feature
         android:name="android.hardware.camera"
@@ -18,19 +18,19 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
-            android:name="com.roomiemain.roomie.join_house.JoinHouseActivity"
+            android:name=".join_house.JoinHouseActivity"
             android:theme="@style/JoinHouseTheme"
             android:screenOrientation="portrait"/>
-        <activity android:name="com.roomiemain.roomie.house.HouseActivity"
+        <activity android:name=".house.HouseActivity"
             android:screenOrientation="portrait"/>
         <activity
-            android:name="com.roomiemain.roomie.choose_house.ChooseHouseActivity"
+            android:name=".choose_house.ChooseHouseActivity"
             android:theme="@style/ChooseHouseTheme"
             android:screenOrientation="portrait"/>
-        <activity android:name="com.roomiemain.roomie.SignInActivity"
+        <activity android:name=".SignInActivity"
             android:screenOrientation="portrait"/>
         <activity
-            android:name="com.roomiemain.roomie.splash.SplashScreenActivity"
+            android:name=".splash.SplashScreenActivity"
             android:theme="@style/SplashTheme"
             android:screenOrientation="portrait">
             <intent-filter>
@@ -54,10 +54,10 @@
             android:theme="@style/Base.Theme.AppCompat"
             android:screenOrientation="portrait"/>
 
-        <receiver android:name="com.roomiemain.roomie.house.chores.chore.SnoozerBroadcast"/>
+        <receiver android:name=".house.chores.chore.SnoozerBroadcast"/>
 
         <service
-            android:name="com.roomiemain.roomie.RoomieFirebaseInstanceService"
+            android:name=".RoomieFirebaseInstanceService"
             android:exported="false">
             <intent-filter>
                 <action android:name="com.google.firebase.MESSAGING_EVENT" />

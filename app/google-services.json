@@ -10,7 +10,7 @@
       "client_info": {
         "mobilesdk_app_id": "1:335374237150:android:8f39c923c859626b0f314f",
         "android_client_info": {
-          "package_name": "com.roomiemain.roomie"
+          "package_name": "com.example.roomie"
         }
       },
       "oauth_client": [
@@ -18,7 +18,7 @@
           "client_id": "335374237150-ooj862bqmdoh54hc98s4scvfcbaqtqvb.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
-            "package_name": "com.roomiemain.roomie",
+            "package_name": "com.example.roomie",
             "certificate_hash": "415cde4a709da64df2669924deb4e61c8122a9a4"
           }
         },

@@ -6,7 +6,7 @@ android {
     buildToolsVersion "30.0.0"
 
     defaultConfig {
-        applicationId "com.roomiemain.roomie"
+        applicationId "com.example.roomie"
         minSdkVersion 26
         targetSdkVersion 30
         versionCode 1
