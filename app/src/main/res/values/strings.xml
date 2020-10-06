@@ -235,6 +235,7 @@
     <string name="reminderMsg">"just a reminder to do:  "</string>
     <string name="fragment_new_grocery_title">new grocery</string>
     <string name="fragment_chore_title">chore</string>
+    <string name="total_house_expenses">"total house expenses: "</string>
 
     <string-array name="filter_by_sizes">
         <item>@string/big</item>

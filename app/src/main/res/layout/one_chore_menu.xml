@@ -18,7 +18,7 @@
         app:layout_constraintVertical_bias="1.0">
 
         <com.airbnb.lottie.LottieAnimationView
-            android:id="@+id/lottieDoneAnimation"
+            android:id="@+id/imageButton3"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentStart="true"
