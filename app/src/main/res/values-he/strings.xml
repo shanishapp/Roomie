@@ -216,5 +216,5 @@
     <string name="reminderMsg">"רק תזכורת לעשות: "</string>
     <string name="fragment_new_grocery_title">קנייה חדשה</string>
     <string name="fragment_chore_title">מטלה</string>
-    <string name="total_house_expenses">"סך ההוצאות החודשיות: "</string>
+    <string name="total_house_expenses">"סך ההוצאות החודשיות "</string>
 </resources>
