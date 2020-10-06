@@ -168,7 +168,6 @@ public class HouseFeedFragment extends Fragment  {
         recyclerView = v.findViewById(R.id.feed_recycler_view);
         recyclerView.setAdapter(adapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-
     }
 
     private void loadRoommies(View view) {
