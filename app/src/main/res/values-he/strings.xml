@@ -11,6 +11,9 @@
     <!--  Choose house fragment  -->
     <string name="choose_house_toolbar_title">בחירת בית</string>
     <string name="choose_house_welcome_msg">היי, %s!</string>
+    <string name="cancel_caps">בטל</string>
+    <string name="do_you_want_to_delete_this_expense">האם אתה רוצה למחוק את ההוצאה הזו?</string>
+    <string name="delete_caps">מחק</string>
     <string name="choose_house_no_houses_msg">אין לך כרגע בית, מה שאומר שאתה חסר בית... בוא נתקן את זה!</string>
     <string name="choose_house_create_new_house">צור בית חדש</string>
     <string name="choose_house_join_existing_house">הצטרף לבית קיים</string>

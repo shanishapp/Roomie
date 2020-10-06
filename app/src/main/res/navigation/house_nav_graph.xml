@@ -7,12 +7,12 @@
 
     <fragment
         android:id="@+id/house_feed_fragment_dest"
-        android:name="com.example.roomie.house.feed.HouseFeedFragment"
+        android:name="com.roomiemain.roomie.house.feed.HouseFeedFragment"
         android:label="@string/house_feed_fragment_title"
         tools:layout="@layout/fragment_house_feed" />
     <fragment
         android:id="@+id/house_user_profile_fragment_dest"
-        android:name="com.example.roomie.house.user_profile.HouseUserProfileFragment"
+        android:name="com.roomiemain.roomie.house.user_profile.HouseUserProfileFragment"
         android:label="@string/house_user_profile_fragment_title"
         tools:layout="@layout/fragment_house_user_profile" >
         <action
@@ -25,7 +25,7 @@
     </fragment>
     <fragment
         android:id="@+id/house_settings_fragment_dest"
-        android:name="com.example.roomie.house.house_settings.HouseHouseSettingsFragment"
+        android:name="com.roomiemain.roomie.house.house_settings.HouseHouseSettingsFragment"
         android:label="@string/house_settings_fragment_title"
         tools:layout="@layout/fragment_house_house_settings" >
         <action
@@ -45,7 +45,7 @@
     </fragment>
     <fragment
         android:id="@+id/house_chores_fragment_dest"
-        android:name="com.example.roomie.house.chores.HouseChoresFragment"
+        android:name="com.roomiemain.roomie.house.chores.HouseChoresFragment"
         android:label="@string/house_chores_fragment_title"
         tools:layout="@layout/fragment_house_chores" >
         <action
@@ -80,7 +80,7 @@
     </fragment>
     <fragment
         android:id="@+id/house_groceries_fragment_dest"
-        android:name="com.example.roomie.house.groceries.HouseGroceriesFragment"
+        android:name="com.roomiemain.roomie.house.groceries.HouseGroceriesFragment"
         android:label="@string/house_groceries_fragment_title"
         tools:layout="@layout/fragment_house_groceries" >
         <action
@@ -89,7 +89,7 @@
     </fragment>
     <fragment
         android:id="@+id/house_expenses_fragment_dest"
-        android:name="com.example.roomie.house.expenses.HouseExpensesFragment"
+        android:name="com.roomiemain.roomie.house.expenses.HouseExpensesFragment"
         android:label="@string/house_expenses_fragment_title"
         tools:layout="@layout/fragment_house_expenses" >
         <action
@@ -102,12 +102,12 @@
     </fragment>
     <fragment
         android:id="@+id/house_invite_roomie_fragment_dest"
-        android:name="com.example.roomie.house.invite.HouseInviteRoomieFragment"
+        android:name="com.roomiemain.roomie.house.invite.HouseInviteRoomieFragment"
         android:label="@string/house_invite_roomie_fragment_title"
         tools:layout="@layout/fragment_house_invite_roomie" />
     <fragment
         android:id="@+id/newChoreFragment"
-        android:name="com.example.roomie.house.chores.chore.NewChoreFragment"
+        android:name="com.roomiemain.roomie.house.chores.chore.NewChoreFragment"
         android:label="@string/fragment_chore_title"
         tools:layout="@layout/fragment_new_chore" >
         <action
@@ -138,7 +138,7 @@
 
     <fragment
         android:id="@+id/house_edit_user_profile_fragment_dest"
-        android:name="com.example.roomie.house.user_profile.HouseEditUserProfileFragment"
+        android:name="com.roomiemain.roomie.house.user_profile.HouseEditUserProfileFragment"
         android:label="@string/house_edit_user_profile_fragment_title"
         tools:layout="@layout/fragment_house_edit_user_profile" >
         <action
@@ -153,7 +153,7 @@
     </fragment>
     <fragment
         android:id="@+id/house_edit_house_settings_fragment_dest"
-        android:name="com.example.roomie.house.house_settings.EditHouseSettingsFragment"
+        android:name="com.roomiemain.roomie.house.house_settings.EditHouseSettingsFragment"
         android:label="@string/edit_house_settings_fragment_title"
         tools:layout="@layout/fragment_edit_house_settings" >
         <action
@@ -168,7 +168,7 @@
     </fragment>
     <fragment
         android:id="@+id/roomie_profile_fragment_dest"
-        android:name="com.example.roomie.house.RoomieProfileFragment"
+        android:name="com.roomiemain.roomie.house.RoomieProfileFragment"
         android:label="@string/roomie_profile_fragment_title"
         tools:layout="@layout/fragment_roomie_profile" >
         <argument
@@ -177,7 +177,7 @@
     </fragment>
     <fragment
         android:id="@+id/choreFragment"
-        android:name="com.example.roomie.house.chores.chore.ChoreFragment"
+        android:name="com.roomiemain.roomie.house.chores.chore.ChoreFragment"
         android:label="fragment_chore"
         tools:layout="@layout/fragment_chore" >
         <argument
@@ -223,7 +223,7 @@
     </fragment>
     <fragment
         android:id="@+id/newGroceryFragment"
-        android:name="com.example.roomie.house.groceries.grocery.NewGroceryFragment"
+        android:name="com.roomiemain.roomie.house.groceries.grocery.NewGroceryFragment"
         android:label="@string/fragment_new_grocery_title"
         tools:layout="@layout/fragment_new_grocery" >
         <action
@@ -232,7 +232,7 @@
     </fragment>
     <fragment
         android:id="@+id/newExpenseFragment"
-        android:name="com.example.roomie.house.expenses.NewExpenseFragment"
+        android:name="com.roomiemain.roomie.house.expenses.NewExpenseFragment"
         android:label="Add Expense"
         tools:layout="@layout/fragment_create_expense">
         <action
@@ -247,7 +247,7 @@
     </fragment>
     <fragment
         android:id="@+id/house_chat_fragment_dest"
-        android:name="com.example.roomie.house.chat.HouseChatFragment"
+        android:name="com.roomiemain.roomie.house.chat.HouseChatFragment"
         android:label="@string/house_chat_fragment_title"
         tools:layout="@layout/fragment_house_chat" />
 </navigation>
