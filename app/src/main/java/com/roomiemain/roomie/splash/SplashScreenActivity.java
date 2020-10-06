@@ -10,8 +10,6 @@ import android.os.Bundle;
 import android.util.Log;
 import android.widget.Toast;
 
-import com.roomiemain.roomie.FirestoreJob;
-import com.roomiemain.roomie.RoomieFirebaseInstanceService;
 import com.roomiemain.roomie.join_house.JoinHouseActivity;
 import com.roomiemain.roomie.SignInActivity;
 import com.roomiemain.roomie.choose_house.ChooseHouseActivity;

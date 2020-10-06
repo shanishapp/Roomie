@@ -12,10 +12,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.roomiemain.roomie.R;
-import com.roomiemain.roomie.house.chores.ChoreAdapter;
 import com.squareup.picasso.Picasso;
-
-import org.w3c.dom.Text;
 
 import java.util.ArrayList;
 import java.util.HashMap;

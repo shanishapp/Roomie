@@ -1,7 +1,6 @@
 package com.roomiemain.roomie.house.groceries.grocery;
 
 import com.roomiemain.roomie.FirestoreJob;
-import com.roomiemain.roomie.house.groceries.grocery.Grocery;
 
 public class NewGroceryJob extends FirestoreJob {
 

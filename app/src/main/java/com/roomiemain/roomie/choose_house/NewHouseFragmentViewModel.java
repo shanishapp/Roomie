@@ -8,7 +8,6 @@ import androidx.lifecycle.ViewModel;
 
 import com.roomiemain.roomie.FirestoreJob;
 import com.roomiemain.roomie.House;
-import com.roomiemain.roomie.repositories.HouseRepository;
 import com.roomiemain.roomie.repositories.UserRepository;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.FieldPath;

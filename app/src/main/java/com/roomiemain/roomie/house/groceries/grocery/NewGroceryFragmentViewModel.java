@@ -1,18 +1,13 @@
 package com.roomiemain.roomie.house.groceries.grocery;
 
-import androidx.annotation.NonNull;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
 import com.roomiemain.roomie.FirestoreJob;
 import com.roomiemain.roomie.House;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
-import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 
-import static com.roomiemain.roomie.util.FirestoreUtil.CHORES_COLLECTION_NAME;
 import static com.roomiemain.roomie.util.FirestoreUtil.GROCERIES_COLLECTION_NAME;
 import static com.roomiemain.roomie.util.FirestoreUtil.HOUSES_COLLECTION_NAME;
 

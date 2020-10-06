@@ -16,7 +16,6 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.NavController;
 import androidx.navigation.fragment.NavHostFragment;
 
-import android.provider.MediaStore;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -32,8 +31,6 @@ import com.roomiemain.roomie.util.FormValidator;
 import com.squareup.picasso.Callback;
 import com.squareup.picasso.Picasso;
 import com.theartofdev.edmodo.cropper.CropImage;
-
-import java.io.File;
 
 /**
  * A simple {@link Fragment} subclass.

@@ -13,13 +13,11 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.Toast;
 
 import com.roomiemain.roomie.R;
-import com.roomiemain.roomie.User;
 import com.roomiemain.roomie.house.HouseActivityViewModel;
 import com.roomiemain.roomie.repositories.GetMessagesJob;
 import com.roomiemain.roomie.repositories.SendMessageJob;
@@ -27,11 +25,9 @@ import com.google.firebase.auth.FirebaseAuth;
 
 import java.text.SimpleDateFormat;
 import java.time.Instant;
-import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import java.util.ListIterator;
 
 /**
  * A simple {@link Fragment} subclass.

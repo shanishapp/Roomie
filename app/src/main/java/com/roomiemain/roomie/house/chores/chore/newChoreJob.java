@@ -1,7 +1,6 @@
 package com.roomiemain.roomie.house.chores.chore;
 
 import com.roomiemain.roomie.FirestoreJob;
-import com.roomiemain.roomie.house.chores.chore.Chore;
 
 public class newChoreJob extends  FirestoreJob {
     private Chore chore;

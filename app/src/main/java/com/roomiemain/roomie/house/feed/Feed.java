@@ -1,7 +1,5 @@
 package com.roomiemain.roomie.house.feed;
 
-import com.roomiemain.roomie.User;
-
 import java.util.Date;
 
 public class Feed {

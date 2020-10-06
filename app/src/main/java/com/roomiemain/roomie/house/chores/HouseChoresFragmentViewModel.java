@@ -1,8 +1,6 @@
 package com.roomiemain.roomie.house.chores;
 
 import android.content.res.Resources;
-import android.text.Editable;
-import android.view.View;
 
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
@@ -13,7 +11,6 @@ import com.roomiemain.roomie.R;
 import com.roomiemain.roomie.house.chores.chore.Chore;
 import com.roomiemain.roomie.house.chores.chore.newChoreJob;
 import com.roomiemain.roomie.util.FirestoreUtil;
-import com.google.firebase.Timestamp;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;

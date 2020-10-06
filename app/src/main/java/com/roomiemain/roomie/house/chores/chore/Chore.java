@@ -1,10 +1,5 @@
 package com.roomiemain.roomie.house.chores.chore;
 
-import android.util.Pair;
-
-import java.text.DateFormat;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.Date;
 
 public class  Chore {

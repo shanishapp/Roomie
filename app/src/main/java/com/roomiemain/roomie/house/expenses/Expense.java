@@ -1,7 +1,5 @@
 package com.roomiemain.roomie.house.expenses;
 
-import android.net.Uri;
-
 import java.sql.Timestamp;
 import java.util.Arrays;
 import java.util.Date;

@@ -9,7 +9,6 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
@@ -18,10 +17,6 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.airbnb.lottie.LottieAnimationView;
 import com.roomiemain.roomie.R;
 import com.roomiemain.roomie.house.chores.chore.Chore;
-import com.roomiemain.roomie.repositories.HouseRepository;
-import com.roomiemain.roomie.repositories.UserRepository;
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
 import com.squareup.picasso.Picasso;
 
 import java.text.DateFormat;

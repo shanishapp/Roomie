@@ -40,7 +40,6 @@ import net.igenius.customcheckbox.CustomCheckBox;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 
 /**
  * A simple {@link Fragment} subclass.
