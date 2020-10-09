@@ -220,4 +220,5 @@
     <string name="cancel_caps">בטל</string>
     <string name="do_you_want_to_delete_this_expense">האם אתה רוצה למחוק את ההוצאה?</string>
     <string name="delete_caps">מחק</string>
+    <string name="fragment_new_chore_title">מטלה חדשה</string>
 </resources>

@@ -189,14 +189,11 @@ public class HouseGroceriesFragment extends Fragment implements GroceryAdapter.O
 
                     ((TextView)customLayout.findViewById(R.id.chosenGroceriesCount)).setText(String.valueOf(pickedGroceries.size()));
                     customLayout.findViewById(R.id.doAddToExpensesBtn).setOnClickListener(view1 -> {
-                        StringBuilder description = new StringBuilder();
-                        for (Grocery newGrocery : pickedGroceries) {
-                            description.append(newGrocery.get_name()).append("\n");
-                        }
+                        String description = getString(R.string.house_groceries_fragment_title);
 
                         NewExpenseViewModel expenseViewModel = new ViewModelProvider(requireActivity()).get(NewExpenseViewModel.class);
                         expenseViewModel.createNewExpense(houseActivityViewModel.getHouse(),
-                                getString(R.string.house_bottom_menu_groceries), description.toString(),
+                                getString(R.string.house_bottom_menu_groceries), description,
                                 Integer.parseInt(((EditText)customLayout.findViewById(R.id.editTextNumber)).getText().toString()),
                                 user.getUid(), user.getDisplayName(), Expense.ExpenseType.GROCERIES);
 
