@@ -122,7 +122,10 @@ public class HouseFeedFragment extends Fragment  {
                             scores.put(chore.get_assignee(),scores.get(chore.get_assignee())+chore.get_score());
                         }
                     }
-                    String winner = scores.entrySet().stream().max((entry1, entry2) -> entry1.getValue() > entry2.getValue() ? 1 : -1).get().getKey();
+                    String winner = "-";
+                    if(!scores.isEmpty()){
+                        winner = scores.entrySet().stream().max((entry1, entry2) -> entry1.getValue() > entry2.getValue() ? 1 : -1).get().getKey();
+                    }
                     ((TextView)view.findViewById(R.id.topContributorTextView)).setText(winner);
                 }
 
