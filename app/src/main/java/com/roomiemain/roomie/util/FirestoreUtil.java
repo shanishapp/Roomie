@@ -39,4 +39,7 @@ public class FirestoreUtil
     public static final String SIZE_FIELD_NAME = "_score";
 
     public static final String CREATION_DATE_FIELD_NAME = "_creationDate";
+
+    public static final String DESCRIPTION_FEILED_NAME = "_description";
+
 }

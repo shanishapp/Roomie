@@ -40,6 +40,7 @@ import com.roomiemain.roomie.house.HouseActivity;
 import com.roomiemain.roomie.house.HouseActivityViewModel;
 import com.roomiemain.roomie.repositories.GetHouseRoomiesJob;
 import com.roomiemain.roomie.repositories.HouseRepository;
+import com.roomiemain.roomie.util.ChoreUtil;
 import com.roomiemain.roomie.util.FirestoreUtil;
 import com.github.florent37.singledateandtimepicker.dialog.SingleDateAndTimePickerDialog;
 import com.skydoves.powerspinner.OnSpinnerItemSelectedListener;
@@ -58,7 +59,7 @@ import java.util.Date;
  */
 public class NewChoreFragment extends Fragment implements HouseActivity.IOnBackPressed {
 
-    private NewChoreFragmentViewModel newChoreFragmentViewModel;
+        private NewChoreFragmentViewModel newChoreFragmentViewModel;
     private PowerSpinnerView titleSpinner;
     private EditText differentTitleEditText;
     private TextView textViewChoreDescriptionLettersLeft;
@@ -98,6 +99,7 @@ public class NewChoreFragment extends Fragment implements HouseActivity.IOnBackP
         return new NewChoreFragment();
     }
 
+    /* view creation */
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -113,8 +115,6 @@ public class NewChoreFragment extends Fragment implements HouseActivity.IOnBackP
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        //set up add button_bg_grey
-
         createNotificationChannel();
         initViews(view);
         toggleLoadingOverlay(true);
@@ -122,10 +122,11 @@ public class NewChoreFragment extends Fragment implements HouseActivity.IOnBackP
 
     }
 
+
+    /* ui */
     private void initViews(View view) {
         houseActivityViewModel = new ViewModelProvider(requireActivity()).get(HouseActivityViewModel.class);
         house = houseActivityViewModel.getHouse();
-
         createChoreButton = view.findViewById(R.id.createChoreBtn);
         navController = Navigation.findNavController(view);
         differentTitleEditText = view.findViewById(R.id.differentTitleEditText);
@@ -141,8 +142,7 @@ public class NewChoreFragment extends Fragment implements HouseActivity.IOnBackP
         presentDateTextView = view.findViewById(R.id.presentDateTextView);
         remindMe = view.findViewById(R.id.reminder_animation);
         dueDate = new Date();
-        String pattern = "dd/MM/yyyy HH:mm";
-        DateFormat df = new SimpleDateFormat(pattern);
+        DateFormat df = new SimpleDateFormat(ChoreUtil.DATE_PATTERN);
         presentDateTextView.setText(df.format(dueDate));
         initAnimationListener();
         loadingOverlay = view.findViewById(R.id.new_chore_loading_overlay);
@@ -198,21 +198,6 @@ public class NewChoreFragment extends Fragment implements HouseActivity.IOnBackP
         assigneeSpinner.setLifecycleOwner(getViewLifecycleOwner());
     }
 
-    private void loadRoommies(View view) {
-        LiveData<GetHouseRoomiesJob> job = HouseRepository.getInstance().getHouseRoomies(house.getId());
-        job.observe(getViewLifecycleOwner(), getHouseRoomiesJob -> {
-            switch (getHouseRoomiesJob.getJobStatus()){
-                case SUCCESS:
-                    for (User user: getHouseRoomiesJob.getRoomiesList()){
-                        roommatesList.add(user.getUsername());
-                    }
-                    createChoreButton.setEnabled(true);
-                    toggleLoadingOverlay(false);
-                    setAssigneeSpinner();
-            }
-        });
-    }
-
     private void setTitleSpinner() {
 
         titleSpinner.setOnSpinnerItemSelectedListener((OnSpinnerItemSelectedListener<String>) (i, s) -> {
@@ -230,58 +215,6 @@ public class NewChoreFragment extends Fragment implements HouseActivity.IOnBackP
 
     }
 
-    private void doCreateNewChore(View view) {
-        if (title == null){
-            TextView errorText = (TextView)titleSpinner;
-            errorText.setError("");
-            errorText.setText(R.string.no_title_error_msg);//changes the selected item text to this
-            return;
-        } else if (title != null && title.equals(getString(R.string.other))) {
-             String diffT = differentTitleEditText.getText().toString();
-             if(! diffT.equals("")) {
-                 title = diffT;
-             }
-        }
-
-        checkButton(view);
-
-        LiveData<newChoreJob> job = newChoreFragmentViewModel.createNewChore(house,title,editTextChoreDescription.getText().toString(), dueDate,assignee,snoozeDate,score);
-
-        job.observe(getViewLifecycleOwner(), createNewChoreJob -> {
-            switch (createNewChoreJob.getJobStatus()) {
-                case IN_PROGRESS:
-                    createChoreButton.setEnabled(false);
-                    break;
-                case SUCCESS:
-                    if(snoozeDate != null)
-                        setSnooze(createNewChoreJob);
-                    Bundle result = new Bundle();
-                    passFilterAndSortData(result);
-                    navController.navigate(R.id.action_newChoreFragment_to_house_chores_fragment_dest,result);
-                    break;
-                case ERROR:
-                    createChoreButton.setEnabled(true);
-                    Toast.makeText(getContext(), getString(R.string.create_new_item_err_msg),
-                            Toast.LENGTH_LONG).show();
-                    break;
-                default:
-                    break;
-            }
-        });
-
-    }
-
-    private void setSnooze(newChoreJob createNewChoreJob) {
-        Intent intent = new Intent(getContext(), SnoozerBroadcast.class);
-        intent.putExtra("title",createNewChoreJob.getChore().get_title());
-        PendingIntent pendingIntent = PendingIntent.getBroadcast(getContext(),0,intent,0);
-
-        AlarmManager alarmManager = (AlarmManager) getActivity().getSystemService(Context.ALARM_SERVICE);
-        alarmManager.set(AlarmManager.RTC_WAKEUP,
-                snoozeDate.getTime(),
-                pendingIntent);
-    }
-
     private void toggleLoadingOverlay(boolean isVisible) {
         if (isVisible) {
             loadingOverlay.setVisibility(View.VISIBLE);
@@ -292,17 +225,50 @@ public class NewChoreFragment extends Fragment implements HouseActivity.IOnBackP
         }
     }
 
-    private void createNotificationChannel() {
-        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            CharSequence name = "notifyRoommie";
-            String description = "to be added later";
-            int importance = NotificationManager.IMPORTANCE_DEFAULT;
-            NotificationChannel channel = new NotificationChannel("notifyRoommie",name,importance);
-            channel.setDescription(description);
+    /* data */
+    private void loadRoommies(View view) {
+        LiveData<GetHouseRoomiesJob> job = HouseRepository.getInstance().getHouseRoomies(house.getId());
+        job.observe(getViewLifecycleOwner(), getHouseRoomiesJob -> {
+            switch (getHouseRoomiesJob.getJobStatus()){
+                case SUCCESS:
+                    for (User user: getHouseRoomiesJob.getRoomiesList()){
+                        roommatesList.add(user.getUsername());
+                    }
+                    createChoreButton.setEnabled(true);
+                    toggleLoadingOverlay(false);
+                    setAssigneeSpinner();
+            }
+        });
+    }
 
-            NotificationManager notificationManager = getActivity().getSystemService(NotificationManager.class);
-            notificationManager.createNotificationChannel(channel);
+
+    /* create new chore */
+    private boolean initTitle() {
+        if (title == null){
+            TextView errorText = (TextView)titleSpinner;
+            errorText.setError("");
+            errorText.setText(R.string.no_title_error_msg);//changes the selected item text to this
+            return true;
+        } else if (title != null && title.equals(getString(R.string.other))) {
+            String diffT = differentTitleEditText.getText().toString();
+            if(! diffT.equals("")) {
+                title = diffT;
+            }
         }
+        return false;
+    }
+
+    private void doCreateNewChore(View view) {
+        if (initTitle()) return;
+        checkButton(view);
+
+        LiveData<newChoreJob> job = newChoreFragmentViewModel.createNewChore(house, title,
+                editTextChoreDescription.getText().toString(), dueDate,assignee,snoozeDate,score);
+
+        job.observe(getViewLifecycleOwner(), createNewChoreJob -> {
+            completeCreateNewChore(createNewChoreJob);
+        });
+
     }
 
     public void checkButton(View v){
@@ -319,6 +285,53 @@ public class NewChoreFragment extends Fragment implements HouseActivity.IOnBackP
         }
     }
 
+    private void completeCreateNewChore(newChoreJob createNewChoreJob) {
+        switch (createNewChoreJob.getJobStatus()) {
+            case IN_PROGRESS:
+                createChoreButton.setEnabled(false);
+                break;
+            case SUCCESS:
+                if(snoozeDate != null)
+                    setSnooze(createNewChoreJob);
+                Bundle result = new Bundle();
+                passFilterAndSortData(result);
+                navController.navigate(R.id.action_newChoreFragment_to_house_chores_fragment_dest,result);
+                break;
+            case ERROR:
+                createChoreButton.setEnabled(true);
+                Toast.makeText(getContext(), getString(R.string.create_new_item_err_msg),
+                        Toast.LENGTH_LONG).show();
+                break;
+            default:
+                break;
+        }
+    }
+
+
+    /* set reminder */
+    private void setSnooze(newChoreJob createNewChoreJob)  {
+        Intent intent = new Intent(getContext(), SnoozerBroadcast.class);
+        intent.putExtra(ChoreUtil.TITLE,createNewChoreJob.getChore().get_title());
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(getContext(),0,intent,0);
+
+        AlarmManager alarmManager = (AlarmManager) getActivity().getSystemService(Context.ALARM_SERVICE);
+        alarmManager.set(AlarmManager.RTC_WAKEUP,
+                snoozeDate.getTime(),
+                pendingIntent);
+    }
+
+    private void createNotificationChannel() {
+        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            String description = "to be added later";
+            int importance = NotificationManager.IMPORTANCE_DEFAULT;
+            NotificationChannel channel = new NotificationChannel(ChoreUtil.CHANNEL_TITLE,ChoreUtil.CHANNEL_TITLE,importance);
+            channel.setDescription(description);
+            NotificationManager notificationManager = getActivity().getSystemService(NotificationManager.class);
+            notificationManager.createNotificationChannel(channel);
+        }
+    }
+
+    /* override back-pressed callback to pass data between fragments*/
     @Override
     public boolean onBackPressed() {
         Bundle result = new Bundle();
