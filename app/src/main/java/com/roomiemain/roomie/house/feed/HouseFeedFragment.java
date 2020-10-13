@@ -81,6 +81,7 @@ public class HouseFeedFragment extends Fragment  {
         return new HouseFeedFragment();
     }
 
+    /* create view */
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -108,54 +109,7 @@ public class HouseFeedFragment extends Fragment  {
         loadStatsScore(view);
     }
 
-    private void loadStatsScore(View view) {
-        LiveData<AllChoresJob> job = houseChoresFragmentViewModel.getLastMonthAchievements(houseActivityViewModel.getHouse().getId());
-        job.observe(getViewLifecycleOwner(), new Observer<AllChoresJob>() {
-            @Override
-            public void onChanged(AllChoresJob allChoresJob) {
-                if(allChoresJob.getJobStatus() == FirestoreJob.JobStatus.SUCCESS){
-                    HashMap<String, Integer> scores = new HashMap<>();
-                    for(Chore chore: allChoresJob.getChoreList()){
-                        if(!scores.containsKey(chore.get_assignee())){
-                            scores.put(chore.get_assignee(),chore.get_score());
-                        }else{
-                            scores.put(chore.get_assignee(),scores.get(chore.get_assignee())+chore.get_score());
-                        }
-                    }
-                    String winner = "-";
-                    if(!scores.isEmpty()){
-                        winner = scores.entrySet().stream().max((entry1, entry2) -> entry1.getValue() > entry2.getValue() ? 1 : -1).get().getKey();
-                    }
-                    ((TextView)view.findViewById(R.id.topContributorTextView)).setText(winner);
-                }
-
-
-            }
-        });
-    }
-
-    private void loadStatsGroceries(View view) {
-        LiveData<AllGroceriesJob> job = houseGroceriesFragmentViewModel.getAllGroceries(houseActivityViewModel.getHouse().getId());
-        job.observe(getViewLifecycleOwner(), allGroceriesJob -> {
-            if(allGroceriesJob.getJobStatus() == FirestoreJob.JobStatus.SUCCESS)
-            ((TextView) view.findViewById(R.id.totalGroceriesLeftTextView)).setText(String.valueOf(allGroceriesJob.getGroceryList().size()));
-        });
-    }
-
-    private void loadStatsExpenses(View view) {
-        LiveData<AllExpensesJob> job = houseExpensesViewModel.getUnSettledExpenses(houseActivityViewModel.getHouse().getId());
-        job.observe(getViewLifecycleOwner(), allExpensesJob -> {
-            if(allExpensesJob.getJobStatus() == FirestoreJob.JobStatus.SUCCESS) {
-                int totalExpenses = 0;
-                for(Expense expense: allExpensesJob.getExpenses()){
-                    totalExpenses += expense.get_cost();
-                }
-                ((TextView)view.findViewById(R.id.totalHouseSpendingTextView)).setText(String.valueOf(totalExpenses));
-
-            }
-        });
-    }
-
+    /* ui */
     private void setUIElements(View rootView) {
         totalHouseSpendingTextView = rootView.findViewById(R.id.totalHouseSpendingTextView);
         totalGroceriesLeftTextView = rootView.findViewById(R.id.totalGroceriesLeftTextView);
@@ -173,6 +127,8 @@ public class HouseFeedFragment extends Fragment  {
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
     }
 
+
+    /* data */
     private void loadRoommies(View view) {
         LiveData<GetHouseRoomiesJob> job = HouseRepository.getInstance().getHouseRoomies(houseActivityViewModel.getHouse().getId());
         job.observe(getViewLifecycleOwner(), getHouseRoomiesJob -> {
@@ -224,6 +180,55 @@ public class HouseFeedFragment extends Fragment  {
                 }
                 feedArrayList.sort((feed, feed1) -> feed1.getDateCreated().compareTo(feed.getDateCreated()));
                 setRecyclerView(view, feedArrayList);
+            }
+        });
+    }
+
+    /* statistics data*/
+    private void loadStatsScore(View view) {
+        LiveData<AllChoresJob> job = houseChoresFragmentViewModel.getLastMonthAchievements(houseActivityViewModel.getHouse().getId());
+        job.observe(getViewLifecycleOwner(), new Observer<AllChoresJob>() {
+            @Override
+            public void onChanged(AllChoresJob allChoresJob) {
+                if(allChoresJob.getJobStatus() == FirestoreJob.JobStatus.SUCCESS){
+                    HashMap<String, Integer> scores = new HashMap<>();
+                    for(Chore chore: allChoresJob.getChoreList()){
+                        if(!scores.containsKey(chore.get_assignee())){
+                            scores.put(chore.get_assignee(),chore.get_score());
+                        }else{
+                            scores.put(chore.get_assignee(),scores.get(chore.get_assignee())+chore.get_score());
+                        }
+                    }
+                    String winner = "-";
+                    if(!scores.isEmpty()){
+                        winner = scores.entrySet().stream().max((entry1, entry2) -> entry1.getValue() > entry2.getValue() ? 1 : -1).get().getKey();
+                    }
+                    ((TextView)view.findViewById(R.id.topContributorTextView)).setText(winner);
+                }
+
+
+            }
+        });
+    }
+
+    private void loadStatsGroceries(View view) {
+        LiveData<AllGroceriesJob> job = houseGroceriesFragmentViewModel.getAllGroceries(houseActivityViewModel.getHouse().getId());
+        job.observe(getViewLifecycleOwner(), allGroceriesJob -> {
+            if(allGroceriesJob.getJobStatus() == FirestoreJob.JobStatus.SUCCESS)
+            ((TextView) view.findViewById(R.id.totalGroceriesLeftTextView)).setText(String.valueOf(allGroceriesJob.getGroceryList().size()));
+        });
+    }
+
+    private void loadStatsExpenses(View view) {
+        LiveData<AllExpensesJob> job = houseExpensesViewModel.getUnSettledExpenses(houseActivityViewModel.getHouse().getId());
+        job.observe(getViewLifecycleOwner(), allExpensesJob -> {
+            if(allExpensesJob.getJobStatus() == FirestoreJob.JobStatus.SUCCESS) {
+                int totalExpenses = 0;
+                for(Expense expense: allExpensesJob.getExpenses()){
+                    totalExpenses += expense.get_cost();
+                }
+                ((TextView)view.findViewById(R.id.totalHouseSpendingTextView)).setText(String.valueOf(totalExpenses));
+
             }
         });
     }
