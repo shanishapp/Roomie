@@ -5,6 +5,9 @@ import com.roomiemain.roomie.house.chores.chore.Chore;
 
 import java.util.List;
 
+/*
+
+ */
 public class AllChoresJob extends FirestoreJob {
     private List<Chore> choreList;
 

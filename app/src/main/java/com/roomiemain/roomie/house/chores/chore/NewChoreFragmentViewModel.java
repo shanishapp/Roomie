@@ -4,6 +4,9 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.QuerySnapshot;
 import com.roomiemain.roomie.FirestoreJob;
 import com.roomiemain.roomie.House;
 import com.google.firebase.firestore.FieldPath;
@@ -47,21 +50,7 @@ public class NewChoreFragmentViewModel extends ViewModel {
                             .get()
                             .addOnCompleteListener(task1 -> {
                                 if(task1.isSuccessful()) {
-                                    if (task1.getResult().isEmpty()) {
-                                        newChoreJob.setJobStatus(FirestoreJob.JobStatus.ERROR);
-                                        newChoreJob.setJobErrorCode(FirestoreJob.JobErrorCode.GENERAL);
-
-                                        job.setValue(newChoreJob);
-                                        return;
-                                    }
-
-                                    newChoreJob.setChore(
-                                            task1.getResult().getDocuments().get(0).toObject(Chore.class)
-
-                                    );
-                                    setChoreId(task.getResult().getId(), chore,house);
-                                    newChoreJob.setJobStatus(FirestoreJob.JobStatus.SUCCESS);
-                                    job.setValue(newChoreJob);
+                                    completeNewChoreJob(house, newChoreJob, job, chore, task, task1);
                                 } else {
                                     newChoreJob.setJobStatus(FirestoreJob.JobStatus.ERROR);
                                     newChoreJob.setJobErrorCode(FirestoreJob.JobErrorCode.GENERAL);
@@ -77,6 +66,27 @@ public class NewChoreFragmentViewModel extends ViewModel {
                     }
         });
         return job;
+    }
+
+    private void completeNewChoreJob(House house, newChoreJob newChoreJob,
+                                     MutableLiveData<newChoreJob> job,
+                                     Chore chore, Task<DocumentReference> task,
+                                     Task<QuerySnapshot> task1) {
+        if (task1.getResult().isEmpty()) {
+            newChoreJob.setJobStatus(FirestoreJob.JobStatus.ERROR);
+            newChoreJob.setJobErrorCode(FirestoreJob.JobErrorCode.GENERAL);
+
+            job.setValue(newChoreJob);
+            return;
+        }
+
+        newChoreJob.setChore(
+                task1.getResult().getDocuments().get(0).toObject(Chore.class)
+
+        );
+        setChoreId(task.getResult().getId(), chore,house);
+        newChoreJob.setJobStatus(FirestoreJob.JobStatus.SUCCESS);
+        job.setValue(newChoreJob);
     }
 
     private void setChoreId(String id, Chore chore, House house) {

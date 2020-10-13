@@ -25,36 +25,21 @@ public class Grocery {
         _creatorName = creatorName;
     }
 
+    /* getters */
     public String get_id() {
         return _id;
-    }
-
-    public void set_id(String _id) {
-        this._id = _id;
     }
 
     public String get_name() {
         return _name;
     }
 
-    public void set_name(String _name) {
-        this._name = _name;
-    }
-
-    public int get_size() {
-        return _size;
-    }
-
-    public void set_size(int _size) {
-        this._size = _size;
-    }
-
     public Date get_lastUpdateDate() {
         return _lastUpdateDate;
     }
 
-    public void set_lastUpdateDate(Date _lastUpdateDate) {
-        this._lastUpdateDate = _lastUpdateDate;
+    public int get_size() {
+        return _size;
     }
 
     public Date get_creationDate(){
@@ -65,12 +50,29 @@ public class Grocery {
         return _viewType;
     }
 
-    public void set_viewType(int _viewType) {
-        this._viewType = _viewType;
-    }
-
     public String get_creatorName() {
         return _creatorName;
+    }
+
+    /* setters */
+    public void set_name(String _name) {
+        this._name = _name;
+    }
+
+    public void set_id(String _id) {
+        this._id = _id;
+    }
+
+    public void set_size(int _size) {
+        this._size = _size;
+    }
+
+    public void set_lastUpdateDate(Date _lastUpdateDate) {
+        this._lastUpdateDate = _lastUpdateDate;
+    }
+
+    public void set_viewType(int _viewType) {
+        this._viewType = _viewType;
     }
 
     public void set_creatorName(String _creatorName) {

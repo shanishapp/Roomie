@@ -30,30 +30,24 @@ public class  Chore {
         _choreDone = false;
     }
 
+
+    /* getters */
     public String get_description() {
         if(_description == null)
             return "";
         return _description;
     }
 
-    public void set_description(String _description) {
-        this._description = _description;
-    }
-
     public Date get_dueDate() {
         return _dueDate;
     }
 
-    public boolean is_choreDone() {
-        return _choreDone;
-    }
-
-    public void set_choreDone(boolean _choreDone) {
-        this._choreDone = _choreDone;
-    }
-
     public Date get_creationDate() {
         return _creationDate;
+    }
+
+    public boolean is_choreDone() {
+        return _choreDone;
     }
 
     public Date get_lastUpdatedDate() {
@@ -64,24 +58,16 @@ public class  Chore {
         return _snoozeDate;
     }
 
-    public String get_title() {
-        return _title;
-    }
-
     public int get_score() {
         return _score;
     }
 
-    public void set_score(int _score) {
-        this._score = _score;
+    public String get_title() {
+        return _title;
     }
 
     public String get_id() {
         return _id;
-    }
-
-    public void set_id(String _id) {
-        this._id = _id;
     }
 
     public String get_assignee() {
@@ -89,6 +75,28 @@ public class  Chore {
             return "";
         }
         return _assignee;
+    }
+
+    public boolean isShowMenu() {
+        return _showMenu;
+    }
+
+    /* setters */
+
+    public void set_description(String _description) {
+        this._description = _description;
+    }
+
+    public void set_choreDone(boolean _choreDone) {
+        this._choreDone = _choreDone;
+    }
+
+    public void set_score(int _score) {
+        this._score = _score;
+    }
+
+    public void set_id(String _id) {
+        this._id = _id;
     }
 
     public void set_assignee(String _assignee) {
@@ -101,21 +109,10 @@ public class  Chore {
 
     public void set_dueDate(Date _dueDate) {
         this._dueDate = _dueDate;
-//        String pattern = "dd/MM/yyyy HH:mm";
-//        DateFormat df = new SimpleDateFormat(pattern);
-//        try {
-//            this._dueDate = df.parse(dueDate);
-//        } catch (ParseException e) {
-//            e.printStackTrace();
-//        }
     }
 
     public void setShowMenu(boolean bool) {
         this._showMenu = bool;
-    }
-
-    public boolean isShowMenu() {
-        return _showMenu;
     }
 
     public void set_snoozeDate(Date snoozeDate){

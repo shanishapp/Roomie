@@ -57,12 +57,12 @@ public class NewGroceryFragment extends Fragment {
         return new NewGroceryFragment();
     }
 
+    /* create view */
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         newGroceryFragmentViewModel = new ViewModelProvider(this).get(NewGroceryFragmentViewModel.class);
         user = FirebaseAuth.getInstance().getCurrentUser();
-
     }
 
     @Nullable
@@ -77,40 +77,13 @@ public class NewGroceryFragment extends Fragment {
 
         initViews(view);
         loadCreateGroceryButton(view);
-        //toggleLoadingOverlay(true);
     }
 
+    /* ui */
     private void loadCreateGroceryButton(View v) {
         createGroceryButton.setOnClickListener(view -> {
             if (view != null)
                 doCreateGrocery(v);
-        });
-    }
-
-    private void doCreateGrocery(View view) {
-        name = groceryName.getText().toString();
-        if (name.equals("")){
-            groceryName.setError("please enter grocery name");
-            return;
-        }
-
-        LiveData<NewGroceryJob> job = newGroceryFragmentViewModel.createNewGrocery(house,name,1,user.getDisplayName());
-        job.observe(getViewLifecycleOwner(), newGroceryJob -> {
-            switch (newGroceryJob.getJobStatus()){
-                case IN_PROGRESS:
-                    createGroceryButton.setEnabled(false);
-                    break;
-                case SUCCESS:
-                    navController.navigate(R.id.action_newGroceryFragment_to_house_groceries_fragment_dest);
-                    break;
-                case ERROR:
-                    createGroceryButton.setEnabled(true);
-                    Toast.makeText(getContext(), getString(R.string.create_new_item_err_msg),
-                            Toast.LENGTH_LONG).show();
-                    break;
-                default:
-                    break;
-            }
         });
     }
 
@@ -124,19 +97,43 @@ public class NewGroceryFragment extends Fragment {
         loadingOverlay = view.findViewById(R.id.new_grocery_loading_overlay);
     }
 
-    private void toggleLoadingOverlay(boolean isVisible) {
-        if (isVisible) {
-            loadingOverlay.setVisibility(View.VISIBLE);
-            createGroceryButton.setEnabled(false);
-        } else {
-            loadingOverlay.setVisibility(View.GONE);
-            createGroceryButton.setEnabled(true);
-        }
-    }
-
     public void checkButton(){
         radioGroup.setOnCheckedChangeListener((radioGroup, i) -> {
 
         });
     }
+
+    /* create new grocery */
+
+    private void doCreateGrocery(View view) {
+        name = groceryName.getText().toString();
+        if (name.equals("")){
+            groceryName.setError("please enter grocery name");
+            return;
+        }
+
+        LiveData<NewGroceryJob> job = newGroceryFragmentViewModel.createNewGrocery(house,name,1,user.getDisplayName());
+        job.observe(getViewLifecycleOwner(), newGroceryJob -> {
+            completeCreateGrocery(newGroceryJob);
+        });
+    }
+
+    private void completeCreateGrocery(NewGroceryJob newGroceryJob) {
+        switch (newGroceryJob.getJobStatus()){
+            case IN_PROGRESS:
+                createGroceryButton.setEnabled(false);
+                break;
+            case SUCCESS:
+                navController.navigate(R.id.action_newGroceryFragment_to_house_groceries_fragment_dest);
+                break;
+            case ERROR:
+                createGroceryButton.setEnabled(true);
+                Toast.makeText(getContext(), getString(R.string.create_new_item_err_msg),
+                        Toast.LENGTH_LONG).show();
+                break;
+            default:
+                break;
+        }
+    }
+
 }

@@ -35,7 +35,6 @@ public class GroceryAdapter  extends RecyclerView.Adapter<RecyclerView.ViewHolde
     public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         Context context = parent.getContext();
         LayoutInflater inflater = LayoutInflater.from(context);
-//        View v = inflater.inflate(R.layout.one_grocery_item, parent, false);
         if(viewType == VIEWTYPE_GROUP){
             ViewGroup group = (ViewGroup) inflater.inflate(R.layout.group_item,parent,false);
             GroupViewHolder groupViewHolder = new GroupViewHolder(group);

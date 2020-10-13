@@ -90,6 +90,7 @@ public class ChoreFragment extends Fragment implements HouseActivity.IOnBackPres
         return new ChoreFragment();
     }
 
+    /* create view */
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -112,7 +113,8 @@ public class ChoreFragment extends Fragment implements HouseActivity.IOnBackPres
     }
 
 
-    // content initialization
+
+    /* ui */
     private void toggleLoadingOverlay(boolean isVisible) {
         if (isVisible) {
             loadingOverlay.setVisibility(View.VISIBLE);
@@ -169,7 +171,6 @@ public class ChoreFragment extends Fragment implements HouseActivity.IOnBackPres
         TextWatcher mTextEditorWatcher = new TextWatcher() {
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
             }
-
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 //This sets a textview to the current length
                 textView.setText(s.length() +"/100");
@@ -207,7 +208,7 @@ public class ChoreFragment extends Fragment implements HouseActivity.IOnBackPres
 
     }
 
-    //buttons initialization
+    /* buttons */
     private void setButtons() {
         editTitleBtn.setOnClickListener(view -> editTitleButtonListener());
         editAssigneeBtn.setOnClickListener(view -> editAssigneeButtonListener());
@@ -324,6 +325,7 @@ public class ChoreFragment extends Fragment implements HouseActivity.IOnBackPres
         alertDialog.show();
     }
 
+    /* override back pressed to pass data between fragments*/
     @Override
     public boolean onBackPressed() {
         Bundle result = new Bundle();
@@ -331,6 +333,7 @@ public class ChoreFragment extends Fragment implements HouseActivity.IOnBackPres
         navController.navigate(R.id.action_choreFragment_to_house_chores_fragment_dest, result);
         return true;
     }
+
     private void passFilterAndSortData(Bundle result) {
         result.putBoolean("isFiltered", getArguments().getBoolean("isFiltered"));
         result.putString("filterBy", getArguments().getString("filterBy"));

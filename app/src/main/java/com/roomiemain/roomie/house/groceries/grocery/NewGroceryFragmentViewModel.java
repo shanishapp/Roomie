@@ -16,11 +16,11 @@ public class NewGroceryFragmentViewModel extends ViewModel {
     private static final int VIEWTYPE_GROCERY = 1;
     FirebaseFirestore db;
 
-        public NewGroceryFragmentViewModel(){
-            db = FirebaseFirestore.getInstance();
-        }
+    public NewGroceryFragmentViewModel(){
+        db = FirebaseFirestore.getInstance();
+    }
 
-        public LiveData<NewGroceryJob> createNewGrocery (House house, String name, int size,String creator){
+    public LiveData<NewGroceryJob> createNewGrocery (House house, String name, int size,String creator){
             NewGroceryJob newGroceryJob = new NewGroceryJob(FirestoreJob.JobStatus.IN_PROGRESS);
             MutableLiveData<NewGroceryJob> job = new MutableLiveData<>(newGroceryJob);
 
