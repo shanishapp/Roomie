@@ -117,6 +117,11 @@ public class NewExpenseFragment extends Fragment
         });
     }
 
+    /**
+     * set up UI elements of the fragment.
+     *
+     * @param view - a View object
+     */
     private void initViews(View view)
     {
         HouseActivityViewModel houseActivityViewModel =
@@ -170,6 +175,10 @@ public class NewExpenseFragment extends Fragment
 
     }
 
+    /**
+     * add an expense to the total expenses of the house.
+     */
+
     private void createExpense()
     {
         String payerID = idByNameMap.get(payerName);
@@ -179,7 +188,7 @@ public class NewExpenseFragment extends Fragment
             TextView errorText = titleSpinner;
             errorText.setError("");
             errorText.setText(R.string.no_title_error_msg);//changes the selected item text to this
-            return; //TODO error massage
+            return;
         } else if (title.equals(getString(R.string.general)))
         {
             String diffT = customTitleEditText.getText().toString();
@@ -219,6 +228,10 @@ public class NewExpenseFragment extends Fragment
         });
     }
 
+    /**
+     * fetch all house roommates from the database
+     */
+
     private void loadRoommies()
     {
         LiveData<GetHouseRoomiesJob> job =
@@ -234,7 +247,6 @@ public class NewExpenseFragment extends Fragment
                     idByNameMap.put(name, id);
                 }
                 setupPayerSpinner();
-                //TODO: case FAILURE
             }
         });
     }

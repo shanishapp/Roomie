@@ -15,6 +15,10 @@ import com.roomiemain.roomie.R;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * A recyclerView adapter holding the balance stats of each roommate.
+ */
+
 public class BalanceAdapter extends RecyclerView.Adapter<BalanceAdapter.ViewHolder>
 {
     private List<Pair<String, Double>> _namesAndBalances;
@@ -70,6 +74,10 @@ public class BalanceAdapter extends RecyclerView.Adapter<BalanceAdapter.ViewHold
     {
         return _namesAndBalances.size();
     }
+
+    /**
+     * A viewHolder for this adapter class.
+     */
 
     public class ViewHolder extends RecyclerView.ViewHolder
     {

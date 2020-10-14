@@ -16,14 +16,17 @@ import com.roomiemain.roomie.R;
 
 import java.util.List;
 
+/**
+ * A recyclerView adapter holding expenses.
+ */
 public class ExpenseAdapter extends RecyclerView.Adapter<ExpenseAdapter.ViewHolder>
 {
 
     List<Expense> _expenses;
-    private OnExpenseListener _myExpenseListener;
-    private OnReceiptListener _myReceiptListener;
-    private HouseExpensesFragment houseExpensesFragment;
-    private SharedPreferences sp;
+    private final OnExpenseListener _myExpenseListener;
+    private final OnReceiptListener _myReceiptListener;
+    private final HouseExpensesFragment houseExpensesFragment;
+    private final SharedPreferences sp;
 
 
     public ExpenseAdapter(List<Expense> expenses, OnExpenseListener onExpenseListener,
@@ -45,6 +48,12 @@ public class ExpenseAdapter extends RecyclerView.Adapter<ExpenseAdapter.ViewHold
         View expenseView = inflater.inflate(R.layout.adapter_expense, parent, false);
         return new ViewHolder(expenseView, _myExpenseListener, _myReceiptListener);
     }
+
+    /**
+     * sets an icon matching the expense typ in the UI
+     * @param image - an ImageView to bet set with a matching source.
+     * @param expenseType - an enum of the expense type.
+     */
 
     public void setExpenseIcon(ImageView image, Expense.ExpenseType expenseType)
     {
@@ -94,7 +103,7 @@ public class ExpenseAdapter extends RecyclerView.Adapter<ExpenseAdapter.ViewHold
         if (expense.is_isSettled())
         {
             //Handle settled expenses animation and graphics
-            markSettledAnimations();
+//            markSettledAnimations();
             String expenseID = expense.get_id();
             boolean wasAnimated = sp.getBoolean(expenseID, false);
             blurUI(titleView, costView, payerView, receiptIcon, expenseTypeIcon);
@@ -127,10 +136,19 @@ public class ExpenseAdapter extends RecyclerView.Adapter<ExpenseAdapter.ViewHold
         receiptIcon.setOnClickListener(v -> houseExpensesFragment.onReceiptClick(expense));
     }
 
-    private void markSettledAnimations()
-    {
-    }
+//    private void markSettledAnimations()
+//    {
+//    }
 
+
+    /**
+     * blurs the UI of a given expense. to be used when it is marked done.
+     * @param titleView - a textView of the title.
+     * @param costView - a textView of the price.
+     * @param payerView - a textView of the paying roommate.
+     * @param receiptIcon - an ImageView.
+     * @param expenseTypeIcon - an ImageView.
+     */
     private void blurUI(TextView titleView, TextView costView, TextView payerView,
                         ImageView receiptIcon, ImageView expenseTypeIcon)
     {
