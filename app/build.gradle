@@ -89,6 +89,7 @@ dependencies {
     // fcm
     implementation 'com.google.firebase:firebase-messaging:20.2.4'
 
-
+    // facebook login
+    implementation 'com.facebook.android:facebook-login:[5,6)'
 
 }

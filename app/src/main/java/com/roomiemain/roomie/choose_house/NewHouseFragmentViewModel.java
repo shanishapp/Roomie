@@ -37,7 +37,7 @@ public class NewHouseFragmentViewModel extends ViewModel {
 
         // create the new house
         Map<String, House.Roles> roomies = new HashMap<>();
-        roomies.put(FirebaseAuth.getInstance().getUid(), House.Roles.OWNER);
+        roomies.put(FirebaseAuth.getInstance().getCurrentUser().getUid(), House.Roles.OWNER);
         House newHouse = new House(houseName, houseAddress, houseDesc, roomies);
 
         // add new house to firestore

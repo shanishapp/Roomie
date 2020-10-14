@@ -168,12 +168,14 @@ public class SignInActivity extends AppCompatActivity {
         // Choose authentication providers
         List<AuthUI.IdpConfig> providers = Arrays.asList(
                 new AuthUI.IdpConfig.EmailBuilder().build(),
-                new AuthUI.IdpConfig.GoogleBuilder().build());
+                new AuthUI.IdpConfig.GoogleBuilder().build(),
+                new AuthUI.IdpConfig.FacebookBuilder().build());
 
         // add custom sign in layout
         AuthMethodPickerLayout customLayout = new AuthMethodPickerLayout.Builder(R.layout.firebase_auth_sign_in)
                 .setEmailButtonId(R.id.firebase_auth_sign_in_create_account_button)
                 .setGoogleButtonId(R.id.firebase_auth_sign_in_google_button)
+                .setFacebookButtonId(R.id.firebase_auth_sign_in_facebook_button)
                 .build();
 
         // Create and launch sign-in intent

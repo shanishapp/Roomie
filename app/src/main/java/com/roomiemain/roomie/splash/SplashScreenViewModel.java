@@ -11,7 +11,7 @@ public class SplashScreenViewModel extends ViewModel {
     private final static String TAG = "SPLASH_SCREEN_VIEW_MODEL";
 
     public LiveData<GetUserHouseJob> getUserHouse() {
-        return HouseRepository.getInstance().getUserHouse(FirebaseAuth.getInstance().getUid());
+        return HouseRepository.getInstance().getUserHouse(FirebaseAuth.getInstance().getCurrentUser().getUid());
     }
 
 }
