@@ -106,6 +106,9 @@ public class Expense
     }
 
 
+    /**
+     * an enum for all possible expense types within the expenses screen.
+     */
     public enum ExpenseType
     {
         PROFESSIONAL,

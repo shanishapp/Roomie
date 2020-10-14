@@ -130,6 +130,13 @@ public class HouseExpensesFragment extends Fragment implements ExpenseAdapter.On
     }
 
 
+    /**
+     * setup the UI elements of the fragment.
+     *
+     * @param allExpensesJob - a AllExpenseJob to interact with the database.
+     * @param view           - a view object.
+     */
+
     private void setUpUI(AllExpensesJob allExpensesJob, View view)
     {
         expenses = (ArrayList<Expense>) allExpensesJob.getExpenses();
@@ -155,6 +162,10 @@ public class HouseExpensesFragment extends Fragment implements ExpenseAdapter.On
         setUpAddExpenseButton(view);
         setUpSettleExpensesButton(view);
     }
+
+    /**
+     * calculate the various balances, both house total and of each roommate.
+     */
 
     private void handleBalances()
     {
@@ -210,6 +221,10 @@ public class HouseExpensesFragment extends Fragment implements ExpenseAdapter.On
         });
     }
 
+    /**
+     * settle all debts in the house, and mark expenses as settled.
+     */
+
     private void settleExpenses()
     {
         for (Expense expense : expenses)
@@ -219,7 +234,6 @@ public class HouseExpensesFragment extends Fragment implements ExpenseAdapter.On
             settleJob.observe(getViewLifecycleOwner(), ExpenseJob -> {
                 if (ExpenseJob.getJobStatus() == FirestoreJob.JobStatus.SUCCESS)
                 {
-                    //TODO: check if this is unnecessary
                     LiveData<AllExpensesJob> updateExpensesJob =
                             viewModel.getExpenses(houseActivityViewModel.getHouse().getId());
                     viewModel.getExpenses(houseActivityViewModel.getHouse().getId());
@@ -256,6 +270,10 @@ public class HouseExpensesFragment extends Fragment implements ExpenseAdapter.On
         }
     }
 
+    /**
+     * @return the total cost of all unsettled expenses in the house.
+     */
+
     public double getHouseSpending()
     {
         double totalCost = 0;
@@ -272,6 +290,11 @@ public class HouseExpensesFragment extends Fragment implements ExpenseAdapter.On
         return totalCost;
     }
 
+    /**
+     * @param uid - an ID of a roommate.
+     * @return the total spending of the matching roommate.
+     */
+
 
     public double getSpendingByUid(String uid)
     {
@@ -284,14 +307,22 @@ public class HouseExpensesFragment extends Fragment implements ExpenseAdapter.On
             }
         }
         return spending;
-
     }
+
+    /**
+     * @param uid - an ID of a roommate.
+     * @return the total balance of the matching roommate.
+     */
 
     public double getBalanceByUid(String uid)
     {
         double balance = getSpendingByUid(uid) - getHouseSpending() / numberOfRoommates;
         return Math.floor(balance * 100) / 100;
     }
+
+    /**
+     * update the member holding the number of roommates in the house.
+     */
 
     private void getRoommateNumber()
     {
@@ -304,10 +335,13 @@ public class HouseExpensesFragment extends Fragment implements ExpenseAdapter.On
                     numberOfRoommates = getHouseRoomiesJob.getRoomiesList().size();
                     handleBalances();
                 case ERROR:
-                    //TODO: implement
             }
         });
     }
+
+    /**
+     * attach a receipt image to the expense.
+     */
 
     private void selectReceiptPicture()
     {
@@ -373,6 +407,12 @@ public class HouseExpensesFragment extends Fragment implements ExpenseAdapter.On
         }
     }
 
+    /**
+     * change the image attached to an expense.
+     * @param expenseId - an id of an expense
+     * @param receiptPhoto - an image file URI
+     */
+
     public void updateReceiptImage(String expenseId, Uri receiptPhoto)
     {
         ExpenseJob expenseJob = new ExpenseJob((FirestoreJob.JobStatus.IN_PROGRESS));
@@ -398,6 +438,10 @@ public class HouseExpensesFragment extends Fragment implements ExpenseAdapter.On
             });
         });
     }
+
+    /**
+     * a dialog for settling expenses.
+     */
 
     public static class SettleExpensesDialogFragment extends DialogFragment
     {
@@ -451,6 +495,10 @@ public class HouseExpensesFragment extends Fragment implements ExpenseAdapter.On
         }
 
     }
+
+    /**
+     * a dialog which displays all roommate balances.
+     */
 
 
     public static class BalanceDialogFragment extends DialogFragment
@@ -521,6 +569,10 @@ public class HouseExpensesFragment extends Fragment implements ExpenseAdapter.On
         }
     }
 
+    /**
+     * a dialog which pops up when adding a receipt image.
+     */
+
     public static class AddReceiptDialog extends DialogFragment
     {
         private Button noButton, yesButton;
@@ -576,6 +628,10 @@ public class HouseExpensesFragment extends Fragment implements ExpenseAdapter.On
             return dialog;
         }
     }
+
+    /**
+     * A dialog for replacing a receipt image.
+     */
 
     public static class ReplaceReceiptDialog extends DialogFragment
     {
@@ -635,6 +691,10 @@ public class HouseExpensesFragment extends Fragment implements ExpenseAdapter.On
             return dialog;
         }
     }
+
+    /**
+     * a dialog for deleting an expense.
+     */
 
     public static class DeleteExpenseDialog extends DialogFragment
     {
