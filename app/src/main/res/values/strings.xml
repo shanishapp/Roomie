@@ -6,6 +6,8 @@
     <string name="request_read_external_storage_msg">
         In order to set your profile picture we need your permission to access your photos.
     </string>
+    <string name="facebook_application_id" translatable="false">2764482827173556</string>
+    <string name="facebook_login_protocol_scheme" translatable="false">fb2764482827173556</string>
 
     <!--  Sign in activity  -->
     <string name="sign_in_welcome_msg">Hey, roomie!</string>
