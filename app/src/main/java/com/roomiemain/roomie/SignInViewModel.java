@@ -10,7 +10,7 @@ import com.google.firebase.auth.FirebaseAuth;
 public class SignInViewModel extends ViewModel {
 
     public LiveData<GetUserHouseJob> getUserHouse() {
-        return HouseRepository.getInstance().getUserHouse(FirebaseAuth.getInstance().getUid());
+        return HouseRepository.getInstance().getUserHouse(FirebaseAuth.getInstance().getCurrentUser().getUid());
     }
 
 }

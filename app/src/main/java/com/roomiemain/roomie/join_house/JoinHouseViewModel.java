@@ -47,7 +47,7 @@ public class JoinHouseViewModel extends ViewModel {
         MutableLiveData<GetUserHouseJob> job = new MutableLiveData<>(getUserHouseJob);
 
         db.collection(HOUSES_COLLECTION_NAME)
-                .whereGreaterThan("roomies." + FirebaseAuth.getInstance().getUid(), "")
+                .whereGreaterThan("roomies." + FirebaseAuth.getInstance().getCurrentUser().getUid(), "")
                 .get()
                 .addOnCompleteListener(task -> {
                     if (task.isSuccessful()) {
